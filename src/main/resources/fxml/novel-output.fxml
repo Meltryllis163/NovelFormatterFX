@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.*?>
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cc.meltryllis.nf.ui.controller.NovelOutputController"
+      prefHeight="400.0" prefWidth="600.0">
+    <Label fx:id="exportConfigLabel" styleClass="title-2"/>
+    <Separator styleClass="small"/>
+    <HBox>
+        <Card minWidth="300">
+            <header>
+                <Tile fx:id="chapterFormatTile"/>
+            </header>
+            <body>
+                <HBox alignment="BOTTOM_LEFT">
+                    <ComboBox prefWidth="350" fx:id="chapterTemplateComboBox"/>
+                </HBox>
+            </body>
+        </Card>
+        <Card minWidth="300">
+            <header>
+                <Tile fx:id="blankLineTile"/>
+            </header>
+            <body>
+                <HBox alignment="BOTTOM_LEFT">
+                    <Spinner prefWidth="100" min="0" max="5" initialValue="1" fx:id="blankLineSpinner"/>
+                </HBox>
+            </body>
+        </Card>
+        <Card minWidth="300">
+            <header>
+                <Tile fx:id="paragraphIndentationTile"/>
+            </header>
+            <body>
+                <HBox alignment="BOTTOM_LEFT">
+                    <spacing>
+                        <UICons fx:constant="SMALL_SPACING"/>
+                    </spacing>
+                    <Spinner prefWidth="100" min="0" max="10" initialValue="2" fx:id="paragraphIndentationSpinner"/>
+                    <ComboBox fx:id="paragraphIndentationComboBox"/>
+                    <ToggleButton fx:id="indentationForChapterButton"/>
+                </HBox>
+            </body>
+        </Card>
+        <spacing>
+            <UICons fx:constant="DEFAULT_SPACING"/>
+        </spacing>
+    </HBox>
+    <HBox alignment="TOP_RIGHT">
+        <Button fx:id="exportButton" prefWidth="100" styleClass="success" onAction="#export"/>
+    </HBox>
+    <spacing>
+        <UICons fx:constant="DEFAULT_SPACING"/>
+    </spacing>
+</VBox>

@@ -1,0 +1,5 @@
+/* 灰色图标 */
+.icon-subtle {
+    -fx-fill: -color-fg-subtle;
+    -fx-icon-color: -color-fg-subtle;
+}
