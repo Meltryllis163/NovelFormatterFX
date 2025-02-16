@@ -27,7 +27,8 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/main-application.fxml"));
         Parent root = fxmlLoader.load();
         // 嵌入全局css表
-        root.getStylesheets().add(Objects.requireNonNull(MainApplication.class.getResource("/fxml/css/common.css")).toExternalForm());
+        root.getStylesheets().add(Objects.requireNonNull(MainApplication.class.getResource("/fxml/css/common.css"))
+                .toExternalForm());
 
         Scene scene = new Scene(root, UICons.PREF_WIDTH, UICons.PREF_HEIGHT);
         stage.titleProperty().bind(I18nUtil.createStringBinding("App.Title"));
