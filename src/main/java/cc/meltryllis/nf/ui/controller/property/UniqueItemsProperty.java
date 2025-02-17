@@ -14,7 +14,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
- * {@link javafx.scene.control.ComboBox#items} 属性的监听增强类。
+ * {@code javafx.scene.control.ComboBox#items} 属性的监听增强类。
+ * 新增以下特性：<p>
+ * <ul>
+ *     <li>元素不允许重复</li>
+ *     <li>为列表的长度 <i>size</i> 新增监听属性</li>
+ * </ul>
  *
  * @author Zachary W
  * @date 2025/2/17

@@ -24,7 +24,7 @@
                 </HBox>
             </body>
         </Card>
-        <Card minWidth="300">
+        <Card minWidth="300" HBox.hgrow="ALWAYS">
             <header>
                 <Tile fx:id="paragraphIndentationTile"/>
             </header>

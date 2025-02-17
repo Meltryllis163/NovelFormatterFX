@@ -85,12 +85,10 @@ public class ChapterFormatController implements Initializable {
         alert.titleProperty()
                 .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ChapterFormat.Tile.Title"));
         alert.setHeaderText(null);
-        VBox editDialog = createEditDialog();
-        editDialog.setPadding(UICons.DIALOG_INSETS);
         // alert图标会同步为owner的图标
         alert.initOwner(root.getScene().getWindow());
-        alert.getDialogPane().setContent(editDialog);
-        alert.getDialogPane().setPrefSize(500, 500);
+        alert.getDialogPane().setContent(createEditDialog());
+        alert.getDialogPane().setPrefSize(600, 700);
         alert.getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = alert.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
@@ -99,20 +97,34 @@ public class ChapterFormatController implements Initializable {
     }
 
     private VBox createEditDialog() {
+
         VBox itemEditBox = new VBox();
+        // itemEditBox.setPadding(UICons.DIALOG_INSETS);
         itemEditBox.setFillWidth(true);
         itemEditBox.setSpacing(UICons.BIG_SPACING);
+        itemEditBox.setPadding(new Insets(20, 20, 20 ,20));
+
+        Label header = new Label();
+        header.textProperty()
+                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ChapterFormat.EditDialog.Tile.Title"));
+        header.getStyleClass().add(Styles.TITLE_2);
+        Label subHeader = new Label();
+        subHeader.textProperty()
+                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ChapterFormat.EditDialog.Tile.Desc"));
+        subHeader.getStyleClass().addAll(Styles.TEXT_SUBTLE);
+        VBox.setVgrow(subHeader, Priority.ALWAYS);
+
         ScrollPane scrollPane = new ScrollPane(createItemListBox());
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setFitToWidth(true);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        itemEditBox.getChildren().addAll(scrollPane, createItemAddBox());
+        itemEditBox.getChildren().addAll(header, subHeader, scrollPane, createItemAddBox());
+
         return itemEditBox;
     }
 
     private VBox createItemListBox() {
         itemListBox = new VBox(UICons.SMALL_SPACING);
-        itemListBox.setPadding(new Insets(0, 10, 0, 10));
         for (String template : uniqueItemsProperty.getItems().get()) {
             itemListBox.getChildren().add(createItemListLine(template));
         }
@@ -140,7 +152,6 @@ public class ChapterFormatController implements Initializable {
 
     private HBox createItemAddBox() {
         HBox addBox = new HBox(UICons.SMALL_SPACING);
-        addBox.setPadding(new Insets(0, 10, 0, 10));
         TextField inputField = new TextField();
         Button addButton = new Button(null, new FontIcon(Feather.CHECK));
         addButton.getStyleClass().add(Styles.SUCCESS);
@@ -151,6 +162,8 @@ public class ChapterFormatController implements Initializable {
             if (!StrUtil.isEmpty(newTemplate) && uniqueItemsProperty.add(newTemplate)) {
                 itemListBox.getChildren().add(createItemListLine(newTemplate));
             }
+            inputField.clear();
+            inputField.requestFocus();
         });
         return addBox;
     }

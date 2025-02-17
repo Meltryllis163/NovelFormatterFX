@@ -30,7 +30,7 @@ public class I18nUtil {
     public static List<Locale> getSupportedLocales() {
         List<Locale> locales = new ArrayList<>();
         locales.add(Locale.SIMPLIFIED_CHINESE);
-        locales.add(Locale.ENGLISH);
+        // locales.add(Locale.ENGLISH);
         return locales;
     }
 
