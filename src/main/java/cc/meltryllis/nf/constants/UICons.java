@@ -16,8 +16,11 @@ public interface UICons {
 
     int SMALL_SPACING = 5;
     int DEFAULT_SPACING = 10;
+    int BIG_SPACING = 20;
+    int LARGE_SPACING = 30;
 
     int ICON_TEXT_GAP = 20;
 
+    Insets DIALOG_INSETS = new Insets(5, 15, 5, 15);
     Insets DEFAULT_INSETS = new Insets(15, 50, 15, 50);
 }

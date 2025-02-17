@@ -1,7 +1,8 @@
-package cc.meltryllis.nf.ui.table;
+package cc.meltryllis.nf.ui.controller.input;
 
 import cc.meltryllis.nf.config.InputFormat;
 import cc.meltryllis.nf.entity.Regex;
+import cc.meltryllis.nf.ui.controller.property.RegexProperty;
 import cc.meltryllis.nf.utils.I18nUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

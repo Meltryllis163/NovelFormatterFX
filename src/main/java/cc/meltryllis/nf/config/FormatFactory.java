@@ -20,7 +20,10 @@ import java.util.List;
 public class FormatFactory {
 
     public static List<String> createDefaultChapterTemplates() {
-        return Arrays.asList("第{chineseNumber}章 {title}", "第{number}章 {title}");
+        return Arrays.asList("第{chineseNumber}章 {title}", "第{number}章 {title}",
+                "{chineseNumber}章 {title}", "{number}章 {title}",
+                "{chineseNumber} {title}", "{number} {title}",
+                "{chineseNumber}", "{number}");
     }
 
     protected static OutputFormat createDefaultOutputFormat() {

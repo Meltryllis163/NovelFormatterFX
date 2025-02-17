@@ -3,7 +3,7 @@
 <?import atlantafx.base.controls.Card?>
 <?import atlantafx.base.controls.Tile?>
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import cc.meltryllis.nf.ui.table.RegexTableView?>
+<?import cc.meltryllis.nf.ui.controller.input.RegexTableView?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>

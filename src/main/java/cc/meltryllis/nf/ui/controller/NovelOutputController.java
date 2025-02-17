@@ -1,11 +1,9 @@
 package cc.meltryllis.nf.ui.controller;
 
 import atlantafx.base.controls.Tile;
-import cc.meltryllis.nf.config.FormatFactory;
 import cc.meltryllis.nf.config.InputFormat;
 import cc.meltryllis.nf.config.OutputFormat;
 import cc.meltryllis.nf.constants.CharacterCons;
-import cc.meltryllis.nf.entity.Chapter;
 import cc.meltryllis.nf.parser.ParseProcessor;
 import cc.meltryllis.nf.utils.I18nUtil;
 import cn.hutool.core.lang.Console;
@@ -19,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.io.FileNotFoundException;
@@ -31,14 +30,12 @@ import java.util.ResourceBundle;
  */
 public class NovelOutputController implements Initializable {
 
+
+    @FXML
+    public VBox root;
+
     @FXML
     public Label exportConfigLabel;
-
-    @FXML
-    public Tile chapterFormatTile;
-
-    @FXML
-    public ComboBox<String> chapterTemplateComboBox;
 
     @FXML
     public Button exportButton;
@@ -60,32 +57,6 @@ public class NovelOutputController implements Initializable {
 
     @FXML
     public ToggleButton indentationForChapterButton;
-
-    private void initChapterFormat() {
-        chapterFormatTile.titleProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ChapterFormat.Tile.Title"));
-        chapterFormatTile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ChapterFormat.Tile.Desc"));
-        chapterTemplateComboBox.getItems().addAll(FormatFactory.createDefaultChapterTemplates());
-        chapterTemplateComboBox.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(String template) {
-                if (template == null) {
-                    return null;
-                }
-                return new Chapter(1024, I18nUtil.get("Common.Novel.Chapter.ChapterName")).format(template);
-            }
-
-            @Override
-            public String fromString(String string) {
-                return null;
-            }
-        });
-        chapterTemplateComboBox.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> OutputFormat.getInstance()
-                        .setChapterTemplate(newValue));
-        chapterTemplateComboBox.getSelectionModel().selectFirst();
-    }
 
     private void initBlackLine() {
         blankLineTile.titleProperty()
@@ -123,9 +94,11 @@ public class NovelOutputController implements Initializable {
                 return null;
             }
         });
-        StringBinding[] bindings = new StringBinding[]{I18nUtil.createStringBinding("Common.Space"), I18nUtil.createStringBinding("Common.FullWidthSpace")};
+        StringBinding[] bindings = new StringBinding[]{I18nUtil.createStringBinding(
+                "Common.Space"), I18nUtil.createStringBinding("Common.FullWidthSpace")};
         char[] spaces = new char[]{CharacterCons.ENGLISH.SPACE, CharacterCons.CHINESE.SPACE};
-        ObservableList<Pair<StringProperty, Character>> observableList = FXCollections.observableArrayList(param -> new Observable[]{param.getKey()});
+        ObservableList<Pair<StringProperty, Character>> observableList = FXCollections.observableArrayList(
+                param -> new Observable[]{param.getKey()});
         for (int i = 0; i < bindings.length; i++) {
             SimpleStringProperty property = new SimpleStringProperty();
             property.bind(bindings[i]);
@@ -135,7 +108,8 @@ public class NovelOutputController implements Initializable {
         paragraphIndentationComboBox.getSelectionModel().selectLast();
 
         indentationForChapterButton.textProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ParagraphIndentation.ChapterButton.Text"));
+                .bind(I18nUtil.createStringBinding(
+                        "App.NovelExportConfiguration.ParagraphIndentation.ChapterButton.Text"));
         indentationForChapterButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> OutputFormat.getInstance()
                         .setIndentationForChapter(newValue));
@@ -145,7 +119,6 @@ public class NovelOutputController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         exportConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.NovelExportConfiguration"));
-        initChapterFormat();
         initBlackLine();
         initParagraphIndentation();
         exportButton.textProperty().bind(I18nUtil.createStringBinding("Common.Export"));

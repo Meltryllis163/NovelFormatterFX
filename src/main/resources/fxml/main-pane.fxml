@@ -8,7 +8,7 @@
             fitToWidth="true">
     <VBox>
         <fx:include source="novel-input.fxml"/>
-        <fx:include source="novel-output.fxml"/>
+        <fx:include source="output/novel-output.fxml"/>
         <spacing>
             <UICons fx:constant="SMALL_SPACING"/>
         </spacing>

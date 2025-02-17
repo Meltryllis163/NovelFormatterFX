@@ -6,7 +6,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * 国际化工具类。
@@ -25,7 +28,10 @@ public class I18nUtil {
     }
 
     public static List<Locale> getSupportedLocales() {
-        return new ArrayList<>(Arrays.asList(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE));
+        List<Locale> locales = new ArrayList<>();
+        locales.add(Locale.SIMPLIFIED_CHINESE);
+        locales.add(Locale.ENGLISH);
+        return locales;
     }
 
     public static Locale getDefaultLocale() {

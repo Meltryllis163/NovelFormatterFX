@@ -1,12 +1,14 @@
 package cc.meltryllis.nf.entity;
 
 import cc.meltryllis.nf.utils.ChineseUtil;
+import cc.meltryllis.nf.utils.I18nUtil;
 import cn.hutool.core.convert.NumberChineseFormatter;
 import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -32,6 +34,8 @@ public class Chapter {
     /** 替换对应占位符的正则 */
     public static final String TITLE_PLACEHOLDER_REGEX = "\\{title}";
 
+    private static final Chapter EXAMPLE_CHAPTER = new Chapter(1024, I18nUtil.get("Common.Novel.Chapter.ChapterName"));
+
     /** 章节编号 */
     private int number;
     /** 章节名 */
@@ -54,7 +58,16 @@ public class Chapter {
         }
     }
 
-    public String format(String template) {
+    @NotNull
+    public static String exampleFormat(@Nullable String template) {
+        return EXAMPLE_CHAPTER.format(template);
+    }
+
+    @NotNull
+    public String format(@Nullable String template) {
+        if (template == null) {
+            return "";
+        }
         template = template.replaceAll(CHINESE_NUMBER_PLACEHOLDER_REGEX,
                 NumberChineseFormatter.format(getNumber(), false));
         template = template.replaceAll(ARABIC_NUMBER_PLACEHOLDER_REGEX, String.valueOf(getNumber()));

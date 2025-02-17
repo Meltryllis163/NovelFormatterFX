@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.ui.table;
+package cc.meltryllis.nf.ui.controller.property;
 
 import cc.meltryllis.nf.entity.Regex;
 import javafx.beans.property.SimpleBooleanProperty;

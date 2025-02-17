@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import atlantafx.base.controls.*?>
+<?import atlantafx.base.controls.Card?>
+<?import atlantafx.base.controls.Tile?>
 <?import cc.meltryllis.nf.constants.UICons?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cc.meltryllis.nf.ui.controller.NovelOutputController"
-      prefHeight="400.0" prefWidth="600.0">
+      prefHeight="400.0" prefWidth="600.0"
+      fx:id="root">
     <Label fx:id="exportConfigLabel" styleClass="title-2"/>
     <Separator styleClass="small"/>
     <HBox>
-        <Card minWidth="300">
-            <header>
-                <Tile fx:id="chapterFormatTile"/>
-            </header>
-            <body>
-                <HBox alignment="BOTTOM_LEFT">
-                    <ComboBox prefWidth="350" fx:id="chapterTemplateComboBox"/>
-                </HBox>
-            </body>
-        </Card>
+        <fx:include source="chapter-format-output.fxml"/>
         <Card minWidth="300">
             <header>
                 <Tile fx:id="blankLineTile"/>
