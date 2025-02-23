@@ -1,8 +1,8 @@
 package cc.meltryllis.nf.ui.controller.input;
 
-import cc.meltryllis.nf.config.InputFormat;
 import cc.meltryllis.nf.entity.Regex;
-import cc.meltryllis.nf.ui.controller.property.RegexProperty;
+import cc.meltryllis.nf.entity.config.InputFormat;
+import cc.meltryllis.nf.entity.property.RegexProperty;
 import cc.meltryllis.nf.utils.I18nUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,11 +29,13 @@ public class RegexTableView extends TableView<RegexProperty> {
         TableColumn<RegexProperty, Boolean> enabledColumn = createEnabledTableColumn();
 
         TableColumn<RegexProperty, String> descColumn = new TableColumn<>();
-        descColumn.textProperty().bind(I18nUtil.createStringBinding("App.ChapterConfig.RegexTableView.DescColumn.Title"));
+        descColumn.textProperty()
+                .bind(I18nUtil.createStringBinding("App.ChapterInput.RegexTableView.DescColumn.Title"));
         descColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
         TableColumn<RegexProperty, Pattern> patternColumn = new TableColumn<>();
-        patternColumn.textProperty().bind(I18nUtil.createStringBinding("App.ChapterConfig.RegexTableView.PatternColumn.Title"));
+        patternColumn.textProperty().bind(I18nUtil.createStringBinding(
+                "App.ChapterInput.RegexTableView.PatternColumn.Title"));
         patternColumn.setCellValueFactory(new PropertyValueFactory<>("pattern"));
 
         /*unchecked*/
@@ -75,7 +77,7 @@ public class RegexTableView extends TableView<RegexProperty> {
 
     private void loadData() {
         List<RegexProperty> regexPropertyList = new ArrayList<>();
-        for (Regex regex : InputFormat.getInstance().getChapterFormat().getRegexList()) {
+        for (Regex regex : InputFormat.getInstance().getChapterRegexList()) {
             regexPropertyList.add(new RegexProperty(regex));
         }
         ObservableList<RegexProperty> data = FXCollections.observableList(regexPropertyList);

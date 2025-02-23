@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.ui.controller.property;
+package cc.meltryllis.nf.entity.property;
 
 import cc.meltryllis.nf.entity.Regex;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  * @date 2025/2/12
  */
 public class RegexProperty {
+
     private final Regex regex;
     private final SimpleStringProperty description;
     private final SimpleObjectProperty<Pattern> pattern;

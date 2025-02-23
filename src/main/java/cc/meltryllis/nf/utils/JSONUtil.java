@@ -33,7 +33,7 @@ public class JSONUtil {
         }
     }
 
-    public static void toFile(File target, Object obj) {
+    public static void storeFile(File target, Object obj) {
         try {
             // 创建父目录
             Files.createDirectories(target.getParentFile().toPath());

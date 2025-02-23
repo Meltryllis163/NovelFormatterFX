@@ -7,7 +7,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fitToWidth="true">
     <VBox>
-        <fx:include source="novel-input.fxml"/>
+        <fx:include source="input/novel-input.fxml"/>
         <fx:include source="output/novel-output.fxml"/>
         <spacing>
             <UICons fx:constant="SMALL_SPACING"/>

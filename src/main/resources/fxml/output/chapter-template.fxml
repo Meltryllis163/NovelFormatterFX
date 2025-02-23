@@ -9,7 +9,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <Card xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
-      fx:controller="cc.meltryllis.nf.ui.controller.output.ChapterFormatController"
+      fx:controller="cc.meltryllis.nf.ui.controller.output.ChapterTemplateController"
       fx:id="root" minWidth="300">
     <header>
         <Tile fx:id="tile"/>

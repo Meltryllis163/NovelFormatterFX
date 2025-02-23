@@ -1,9 +1,8 @@
 package cc.meltryllis.nf.parser;
 
-import cc.meltryllis.nf.config.ChapterInputFormat;
-import cc.meltryllis.nf.config.InputFormat;
 import cc.meltryllis.nf.entity.Chapter;
 import cc.meltryllis.nf.entity.Regex;
+import cc.meltryllis.nf.entity.config.InputFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -30,11 +29,11 @@ public class ChapterParser extends AbstractParser {
 
     @Override
     protected boolean parse(@NotNull String trimmingText) {
-        ChapterInputFormat config = InputFormat.getInstance().getChapterFormat();
-        if (trimmingText.length() > config.getMaxLimitLength()) {
+        InputFormat inputFormat = InputFormat.getInstance();
+        if (trimmingText.length() > inputFormat.getChapterMaxLength()) {
             return false;
         }
-        for (Regex regex : config.getRegexList()) {
+        for (Regex regex : inputFormat.getChapterRegexList()) {
             Matcher matcher = regex.matcher(trimmingText);
             if (matcher != null && matcher.matches()) {
                 chapter = new Chapter(matcher.group(NUMBER_KEY), matcher.group(TITLE_KEY));

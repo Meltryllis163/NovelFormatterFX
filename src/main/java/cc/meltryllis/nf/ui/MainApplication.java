@@ -7,10 +7,16 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.Mnemonic;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -29,8 +35,8 @@ public class MainApplication extends Application {
         // 嵌入全局css表
         root.getStylesheets().add(Objects.requireNonNull(MainApplication.class.getResource("/fxml/css/common.css"))
                 .toExternalForm());
-
         Scene scene = new Scene(root, UICons.PREF_WIDTH, UICons.PREF_HEIGHT);
+        initLanguageMnemonic(scene);
         stage.titleProperty().bind(I18nUtil.createStringBinding("App.Title"));
         Image icon = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/icon.png")));
         stage.getIcons().add(icon);
@@ -38,6 +44,22 @@ public class MainApplication extends Application {
         stage.setMinHeight(UICons.STAGE_MIN_HEIGHT);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void initLanguageMnemonic(Scene scene) {
+        KeyCombination changeLanguage = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN,
+                KeyCombination.SHIFT_DOWN,
+                KeyCombination.ALT_DOWN);
+        Button changeLanguageButton = new Button();
+        changeLanguageButton.setOnAction(event -> {
+            if (I18nUtil.getLocale().equals(Locale.SIMPLIFIED_CHINESE)) {
+                I18nUtil.setLocale(Locale.ENGLISH);
+            } else {
+                I18nUtil.setLocale(Locale.SIMPLIFIED_CHINESE);
+            }
+        });
+        Mnemonic changeLanguageMnemonic = new Mnemonic(changeLanguageButton, changeLanguage);
+        scene.addMnemonic(changeLanguageMnemonic);
     }
 
     public static void main(String[] args) {

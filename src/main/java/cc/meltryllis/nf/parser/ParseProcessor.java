@@ -1,8 +1,9 @@
 package cc.meltryllis.nf.parser;
 
-import cc.meltryllis.nf.config.OutputFormat;
 import cc.meltryllis.nf.constants.FileCons;
 import cc.meltryllis.nf.entity.Chapter;
+import cc.meltryllis.nf.entity.Replacement;
+import cc.meltryllis.nf.entity.config.OutputFormat;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;
@@ -68,6 +69,13 @@ public class ParseProcessor {
             boolean indentationForChapter = outputFormat.isIndentationForChapter();
             String line;
             while ((line = reader.readLine()) != null) {
+                for (Replacement replacement : outputFormat.getReplacementList()) {
+                    if (replacement.isRegexMode()) {
+                        line = line.replaceAll(replacement.getOldText(), replacement.getNewText());
+                    } else {
+                        line = line.replace(replacement.getOldText(), replacement.getNewText());
+                    }
+                }
                 ParseProcessor processor = new ParseProcessor(line);
                 AbstractParser parser = processor.parse();
                 int type = processor.getType();
@@ -78,7 +86,7 @@ public class ParseProcessor {
                     if (indentationForChapter) {
                         writer.write(indention);
                     }
-                    writer.write(chapter.format(OutputFormat.getInstance().getChapterTemplate()));
+                    writer.write(chapter.format(OutputFormat.getInstance().getSelectedChapterTemplate()));
                 } else if (type == CONTENT) {
                     ContentParser contentParser = (ContentParser) parser;
                     assert contentParser != null;

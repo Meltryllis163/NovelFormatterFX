@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -23,13 +22,8 @@ public class MenuBarController implements Initializable {
 
     @FXML
     MenuBar menuBar;
-
     @FXML
     Menu fileMenu;
-
-    @FXML
-    Menu languageMenu;
-
     @FXML
     MenuItem exitItem;
 
@@ -45,12 +39,6 @@ public class MenuBarController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fileMenu.textProperty().bind(I18nUtil.createStringBinding("Common.File"));
-        languageMenu.textProperty().bind(I18nUtil.createStringBinding("Common.Language"));
-        for (Locale supportedLocale : I18nUtil.getSupportedLocales()) {
-            MenuItem item = new MenuItem(supportedLocale.getDisplayName(supportedLocale));
-            item.setOnAction(actionEvent -> I18nUtil.setLocale(supportedLocale));
-            languageMenu.getItems().add(item);
-        }
         exitItem.textProperty().bind(I18nUtil.createStringBinding("Common.Exit"));
     }
 

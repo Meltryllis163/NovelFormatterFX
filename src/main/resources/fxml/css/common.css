@@ -3,3 +3,8 @@
     -fx-fill: -color-fg-subtle;
     -fx-icon-color: -color-fg-subtle;
 }
+
+/* 淡蓝色文本输入框 */
+.text-field-light-blue {
+    -fx-text-fill: #0969DA;
+}

@@ -1,9 +1,10 @@
 package cc.meltryllis.nf.ui.controller;
 
 import atlantafx.base.controls.Tile;
-import cc.meltryllis.nf.config.InputFormat;
-import cc.meltryllis.nf.config.OutputFormat;
 import cc.meltryllis.nf.constants.CharacterCons;
+import cc.meltryllis.nf.entity.config.InputFormat;
+import cc.meltryllis.nf.entity.config.OutputFormat;
+import cc.meltryllis.nf.entity.property.OutputFormatProperty;
 import cc.meltryllis.nf.parser.ParseProcessor;
 import cc.meltryllis.nf.utils.I18nUtil;
 import cn.hutool.core.lang.Console;
@@ -60,20 +61,18 @@ public class NovelOutputController implements Initializable {
 
     private void initBlackLine() {
         blankLineTile.titleProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.BlackLine.Tile.Title"));
+                .bind(I18nUtil.createStringBinding("App.OutputConfiguration.BlackLine.Tile.Title"));
         blankLineTile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.BlackLine.Tile.Desc"));
+                .bind(I18nUtil.createStringBinding("App.OutputConfiguration.BlackLine.Tile.Desc"));
         blankLineSpinner.setEditable(false);
-        OutputFormat.getInstance().setBlankLineCount(blankLineSpinner.getValue());
-        blankLineSpinner.valueProperty().addListener((observable, oldValue, newValue) -> OutputFormat.getInstance()
-                .setBlankLineCount(newValue));
+        OutputFormatProperty.getInstance().getBlankLineCountProperty().bind(blankLineSpinner.valueProperty());
     }
 
     private void initParagraphIndentation() {
         paragraphIndentationTile.titleProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ParagraphIndentation.Tile.Title"));
+                .bind(I18nUtil.createStringBinding("App.OutputConfiguration.ParagraphIndentation.Tile.Title"));
         paragraphIndentationTile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.NovelExportConfiguration.ParagraphIndentation.Tile.Desc"));
+                .bind(I18nUtil.createStringBinding("App.OutputConfiguration.ParagraphIndentation.Tile.Desc"));
         OutputFormat.getInstance().setSpaceCount(paragraphIndentationSpinner.getValue());
         paragraphIndentationSpinner.valueProperty()
                 .addListener((observable, oldValue, newValue) -> OutputFormat.getInstance().setSpaceCount(newValue));
@@ -109,7 +108,7 @@ public class NovelOutputController implements Initializable {
 
         indentationForChapterButton.textProperty()
                 .bind(I18nUtil.createStringBinding(
-                        "App.NovelExportConfiguration.ParagraphIndentation.ChapterButton.Text"));
+                        "App.OutputConfiguration.ParagraphIndentation.ChapterButton.Text"));
         indentationForChapterButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> OutputFormat.getInstance()
                         .setIndentationForChapter(newValue));
@@ -118,7 +117,7 @@ public class NovelOutputController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        exportConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.NovelExportConfiguration"));
+        exportConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.OutputConfiguration"));
         initBlackLine();
         initParagraphIndentation();
         exportButton.textProperty().bind(I18nUtil.createStringBinding("Common.Export"));

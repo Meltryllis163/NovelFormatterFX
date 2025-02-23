@@ -10,5 +10,6 @@ public interface DataCons {
 
     String DATA_FOLDER = "data";
     String INPUT_FORMAT_CONFIG = DATA_FOLDER + "/input_format.json";
+    String OUTPUT_FORMAT_CONFIG = DATA_FOLDER + "/output_format.json";
 
 }

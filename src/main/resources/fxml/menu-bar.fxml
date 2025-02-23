@@ -8,7 +8,6 @@
          fx:controller="cc.meltryllis.nf.ui.controller.MenuBarController"
          fx:id="menuBar">
     <Menu fx:id="fileMenu">
-        <Menu fx:id="languageMenu"/>
         <MenuItem fx:id="exitItem" onAction="#exit"/>
     </Menu>
 </MenuBar>

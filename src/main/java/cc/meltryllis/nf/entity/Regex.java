@@ -26,7 +26,7 @@ public class Regex {
     private String description;
     private Pattern pattern;
     @JsonIgnore
-    private boolean isEnabled;
+    private boolean enabled;
 
     public Regex(String description, String pattern) {
         this(description, Pattern.compile(pattern));
@@ -44,4 +44,25 @@ public class Regex {
         return pattern.matcher(s);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Regex) {
+            return pattern.equals(((Regex) obj).getPattern());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int res = 1;
+        res = res * prime + (pattern == null ? 0 : pattern.hashCode());
+        return res;
+    }
 }

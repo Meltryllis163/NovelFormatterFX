@@ -5,5 +5,6 @@
       xmlns:fx="http://javafx.com/fxml"
       alignment="TOP_CENTER">
     <fx:include source="menu-bar.fxml"/>
-    <fx:include source="main-pane.fxml"/>
+    <fx:include source="tabs.fxml"/>
 </VBox>
+

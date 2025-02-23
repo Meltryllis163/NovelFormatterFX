@@ -5,13 +5,13 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 中文转换工具。
+ * 数字转换工具。
  *
  * @author Zachary W
  * @date 2025/2/8
  */
 @SuppressWarnings("UnnecessaryUnicodeEscape")
-public class ChineseUtil {
+public class NumberUtil {
 
     /** Unicode中的最小中文字符 */
     public static final char MIN_CHINESE_CHARACTER = '\u4E00';
@@ -34,8 +34,20 @@ public class ChineseUtil {
         }
     }
 
+    public static int parseNumber(String str) throws IllegalArgumentException {
+        str = StrUtil.trim(str);
+        if (StrUtil.isBlank(str)) {
+            throw new IllegalArgumentException(StrUtil.format("\"{}\" is blank.", str));
+        }
+        try {
+            return chineseToNumber(str);
+        } catch (IllegalArgumentException e) {
+            return cn.hutool.core.util.NumberUtil.parseInt(str);
+        }
+    }
+
     /**
-     * 抄自 {@link NumberChineseFormatter#chineseToNumber(char)}。
+     * 抄自 {@code cn.hutool.core.convert.coNumberChineseFormatter#chineseToNumber(char)}。
      */
     private static int chineseToNumber(char chinese) throws IllegalArgumentException {
         // '两'(20004) -> '二'(20108)
@@ -44,17 +56,9 @@ public class ChineseUtil {
         }
         int i = ArrayUtil.indexOf(DIGITS, chinese);
         if (i < 0) {
-            throw new IllegalArgumentException(StrUtil.format("{} is not a chinese number character."));
+            throw new IllegalArgumentException(StrUtil.format("{} is not a chinese number character.", chinese));
         }
         return (i + 1) / 2;
-    }
-
-    public static boolean isChineseNumber(char chr) {
-        // '两'(20004) -> '二'(20108)
-        if (20004 == chr) {
-            chr = 20108;
-        }
-        return ArrayUtil.indexOf(DIGITS, chr) != -1 || ArrayUtil.indexOf(QUANTITY_UNIT, chr) != -1;
     }
 
 }
