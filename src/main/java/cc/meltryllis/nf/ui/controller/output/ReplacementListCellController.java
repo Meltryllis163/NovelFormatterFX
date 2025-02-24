@@ -29,9 +29,7 @@ public class ReplacementListCellController extends FXMLListCellController<Replac
         这个问题已经解决。详见cc.meltryllis.nf.ui.common.FXMLListCell.loadRoot()注释。
         但是上方的原因还是合理的，因此此处仍然要注意。
          */
-        itemSelectedCheckBox.setSelected(item.isSelected());
-        itemSelectedCheckBox.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> item.setSelected(newValue));
+        itemSelectedCheckBox.selectedProperty().bindBidirectional(item.getSelectedProperty());
         targetField.setText(item.getOldText());
         if (item.isRegexMode()) {
             targetField.getStyleClass().add(MyStyles.TEXT_FIELD_LIGHT_BLUE);

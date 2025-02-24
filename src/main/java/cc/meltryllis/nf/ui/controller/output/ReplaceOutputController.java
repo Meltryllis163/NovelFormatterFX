@@ -5,10 +5,10 @@ import cc.meltryllis.nf.constants.MyStyles;
 import cc.meltryllis.nf.entity.Replacement;
 import cc.meltryllis.nf.entity.property.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.UniqueListProperty;
+import cc.meltryllis.nf.ui.MainApplication;
 import cc.meltryllis.nf.ui.common.FXMLListCell;
 import cc.meltryllis.nf.utils.I18nUtil;
 import cn.hutool.core.util.StrUtil;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -53,17 +54,19 @@ public class ReplaceOutputController implements Initializable {
     public void selectAllListItems() {
         UniqueListProperty<Replacement> uniqueListProperty = OutputFormatProperty.getInstance()
                 .getReplacementUniqueListProperty();
-        for (int i = uniqueListProperty.size() - 1; i >= 0; i--) {
-            uniqueListProperty.get(i).setSelected(true);
+        for (Replacement replacement : uniqueListProperty.getValue()) {
+            replacement.setSelected(true);
         }
     }
 
-    public void deleteSelectedItems(ActionEvent actionEvent) {
+    public void deleteSelectedItems() {
         UniqueListProperty<Replacement> uniqueListProperty = OutputFormatProperty.getInstance()
                 .getReplacementUniqueListProperty();
-        for (int i = uniqueListProperty.size() - 1; i >= 0; i--) {
-            if (uniqueListProperty.get(i).isSelected()) {
-                uniqueListProperty.remove(i);
+        Iterator<Replacement> iterator = uniqueListProperty.iterator();
+        while (iterator.hasNext()) {
+            Replacement replacement = iterator.next();
+            if (replacement.isSelected()) {
+                iterator.remove();
             }
         }
     }
@@ -76,8 +79,8 @@ public class ReplaceOutputController implements Initializable {
 
     private void initReplacementList() {
         regexButton.setCursor(Cursor.HAND);
-        regexButton.setGraphic(
-                new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/regex.png")))));
+        regexButton.setGraphic(new ImageView(new Image(
+                Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/regex.png")))));
         regexButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 targetField.getStyleClass().add(MyStyles.TEXT_FIELD_LIGHT_BLUE);
@@ -88,7 +91,7 @@ public class ReplaceOutputController implements Initializable {
         Label placeholderLabel = new Label();
         placeholderLabel.textProperty()
                 .bind(I18nUtil.createStringBinding("App.OutputConfiguration.Replace.ListView.PlaceholderLabel.Text"));
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         listView.placeholderProperty().setValue(placeholderLabel);
         listView.itemsProperty().bind(OutputFormatProperty.getInstance().getReplacementUniqueListProperty());
         listView.setCellFactory(param -> new FXMLListCell<>("/fxml/output/replace-list-cell.fxml"));

@@ -39,6 +39,7 @@ public final class OutputFormat {
     @JsonIgnore
     @JsonProperty(defaultValue = "false")
     private boolean indentationForChapter;
+
     private List<Replacement> replacementList;
 
     public static OutputFormat getInstance() {

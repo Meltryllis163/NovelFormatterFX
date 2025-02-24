@@ -1,6 +1,8 @@
 package cc.meltryllis.nf.entity;
 
 import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.beans.property.SimpleBooleanProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +21,23 @@ import lombok.Setter;
 @Setter
 public class Replacement {
 
-    private boolean selected;
+    @JsonIgnore
+    private SimpleBooleanProperty selectedProperty;
+
     private String oldText;
     private boolean regexMode;
     private String newText;
 
     public Replacement(String oldText, boolean regexMode, String newText) {
-        this(false, oldText, regexMode, newText);
+        this(new SimpleBooleanProperty(false), oldText, regexMode, newText);
+    }
+
+    public boolean isSelected() {
+        return getSelectedProperty().getValue();
+    }
+
+    public void setSelected(boolean value) {
+        getSelectedProperty().setValue(value);
     }
 
     @Override

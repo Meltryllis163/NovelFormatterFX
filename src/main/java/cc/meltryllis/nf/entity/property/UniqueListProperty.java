@@ -1,5 +1,6 @@
 package cc.meltryllis.nf.entity.property;
 
+import cn.hutool.core.util.StrUtil;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -9,14 +10,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
- * 为JavaFX设计的可监控 {@link List}。
- * 新增以下特性：<p>
+ * 为JavaFX设计的带有一些监控属性的列表。
+ * 具有特性：<p>
  * <ul>
  *     <li>元素不允许重复</li>
  *     <li>为列表的长度 <i>size</i> 新增监听属性</li>
@@ -32,10 +30,6 @@ public class UniqueListProperty<E> extends SimpleObjectProperty<ObservableList<E
 
     @Getter(AccessLevel.PUBLIC)
     private final SimpleIntegerProperty sizeProperty;
-
-    public UniqueListProperty() {
-        this(new ArrayList<>());
-    }
 
     /**
      * @param elements 传入的数据列表，注意这是一个<b>引用拷贝</b>。即编辑操作都直接作用与传入的列表，传入过程中不存在克隆与复制。
@@ -99,7 +93,52 @@ public class UniqueListProperty<E> extends SimpleObjectProperty<ObservableList<E
     }
 
     @Override
-    public @NotNull UniqueListIterator<E> iterator() {
-        return new UniqueListIterator<>(this);
+    public @NotNull Iterator<E> iterator() {
+        return new UniqueListIterator();
+    }
+
+    /**
+     * {@link UniqueListProperty}迭代器。
+     *
+     * @author Zachary W
+     * @date 2025/2/23
+     */
+    @Getter(AccessLevel.PRIVATE)
+    private class UniqueListIterator implements Iterator<E> {
+
+        private int lastSet;
+        private int index;
+
+        public UniqueListIterator() {
+            this.lastSet = -1;
+            this.index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return getIndex() < size();
+        }
+
+        @Override
+        public E next() {
+            int i = getIndex();
+            if (i >= size()) {
+                throw new NoSuchElementException(
+                        StrUtil.format("Cannot get element at index {}, only {} elements.", index,
+                                size()));
+            }
+            index = i + 1;
+            return get(lastSet = i);
+        }
+
+        @Override
+        public void remove() {
+            if (lastSet < 0) {
+                throw new IllegalStateException();
+            }
+            UniqueListProperty.this.remove(lastSet);
+            index = lastSet;
+            lastSet = -1;
+        }
     }
 }
