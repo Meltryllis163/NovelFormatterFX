@@ -140,7 +140,7 @@
                                 <!-- <headerType>console</headerType> -->
                             </winConfig>
                             <additionalModules>
-                                <!-- See Here https://github.com/fvarrui/JavaPackager/issues/429 -->
+                                <!-- 详见 https://github.com/fvarrui/JavaPackager/issues/429 -->
                                 <additionalModule>java.naming</additionalModule>
                             </additionalModules>
                         </configuration>
@@ -156,35 +156,6 @@
                     <mainClass>cc.meltryllis.nf/cc.meltryllis.nf.Main</mainClass>
                 </configuration>
             </plugin>
-            <!-- <plugin> -->
-            <!--     <groupId>io.github.janix520</groupId> -->
-            <!--     <artifactId>maven-easypackage-plugin</artifactId> -->
-            <!--     <version>1.4.1</version> -->
-            <!--     <executions> -->
-            <!--         <execution> -->
-            <!--             <phase>package</phase> -->
-            <!--             <goals> -->
-            <!--                 <goal>jpackage</goal> -->
-            <!--             </goals> -->
-            <!--         </execution> -->
-            <!--     </executions> -->
-            <!--     <configuration> -->
-            <!--         &lt;!&ndash; 是否是最小打包，用于精简虚拟机，有的库依赖老旧的库，解析依赖会出错，true如果打包不成功，就改成false &ndash;&gt; -->
-            <!--         <minimum>false</minimum> -->
-            <!--         &lt;!&ndash;应用程序名称&ndash;&gt; -->
-            <!--         <name>${project.artifactId}</name> -->
-            <!--         &lt;!&ndash;主运行类&ndash;&gt; -->
-            <!--         <mainClass>cc.meltryllis.nf.Main</mainClass> -->
-            <!--         &lt;!&ndash;是否显示控制台&ndash;&gt; -->
-            <!--         <winConsole>true</winConsole> -->
-            <!--         &lt;!&ndash;可选app-image、exe、msi、rpm、deb、pkg、dmg，msi需要另外一个程序配合，app-image是exe绿色版，exe是安装包，其他自行搜索&ndash;&gt; -->
-            <!--         <type>app-image</type> -->
-            <!--         <appVersion>1.0.0</appVersion> -->
-            <!--         <copyright>版权</copyright> -->
-            <!--         <vendor>厂商</vendor> -->
-            <!--         <description>描述</description> -->
-            <!--     </configuration> -->
-            <!-- </plugin> -->
         </plugins>
     </build>
 </project>
