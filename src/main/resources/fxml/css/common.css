@@ -1,0 +1,15 @@
+/* 灰色图标 */
+.icon-subtle {
+    -fx-fill: -color-fg-subtle;
+    -fx-icon-color: -color-fg-subtle;
+}
+
+/* 道奇蓝文本输入框 */
+.text-field-doder-blue {
+    -fx-text-fill: #1E90FF;
+}
+
+/* 详见 https://github.com/mkpaz/atlantafx/issues/107 */
+.table-view {
+    -fx-fixed-cell-size: 40;
+}

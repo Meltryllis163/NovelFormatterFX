@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx"
+           fx:controller="cc.meltryllis.nf.ui.controller.FormatterPaneController"
+           fx:id="root">
+    <ScrollPane fitToWidth="true">
+        <VBox>
+            <fx:include source="input/novel-input.fxml"/>
+            <fx:include source="output/novel-output.fxml"/>
+            <spacing>
+                <UICons fx:constant="SMALL_SPACING"/>
+            </spacing>
+            <padding>
+                <UICons fx:constant="DEFAULT_INSETS"/>
+            </padding>
+        </VBox>
+    </ScrollPane>
+</StackPane>

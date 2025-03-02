@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.NovelInputController"
+      fx:id="root">
+    <Label fx:id="inputFormatLabel" styleClass="title-2"/>
+    <Separator styleClass="small"/>
+    <fx:include source="novel-select.fxml"/>
+    <VBox>
+        <fx:include source="chapter-input.fxml"/>
+        <spacing>
+            <UICons fx:constant="DEFAULT_SPACING"/>
+        </spacing>
+    </VBox>
+    <!--    <Label fx:id="filePathLabel" styleClass="text-default"/>-->
+    <spacing>
+        <UICons fx:constant="DEFAULT_SPACING"/>
+    </spacing>
+    <padding>
+        <Insets bottom="50"/>
+    </padding>
+</VBox>

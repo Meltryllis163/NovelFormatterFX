@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.Card?>
+<?import atlantafx.base.controls.Tile?>
+<?import atlantafx.base.layout.InputGroup?>
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<Card xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.output.ReplaceOutputController">
+    <header>
+        <Tile fx:id="replaceTile"/>
+    </header>
+    <body>
+        <VBox>
+            <Separator styleClass="small"/>
+            <HBox>
+
+                <Button onAction="#selectAllListItems">
+                    <graphic>
+                        <FontIcon iconLiteral="fth-check-square"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="deleteButton" onAction="#deleteSelectedItems">
+                    <graphic>
+                        <FontIcon iconLiteral="fth-trash"/>
+                    </graphic>
+                </Button>
+                <Separator orientation="VERTICAL" styleClass="medium"/>
+                <InputGroup HBox.hgrow="ALWAYS">
+                    <ToggleButton fx:id="regexButton" prefHeight="50" styleClass="button-icon"/>
+                    <TextField fx:id="targetField" HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="rightToLabel" prefHeight="50">
+                        <graphic>
+                            <FontIcon iconLiteral="fth-chevrons-right"/>
+                        </graphic>
+                    </Label>
+                    <TextField fx:id="replacementField" HBox.hgrow="ALWAYS"/>
+                </InputGroup>
+                <Button onAction="#addListItem">
+                    <graphic>
+                        <FontIcon iconLiteral="fth-plus-square"/>
+                    </graphic>
+                </Button>
+                <spacing>
+                    <UICons fx:constant="SMALL_SPACING"/>
+                </spacing>
+            </HBox>
+            <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="bordered"/>
+            <spacing>
+                <UICons fx:constant="SMALL_SPACING"/>
+            </spacing>
+        </VBox>
+    </body>
+</Card>

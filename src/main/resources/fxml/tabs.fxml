@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<TabPane xmlns:fx="http://javafx.com/fxml"
+         xmlns="http://javafx.com/javafx"
+         fx:controller="cc.meltryllis.nf.ui.controller.TabsController"
+         styleClass="floating" fx:id="root">
+    <Tab fx:id="mainTab" closable="false">
+        <graphic>
+            <FontIcon iconLiteral="fth-edit"/>
+        </graphic>
+        <fx:include source="formatter-pane.fxml"/>
+    </Tab>
+    <Tab fx:id="settingsTab" closable="false">
+        <graphic>
+            <FontIcon iconLiteral="fth-settings"/>
+        </graphic>
+        <fx:include fx:id="settingsPane" source="settings/settings-pane.fxml"/>
+    </Tab>
+</TabPane>
