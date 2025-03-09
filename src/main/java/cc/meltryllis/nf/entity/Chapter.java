@@ -1,9 +1,9 @@
 package cc.meltryllis.nf.entity;
 
-import cc.meltryllis.nf.utils.I18nUtil;
-import cc.meltryllis.nf.utils.NumberUtil;
-import cc.meltryllis.nf.utils.StrUtil;
-import lombok.AccessLevel;
+import cc.meltryllis.nf.entity.property.output.ChapterTemplateProperty;
+import cc.meltryllis.nf.utils.common.NumberUtil;
+import cc.meltryllis.nf.utils.common.StrUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,43 +18,47 @@ import org.jetbrains.annotations.Nullable;
  */
 @AllArgsConstructor
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 public class Chapter {
 
-    private static final Chapter EXAMPLE_CHAPTER = new Chapter(null, 1024,
+    private static final Chapter EXAMPLE_CHAPTER = new Chapter(StrUtil.EMPTY, 1024,
             I18nUtil.get("Common.Novel.Chapter.ChapterName"));
 
     /** 原文本 */
+    @NotNull
     private final String text;
-    /** 章节编号 */
-    private final int    number;
-    /** 章节名 */
-    private final String title;
 
-    public Chapter(String text, String numberString, @Nullable String title) throws IllegalArgumentException {
+    /** 章节编号 */
+    private int    number;
+    /** 章节名 */
+    @NotNull
+    private String title;
+
+    public Chapter(@NotNull String text, @NotNull String numberString,
+                   @NotNull String title) throws IllegalArgumentException {
         this.text = StrUtil.trim(text);
         this.title = StrUtil.trim(title);
         this.number = NumberUtil.parseNumber(numberString);
     }
 
     @NotNull
-    public static String exampleFormat(@Nullable String template) {
+    public static String exampleText(@Nullable String template) {
         return EXAMPLE_CHAPTER.format(template);
     }
 
     /**
      * 根据模板格式化章节。
      *
-     * @param format 格式化模板。
+     * @param templateProperty 格式化模板。
      *
      * @return 格式化以后的章节。如果格式为空则使用默认格式。
      *
      * @see #format(String)
      */
     @NotNull
-    public String format(@Nullable ChapterFormat format) {
+    public String format(@Nullable ChapterTemplateProperty templateProperty) {
         return format(
-                format == null ? ChapterFormat.DEFAULT_CHAPTER_FORMAT.getTemplateText() : format.getTemplateText());
+                templateProperty == null ? ChapterTemplateProperty.DEFAULT_CHAPTER_TEMPLATE.getTemplateText() : templateProperty.getTemplateText());
     }
 
     /**
@@ -64,17 +68,18 @@ public class Chapter {
      *
      * @return 格式化以后的章节。如果格式为空则使用默认格式。
      *
-     * @see ChapterFormat#CHINESE_NUMBER_PLACEHOLDER
-     * @see ChapterFormat#ARABIC_NUMBER_PLACEHOLDER
-     * @see ChapterFormat#TITLE_PLACEHOLDER
-     * @see ChapterFormat#DEFAULT_CHAPTER_FORMAT
+     * @see ChapterTemplateProperty#CHINESE_NUMBER_PLACEHOLDER
+     * @see ChapterTemplateProperty#ARABIC_NUMBER_PLACEHOLDER
+     * @see ChapterTemplateProperty#TITLE_PLACEHOLDER
+     * @see ChapterTemplateProperty#DEFAULT_CHAPTER_TEMPLATE
      */
     private String format(@Nullable String template) {
         if (StrUtil.isEmpty(template)) {
-            template = ChapterFormat.DEFAULT_CHAPTER_FORMAT.getTemplateText();
+            template = ChapterTemplateProperty.DEFAULT_CHAPTER_TEMPLATE.getTemplateText();
         }
-        template = template.replace(ChapterFormat.CHINESE_NUMBER_PLACEHOLDER, NumberUtil.format(getNumber(), false));
-        template = template.replace(ChapterFormat.ARABIC_NUMBER_PLACEHOLDER, String.valueOf(getNumber()));
-        return template.replace(ChapterFormat.TITLE_PLACEHOLDER, getTitle());
+        template = template.replace(ChapterTemplateProperty.CHINESE_NUMBER_PLACEHOLDER,
+                NumberUtil.format(getNumber(), false));
+        template = template.replace(ChapterTemplateProperty.ARABIC_NUMBER_PLACEHOLDER, String.valueOf(getNumber()));
+        return template.replace(ChapterTemplateProperty.TITLE_PLACEHOLDER, getTitle());
     }
 }

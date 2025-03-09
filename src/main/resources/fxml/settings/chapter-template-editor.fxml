@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.Card?>
+<?import atlantafx.base.controls.Tile?>
+<?import atlantafx.base.layout.InputGroup?>
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import cc.meltryllis.nf.ui.common.CustomTableView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<Card xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.settings.ChapterTemplateEditor">
+    <header>
+        <Tile fx:id="tile"/>
+    </header>
+    <body>
+        <VBox>
+            <Separator styleClass="small"/>
+            <HBox alignment="CENTER_LEFT">
+                <Button onAction="#selectAll">
+                    <graphic>
+                        <FontIcon iconLiteral="fth-check-square"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="deleteButton" onAction="#deleteSelectedItems">
+                    <graphic>
+                        <FontIcon iconLiteral="fth-trash"/>
+                    </graphic>
+                </Button>
+                <Separator orientation="VERTICAL" styleClass="medium"/>
+                <InputGroup HBox.hgrow="ALWAYS">
+                    <TextField fx:id="templateField" HBox.hgrow="ALWAYS"/>
+                    <Label maxHeight="50">
+                        <graphic>
+                            <FontIcon iconLiteral="fth-chevrons-right"/>
+                        </graphic>
+                    </Label>
+                    <TextField fx:id="exampleField" disable="true" HBox.hgrow="ALWAYS"/>
+                </InputGroup>
+                <Button onAction="#addChapterFormatItem">
+                    <graphic>
+                        <FontIcon iconLiteral="fth-plus-square"/>
+                    </graphic>
+                </Button>
+                <spacing>
+                    <UICons fx:constant="SMALL_SPACING"/>
+                </spacing>
+            </HBox>
+            <CustomTableView fx:id="tableView" VBox.vgrow="ALWAYS"/>
+            <spacing>
+                <UICons fx:constant="SMALL_SPACING"/>
+            </spacing>
+        </VBox>
+    </body>
+</Card>

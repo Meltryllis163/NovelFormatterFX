@@ -13,12 +13,11 @@
     <Separator styleClass="small"/>
     <fx:include source="novel-select.fxml"/>
     <VBox>
-        <fx:include source="chapter-input.fxml"/>
+        <fx:include source="chapter/chapter-input.fxml"/>
         <spacing>
             <UICons fx:constant="DEFAULT_SPACING"/>
         </spacing>
     </VBox>
-    <!--    <Label fx:id="filePathLabel" styleClass="text-default"/>-->
     <spacing>
         <UICons fx:constant="DEFAULT_SPACING"/>
     </spacing>

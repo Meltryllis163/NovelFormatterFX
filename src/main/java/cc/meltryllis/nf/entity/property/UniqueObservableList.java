@@ -1,14 +1,16 @@
 package cc.meltryllis.nf.entity.property;
 
+import cc.meltryllis.nf.utils.common.StrUtil;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
+import javafx.collections.ModifiableObservableListBase;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -16,76 +18,35 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * 为JavaFX设计的带有一些监控属性的列表。
- * 具有特性：<p>
- * <ul>
- *     <li>元素不允许重复</li>
- *     <li>为列表的长度 <i>size</i> 新增监听属性</li>
- * </ul>
+ * 具有不重复元素的 {@code ObservableList}。
  *
  * @author Zachary W
  * @date 2025/2/17
  */
+@Slf4j
 @Getter(AccessLevel.PRIVATE)
-public class UniqueObservableList<E> {
+public class UniqueObservableList<E> extends ModifiableObservableListBase<E> {
 
-    private final Comparator<? super E> comparator;
-
-    private final ObservableList<E> observableList;
-
-    @Getter(AccessLevel.PUBLIC)
+    private final List<E>               elements;
+    @Getter
+    @JsonIgnore
     private final SimpleIntegerProperty sizeProperty;
+    @Setter
+    @JsonIgnore
+    private       Comparator<E>         comparator;
 
-    public UniqueObservableList(@NotNull List<E> elements) {
-        this(elements, null);
-    }
-
-    public UniqueObservableList(@NotNull List<E> elements, Comparator<? super E> comparator) {
-        this.comparator = comparator;
-        this.observableList = FXCollections.observableList(distinctElements(elements));
-        this.sizeProperty = new SimpleIntegerProperty(observableList.size());
-        getObservableList().addListener((ListChangeListener<E>) c -> sizeProperty.setValue(getObservableList().size()));
-    }
-
-    public boolean add(E element) {
-        if (!getObservableList().contains(element)) {
-            getObservableList().add(element);
-            sort();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean remove(E element) {
-        return getObservableList().remove(element);
-    }
-
-    public E remove(int index) {
-        return getObservableList().remove(index);
-    }
-
-    public void asItems(TableView<E> tableView) {
-        tableView.setItems(getObservableList());
-    }
-
-    public void asItems(ListView<E> listView) {
-        listView.setItems(getObservableList());
-    }
-
-    public void asItems(ComboBox<E> comboBox) {
-        comboBox.setItems(getObservableList());
-    }
-
-    private void sort() {
-        if (getComparator() != null) {
-            getObservableList().sort(getComparator());
-        }
+    @JsonCreator
+    public UniqueObservableList(@JsonProperty("elements") @NotNull List<E> elements) {
+        this.elements = distinctElements(elements);
+        this.sizeProperty = new SimpleIntegerProperty(elements.size());
+        addListener((ListChangeListener<E>) c -> sizeProperty.setValue(size()));
     }
 
     /**
      * 过滤传入列表中的重复项，使其仅保留一次。
      *
      * @param elements 被过滤的列表
+     *
      * @return 过滤后的列表
      */
     private List<E> distinctElements(List<E> elements) {
@@ -93,4 +54,54 @@ public class UniqueObservableList<E> {
         elements.removeIf(element -> !set.add(element));
         return elements;
     }
+
+    @JsonIgnore
+    public List<E> toList() {
+        return getElements().stream().toList();
+    }
+
+    @Override
+    public boolean add(E e) {
+        try {
+            return super.add(e);
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+    }
+
+    @Override
+    public E get(int index) {
+        return getElements().get(index);
+    }
+
+    @Override
+    public int size() {
+        return getElements().size();
+    }
+
+    @Override
+    protected void doAdd(int index, E element) {
+        if (!contains(element)) {
+            getElements().add(index, element);
+            if (getComparator() != null) {
+                getElements().sort(getComparator());
+            }
+            return;
+        }
+        throw new IllegalArgumentException(StrUtil.format("Add failed. Element {0} already exists.", element));
+    }
+
+    @Override
+    protected E doSet(int index, E element) {
+        if (!contains(element)) {
+            return getElements().set(index, element);
+        }
+        throw new IllegalArgumentException(StrUtil.format("Set failed. Element {0} already exists.", element));
+    }
+
+    @Override
+    protected E doRemove(int index) {
+        return getElements().remove(index);
+    }
+
 }

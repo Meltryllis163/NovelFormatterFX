@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import cc.meltryllis.nf.constants.UICons?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-<ScrollPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="cc.meltryllis.nf.ui.controller.SettingsPaneController"
-            fitToWidth="true">
-    <VBox>
-        <Label fx:id="appConfigLabel" styleClass="title-2" visible="false"/>
-        <Separator visible="false"/>
-        <Label fx:id="novelConfigLabel" styleClass="title-2"/>
-        <Separator/>
-        <fx:include source="chapter-input-regex-editor.fxml"/>
-        <fx:include source="chapter-output-format-editor.fxml"/>
-        <spacing>
-            <UICons fx:constant="SMALL_SPACING"/>
-        </spacing>
-        <padding>
-            <UICons fx:constant="DEFAULT_INSETS"/>
-        </padding>
-    </VBox>
-</ScrollPane>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx">
+    <ScrollPane fitToWidth="true">
+        <fx:include source="formatter-config.fxml"/>
+    </ScrollPane>
+</StackPane>
+

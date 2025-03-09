@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import cc.meltryllis.nf.ui.common.StateLabel?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.dialog.PatternCompileController"
+      alignment="CENTER_LEFT"
+      minWidth="800">
+    <Label fx:id="patternLabel"/>
+    <TextField fx:id="patternField"/>
+    <StateLabel fx:id="compileResultLabel" visible="false"/>
+    <Label fx:id="testTextLabel"/>
+    <TextField fx:id="testTextField" HBox.hgrow="ALWAYS"/>
+    <StateLabel fx:id="matchResultLabel" visible="false"/>
+    <HBox alignment="BASELINE_RIGHT">
+        <Button fx:id="applyButton" styleClass="success"/>
+    </HBox>
+    <spacing>
+        <UICons fx:constant="BIG_SPACING"/>
+    </spacing>
+</VBox>
+

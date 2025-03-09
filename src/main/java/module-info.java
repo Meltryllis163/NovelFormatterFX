@@ -17,15 +17,18 @@ module cc.meltryllis.nf {
     opens cc.meltryllis.nf.ui.controller.input to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.output to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.settings to javafx.fxml;
+    opens cc.meltryllis.nf.ui.controller.dialog to javafx.fxml;
     opens cc.meltryllis.nf.ui.common to javafx.fxml;
     opens cc.meltryllis.nf.constants to javafx.fxml;
 
-    opens cc.meltryllis.nf.entity.property to javafx.base;
-
     opens cc.meltryllis.nf.entity to com.fasterxml.jackson.databind;
-    opens cc.meltryllis.nf.entity.config to com.fasterxml.jackson.databind;
+    opens cc.meltryllis.nf.ui to com.fasterxml.jackson.databind;
 
+    opens cc.meltryllis.nf.entity.property to com.fasterxml.jackson.databind, javafx.base;
+    opens cc.meltryllis.nf.entity.property.input to com.fasterxml.jackson.databind, javafx.base;
+    opens cc.meltryllis.nf.entity.property.output to com.fasterxml.jackson.databind, javafx.base;
 
     exports cc.meltryllis.nf.ui;
     exports cc.meltryllis.nf.ui.controller;
+
 }

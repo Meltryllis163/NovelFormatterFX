@@ -3,8 +3,8 @@ package cc.meltryllis.nf.ui.controller;
 import atlantafx.base.theme.Styles;
 import cc.meltryllis.nf.constants.DataCons;
 import cc.meltryllis.nf.constants.UICons;
-import cc.meltryllis.nf.utils.I18nUtil;
-import cc.meltryllis.nf.utils.message.DialogUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
+import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -50,8 +50,8 @@ public class MenuBarController implements Initializable {
     public void exit() {
         if (menuBar != null) {
             Window window = menuBar.getScene().getWindow();
-            if (window instanceof Stage) {
-                ((Stage) window).close();
+            if (window instanceof Stage stage) {
+                stage.close();
             }
         }
     }
@@ -62,15 +62,15 @@ public class MenuBarController implements Initializable {
 
         // 版本
         Label versionKey = new Label(null, new FontIcon("fth-alert-circle"));
-        versionKey.textProperty().bind(I18nUtil.createStringBinding("Message.About.Version.Key"));
+        versionKey.textProperty().bind(I18nUtil.createStringBinding("Dialog.About.Version.Key"));
         HBox.setHgrow(versionKey, Priority.ALWAYS);
         Label versionValue = new Label(DataCons.VERSION);
         // Github
         Label githubKey = new Label(null, new FontIcon("fth-github"));
-        githubKey.textProperty().bind(I18nUtil.createStringBinding("Message.About.Github.Key"));
+        githubKey.textProperty().bind(I18nUtil.createStringBinding("Dialog.About.Github.Key"));
         HBox.setHgrow(versionKey, Priority.ALWAYS);
         Label githubValue = new Label();
-        githubValue.textProperty().bind(I18nUtil.createStringBinding("Message.About.Github.Value"));
+        githubValue.textProperty().bind(I18nUtil.createStringBinding("Dialog.About.Github.Value"));
         githubValue.getStyleClass().addAll(Styles.ACCENT, Styles.TEXT_UNDERLINED);
         githubValue.setCursor(Cursor.HAND);
         githubValue.setOnMouseClicked(event -> {
@@ -90,7 +90,7 @@ public class MenuBarController implements Initializable {
         valueBox.setAlignment(Pos.CENTER_RIGHT);
 
         box.getChildren().addAll(keyBox, valueBox);
-        DialogUtil.show("App.Title", box, DialogUtil.Type.NONE);
+        DialogUtil.show(I18nUtil.createStringBinding("App.Title"), box);
     }
 
     @Override

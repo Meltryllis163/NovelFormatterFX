@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.dialog.FormatFailController"
+      alignment="CENTER_LEFT">
+    <Label fx:id="failLabel"/>
+    <Label fx:id="reasonLabel"/>
+    <spacing>
+        <UICons fx:constant="BIG_SPACING"/>
+    </spacing>
+</VBox>

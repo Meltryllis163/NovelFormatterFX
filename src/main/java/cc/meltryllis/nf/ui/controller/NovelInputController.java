@@ -1,6 +1,6 @@
 package cc.meltryllis.nf.ui.controller;
 
-import cc.meltryllis.nf.utils.I18nUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
