@@ -2,11 +2,11 @@ package cc.meltryllis.nf.ui;
 
 import atlantafx.base.theme.PrimerLight;
 import cc.meltryllis.nf.constants.UICons;
-import cc.meltryllis.nf.entity.config.InputFormat;
-import cc.meltryllis.nf.entity.config.OutputFormat;
-import cc.meltryllis.nf.utils.I18nUtil;
+import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
+import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.AlertUtil;
-import cc.meltryllis.nf.utils.message.DialogUtil;
+import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -52,16 +52,15 @@ public class MainApplication extends Application {
         DialogUtil.registerOwner(scene.getWindow());
         // 退出事件
         stage.setOnCloseRequest(windowEvent -> {
-            InputFormat.store();
-            OutputFormat.store();
+            InputFormatProperty.store();
+            OutputFormatProperty.store();
         });
         stage.show();
     }
 
     private void initLanguageMnemonic(Scene scene) {
         KeyCombination changeLanguage = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN,
-                KeyCombination.SHIFT_DOWN,
-                KeyCombination.ALT_DOWN);
+                KeyCombination.SHIFT_DOWN, KeyCombination.ALT_DOWN);
         Button changeLanguageButton = new Button();
         changeLanguageButton.setOnAction(event -> {
             if (I18nUtil.getLocale().equals(Locale.SIMPLIFIED_CHINESE)) {

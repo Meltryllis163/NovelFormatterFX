@@ -1,26 +1,24 @@
 package cc.meltryllis.nf.ui.controller;
 
-import atlantafx.base.controls.Tile;
-import cc.meltryllis.nf.constants.CharacterCons;
-import cc.meltryllis.nf.entity.config.InputFormat;
-import cc.meltryllis.nf.entity.config.OutputFormat;
+import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
 import cc.meltryllis.nf.parser.ParseProcessor;
-import cc.meltryllis.nf.utils.I18nUtil;
-import cc.meltryllis.nf.utils.StrUtil;
-import javafx.beans.Observable;
-import javafx.beans.binding.StringBinding;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import cc.meltryllis.nf.ui.MainApplication;
+import cc.meltryllis.nf.ui.controller.dialog.FormatFailController;
+import cc.meltryllis.nf.ui.controller.dialog.FormatSuccessController;
+import cc.meltryllis.nf.utils.FXUtil;
+import cc.meltryllis.nf.utils.common.StrUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
+import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.util.Pair;
-import javafx.util.StringConverter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,83 +29,70 @@ import java.util.ResourceBundle;
 @Slf4j
 public class NovelOutputController implements Initializable {
 
-
     @FXML
-    public VBox root;
-
+    public VBox   root;
     @FXML
-    public Label exportConfigLabel;
-
+    public Label  othersLabel;
+    @FXML
+    public Label  exportConfigLabel;
     @FXML
     public Button exportButton;
 
-    @FXML
-    public Tile paragraphIndentationTile;
-
-    @FXML
-    public Spinner<Integer> paragraphIndentationSpinner;
-
-    @FXML
-    public ComboBox<Pair<StringProperty, Character>> paragraphIndentationComboBox;
-
-    @FXML
-    public ToggleButton indentationForChapterButton;
-
-
-    private void initParagraphIndentation() {
-        paragraphIndentationTile.titleProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.ParagraphIndentation.Tile.Title"));
-        paragraphIndentationTile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.ParagraphIndentation.Tile.Desc"));
-        OutputFormat.getInstance().setSpaceCount(paragraphIndentationSpinner.getValue());
-        paragraphIndentationSpinner.valueProperty()
-                .addListener((observable, oldValue, newValue) -> OutputFormat.getInstance().setSpaceCount(newValue));
-        paragraphIndentationComboBox.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> OutputFormat.getInstance().setSpace(newValue.getValue()));
-        paragraphIndentationComboBox.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(Pair<StringProperty, Character> object) {
-                if (object == null) {
-                    return null;
-                }
-                return object.getKey().getValue();
-            }
-
-            @Override
-            public Pair<StringProperty, Character> fromString(String string) {
-                return null;
-            }
-        });
-        StringBinding[] bindings = new StringBinding[]{I18nUtil.createStringBinding(
-                "Common.Space"), I18nUtil.createStringBinding("Common.FullWidthSpace")};
-        char[] spaces = new char[]{CharacterCons.ENGLISH.SPACE, CharacterCons.CHINESE.SPACE};
-        ObservableList<Pair<StringProperty, Character>> observableList = FXCollections.observableArrayList(
-                param -> new Observable[]{param.getKey()});
-        for (int i = 0; i < bindings.length; i++) {
-            SimpleStringProperty property = new SimpleStringProperty();
-            property.bind(bindings[i]);
-            observableList.add(new Pair<>(property, spaces[i]));
-        }
-        paragraphIndentationComboBox.setItems(observableList);
-        paragraphIndentationComboBox.getSelectionModel().selectLast();
-
-        indentationForChapterButton.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.ParagraphIndentation.ChapterButton.Text"));
-        indentationForChapterButton.selectedProperty().addListener(
-                (observable, oldValue, newValue) -> OutputFormat.getInstance().setIndentationForChapter(newValue));
-        indentationForChapterButton.setSelected(false);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         exportConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.Output.Label.Text"));
-        initParagraphIndentation();
         exportButton.textProperty().bind(I18nUtil.createStringBinding("Common.Export"));
+        othersLabel.textProperty().bind(I18nUtil.createStringBinding("Common.Others"));
+    }
+
+    private VBox createFormatSuccessDialogContent(File sourceFile) {
+        FXMLLoader fxmlLoader = FXUtil.newFXMLLoader("/fxml/dialog/format-success.fxml");
+        try {
+            VBox contentBox = fxmlLoader.load();
+            FormatSuccessController formatSuccessController = fxmlLoader.getController();
+            formatSuccessController.setFormatFile(sourceFile);
+            return contentBox;
+        } catch (IOException e) {
+            log.debug("Load format-success.fxml failed.", e);
+            return null;
+        }
+    }
+
+    private VBox createFormatFailDialogContent(IOException exception) {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/dialog/format-fail.fxml"));
+        try {
+            VBox contentBox = fxmlLoader.load();
+            Object controller = fxmlLoader.getController();
+            if (controller instanceof FormatFailController formatFailController) {
+                formatFailController.setFailException(exception.getMessage());
+            }
+            return contentBox;
+        } catch (IOException e) {
+            log.debug("Load format-fail.fxml failed.", e);
+            return null;
+        }
     }
 
     public void export() {
         long start = System.currentTimeMillis();
-        ParseProcessor.format(InputFormat.getInstance().getFile());
+        File formatFile = InputFormatProperty.getInstance().getFile();
+        try {
+            ParseProcessor parseProcessor = new ParseProcessor(formatFile);
+            if (parseProcessor.format()) {
+                VBox exportSuccessDialog = createFormatSuccessDialogContent(formatFile);
+                if (exportSuccessDialog != null) {
+                    DialogUtil.show(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title"), exportSuccessDialog,
+                            DialogUtil.Type.SUCCESS);
+                }
+            }
+        } catch (IOException e) {
+            VBox exportSuccessDialog = createFormatFailDialogContent(e);
+            if (exportSuccessDialog != null) {
+                DialogUtil.show(I18nUtil.createStringBinding("Dialog.FormatFail.Title"), exportSuccessDialog,
+                        DialogUtil.Type.WARNING);
+            }
+        }
         log.info(StrUtil.format("Format file success. Time: {0}ms.", System.currentTimeMillis() - start));
     }
 }

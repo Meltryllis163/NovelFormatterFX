@@ -1,41 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import atlantafx.base.controls.Card?>
-<?import atlantafx.base.controls.Tile?>
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cc.meltryllis.nf.ui.controller.NovelOutputController"
-      prefHeight="400.0" prefWidth="600.0"
       fx:id="root">
     <Label fx:id="exportConfigLabel" styleClass="title-2"/>
     <Separator styleClass="small"/>
-    <HBox>
-        <fx:include source="chapter-format.fxml" HBox.hgrow="ALWAYS" prefWidth="400"/>
-        <fx:include source="blank-line.fxml" HBox.hgrow="ALWAYS"/>
-        <spacing>
-            <UICons fx:constant="DEFAULT_SPACING"/>
-        </spacing>
-    </HBox>
-    <HBox>
-        <Card minWidth="300" HBox.hgrow="ALWAYS">
-            <header>
-                <Tile fx:id="paragraphIndentationTile"/>
-            </header>
-            <body>
-                <HBox alignment="BOTTOM_LEFT">
-                    <spacing>
-                        <UICons fx:constant="SMALL_SPACING"/>
-                    </spacing>
-                    <Spinner prefWidth="100" min="0" max="10" initialValue="2" fx:id="paragraphIndentationSpinner"/>
-                    <ComboBox fx:id="paragraphIndentationComboBox" minWidth="130"/>
-                    <ToggleButton fx:id="indentationForChapterButton"/>
-                </HBox>
-            </body>
-        </Card>
-    </HBox>
+    <fx:include source="paragraph/paragraph.fxml"/>
+    <fx:include source="chapter-template.fxml"/>
+    <Label fx:id="othersLabel" styleClass="title-3">
+        <graphic>
+            <FontIcon iconLiteral="fth-hash" styleClass="icon-subtle"/>
+        </graphic>
+        <graphicTextGap>
+            <UICons fx:constant="ICON_TEXT_GAP"/>
+        </graphicTextGap>
+    </Label>
     <fx:include source="replace.fxml" minHeight="500"/>
     <HBox alignment="TOP_RIGHT">
         <Button fx:id="exportButton" prefWidth="100" styleClass="success" onAction="#export"/>

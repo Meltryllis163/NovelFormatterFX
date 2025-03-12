@@ -1,6 +1,6 @@
 package cc.meltryllis.nf.ui.controller;
 
-import cc.meltryllis.nf.utils.I18nUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,11 +14,11 @@ import java.util.ResourceBundle;
  */
 public class ChapterInputFormatController implements Initializable {
     @FXML
-    Label chapterConfigLabel;
+    Label chapterInputFormatTitleLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        chapterConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.Input.ChapterInput"));
+        chapterInputFormatTitleLabel.textProperty().bind(I18nUtil.createStringBinding("App.Input.Chapter.Label.Text"));
     }
 
 }

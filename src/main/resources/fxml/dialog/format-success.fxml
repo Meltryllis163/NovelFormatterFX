@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.dialog.FormatSuccessController"
+      alignment="CENTER_LEFT">
+    <Label fx:id="successLabel"/>
+    <Text fx:id="pathText"/>
+    <HBox>
+        <Label fx:id="openFileLabel" styleClass="accent, text-underline"/>
+        <Label fx:id="openDirLabel" styleClass="accent, text-underline"/>
+        <spacing>
+            <UICons fx:constant="DEFAULT_SPACING"/>
+        </spacing>
+    </HBox>
+    <spacing>
+        <UICons fx:constant="BIG_SPACING"/>
+    </spacing>
+</VBox>

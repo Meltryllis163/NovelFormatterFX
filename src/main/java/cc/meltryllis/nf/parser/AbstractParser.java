@@ -1,6 +1,6 @@
 package cc.meltryllis.nf.parser;
 
-import cc.meltryllis.nf.utils.StrUtil;
+import cc.meltryllis.nf.utils.common.StrUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

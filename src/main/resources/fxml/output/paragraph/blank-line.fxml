@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.Card?>
+<?import atlantafx.base.controls.Tile?>
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.HBox?>
+<Card xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.output.BlankLineController">
+    <header>
+        <Tile fx:id="blankLineTile"/>
+    </header>
+    <body>
+        <HBox alignment="BOTTOM_LEFT">
+            <Spinner editable="true" min="0" max="5" initialValue="1" fx:id="blankLineSpinner" HBox.hgrow="ALWAYS"/>
+            <ToggleButton fx:id="resegmentToggleButton"/>
+            <spacing>
+                <UICons fx:constant="SMALL_SPACING"/>
+            </spacing>
+        </HBox>
+    </body>
+</Card>

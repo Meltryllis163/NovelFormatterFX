@@ -1,6 +1,6 @@
 package cc.meltryllis.nf.utils.message;
 
-import cc.meltryllis.nf.utils.I18nUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
@@ -18,13 +18,13 @@ import java.util.HashMap;
 public class TooltipUtil {
 
     public static final HashMap<Control, Tooltip> LAST_TOOLTIP_MAP = new HashMap<>();
-    public static final int OFFSET = 5;
+    public static final int                       OFFSET           = 5;
 
-    public static void show(Control control, String i18nKey, Pos pos) {
-        show(control, i18nKey, pos, 1000);
+    public static Tooltip show(Control control, String i18nKey, Pos pos) {
+        return show(control, i18nKey, pos, 1000);
     }
 
-    public static void show(Control control, String i18nKey, Pos pos, double hideDelay) {
+    public static Tooltip show(Control control, String i18nKey, Pos pos, double hideDelay) {
         hideLastTooltip(control);
         Point2D p = control.localToScene(0, 0);
         final Tooltip customTooltip = new Tooltip();
@@ -42,6 +42,7 @@ public class TooltipUtil {
         PauseTransition pauseTransition = new PauseTransition(Duration.millis(hideDelay));
         pauseTransition.setOnFinished(event -> customTooltip.hide());
         pauseTransition.play();
+        return customTooltip;
     }
 
     private static void addLastTooltip(Control control, Tooltip tooltip) {
@@ -62,4 +63,5 @@ public class TooltipUtil {
     public enum Pos {
         BOTTOM, RIGHT
     }
+
 }

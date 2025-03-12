@@ -4,9 +4,14 @@ import atlantafx.base.controls.Notification;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import cc.meltryllis.nf.constants.UICons;
-import cc.meltryllis.nf.utils.I18nUtil;
+import cc.meltryllis.nf.ui.controller.TabsController;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
+import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -22,54 +27,35 @@ import org.kordamp.ikonli.javafx.FontIcon;
  */
 public class NotificationUtil {
 
-    /** 通知样式：ACCENT */
-    public static final int ACCENT  = 0;
-    /** 通知样式：SUCCESS */
-    public static final int SUCCESS = 1;
-    /** 通知样式：WARNING */
-    public static final int WARNING = 2;
-    /** 通知样式：DANGER */
-    public static final int DANGER  = 3;
-    /** 在格式化工具界面通知 */
-    public static final int FORMATTER_PANE = 0;
-    /** 在设置界面通知 */
-    public static final int SETTINGS_PANE  = 1;
-    private static final FontIcon FONT_ICON = new FontIcon("fth-help-circle");
-    private static final Notification[] LAST_NOTIFICATIONS = new Notification[2];
-
-    /** 格式化工具面板 */
-    private static StackPane formatterPane;
-    /** 设置面板 */
-    private static StackPane settingsPane;
-
-
-    public static void registerFormatterPane(@NotNull StackPane pane) {
-        formatterPane = pane;
-    }
-
-    public static void registerSettingsPane(@NotNull StackPane pane) {
-        settingsPane = pane;
-    }
+    private static final FontIcon     FONT_ICON = new FontIcon("fth-help-circle");
+    private static       Notification LAST_NOTIFICATION;
 
     @Nullable
-    private static StackPane getStackPane(int type) {
-        if (type == FORMATTER_PANE) {
-            return formatterPane;
-        } else if (type == SETTINGS_PANE) {
-            return settingsPane;
-        } else {
-            return null;
+    private static StackPane getStackPane() {
+        TabPane tabPane = TabsController.getTabPane();
+        if (tabPane != null) {
+            Node content = tabPane.getSelectionModel().getSelectedItem().getContent();
+            if (content instanceof StackPane stackPane) {
+                return stackPane;
+            }
         }
+        return null;
     }
 
-    public static void show(int paneType, final int notificationType, @NotNull final String i18nKey,
-                            @NotNull final Pos position) {
+    /**
+     * 显示通知。
+     *
+     * @param notificationType 通知类型。
+     * @param i18nKey          通知内容的国际化Key。
+     * @param position         通知位置，目前仅支持 {@code BOTTOM_CENTER} 和 {@code TOP_CENTER}。
+     */
+    public static void show(final DialogUtil.Type notificationType, @NotNull final String i18nKey, @NotNull final Pos position) {
         // 前置检查
-        StackPane stackPane = getStackPane(paneType);
+        StackPane stackPane = getStackPane();
         if (stackPane == null) {
             return;
         }
-        removeLastNotification(stackPane, paneType);
+        removeLastNotification(stackPane);
         // 样式设置
         Notification notification = createNotification(notificationType, i18nKey);
         StackPane.setMargin(notification, UICons.NOTIFICATION_INSETS);
@@ -77,24 +63,28 @@ public class NotificationUtil {
         // 动画
         Timeline in = createSlideInAnimations(notification, position);
         stackPane.getChildren().add(notification);
-        setLastNotification(paneType, notification);
+        LAST_NOTIFICATION = notification;
         if (in != null) {
             in.playFromStart();
+        } else {
+            stackPane.getChildren().add(notification);
         }
         notification.setOnClose(event -> {
             Timeline out = createSlideOutAnimations(notification, position);
             if (out != null) {
                 out.setOnFinished(actionEvent -> stackPane.getChildren().remove(notification));
                 out.playFromStart();
+            } else {
+                stackPane.getChildren().remove(notification);
             }
         });
     }
 
-    private static Notification createNotification(int notificationType, String i18nKey) {
+    private static Notification createNotification(DialogUtil.Type type, String i18nKey) {
         Notification notification = new Notification(null, FONT_ICON);
         notification.messageProperty().bind(I18nUtil.createStringBinding(i18nKey));
         notification.getStyleClass().add(Styles.ELEVATED_1);
-        switch (notificationType) {
+        switch (type) {
             case ACCENT:
                 notification.getStyleClass().add(Styles.ACCENT);
                 break;
@@ -115,31 +105,19 @@ public class NotificationUtil {
         return notification;
     }
 
-    private static void removeLastNotification(@NotNull StackPane pane, int paneType) {
-        Notification lastNotification = getLastNotification(paneType);
-        pane.getChildren().remove(lastNotification);
-        LAST_NOTIFICATIONS[paneType] = null;
-    }
-
-    private static Notification getLastNotification(int paneType) {
-        if (paneType >= FORMATTER_PANE && paneType <= SETTINGS_PANE) {
-            return LAST_NOTIFICATIONS[paneType];
-        }
-        return null;
-    }
-
-    private static void setLastNotification(int paneType, Notification notification) {
-        if (paneType >= FORMATTER_PANE && paneType <= SETTINGS_PANE) {
-            LAST_NOTIFICATIONS[paneType] = notification;
+    private static void removeLastNotification(@NotNull StackPane stackPane) {
+        if (LAST_NOTIFICATION != null) {
+            stackPane.getChildren().remove(LAST_NOTIFICATION);
+            LAST_NOTIFICATION = null;
         }
     }
 
     private static Timeline createSlideInAnimations(Notification notification, Pos position) {
         Timeline in = null;
         Duration millis = Duration.millis(250);
-        if (Pos.BOTTOM_CENTER.equals(position)) {
+        if (VPos.BOTTOM.equals(position.getVpos())) {
             in = Animations.slideInUp(notification, millis);
-        } else if (Pos.TOP_CENTER.equals(position)) {
+        } else if (VPos.TOP.equals(position.getVpos())) {
             in = Animations.slideInDown(notification, millis);
         }
         return in;
@@ -148,9 +126,9 @@ public class NotificationUtil {
     private static Timeline createSlideOutAnimations(Notification notification, Pos position) {
         Timeline out = null;
         Duration millis = Duration.millis(250);
-        if (Pos.BOTTOM_CENTER.equals(position)) {
+        if (VPos.BOTTOM.equals(position.getVpos())) {
             out = Animations.slideOutDown(notification, millis);
-        } else if (Pos.TOP_CENTER.equals(position)) {
+        } else if (VPos.TOP.equals(position.getVpos())) {
             out = Animations.slideOutUp(notification, millis);
         }
         return out;

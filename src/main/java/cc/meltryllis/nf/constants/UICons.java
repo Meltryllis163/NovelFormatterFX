@@ -16,17 +16,17 @@ public interface UICons {
     int STAGE_MIN_WIDTH           = 300;
     int STAGE_MIN_HEIGHT          = 300;
     int DIALOG_MIN_WIDTH          = 200;
-    int DIALOG_MAX_WIDTH          = 400;
+    int DIALOG_MAX_WIDTH          = 800;
     int DIALOG_CONTENT_MIN_HEIGHT = 100;
 
-    int SMALL_SPACING = 5;
+    int SMALL_SPACING   = 5;
     int DEFAULT_SPACING = 10;
-    int BIG_SPACING   = 20;
-    int LARGE_SPACING = 30;
+    int BIG_SPACING     = 20;
+    int LARGE_SPACING   = 30;
 
     int ICON_TEXT_GAP = 20;
 
-    Insets DIALOG_INSETS = new Insets(15, 30, 15, 30);
+    Insets DIALOG_INSETS       = new Insets(15, 30, 15, 30);
     Insets DEFAULT_INSETS      = new Insets(15, 50, 15, 50);
     Insets NOTIFICATION_INSETS = new Insets(10, 10, 10, 10);
 

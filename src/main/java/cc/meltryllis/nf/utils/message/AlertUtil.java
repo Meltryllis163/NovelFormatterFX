@@ -1,7 +1,7 @@
 package cc.meltryllis.nf.utils.message;
 
-import cc.meltryllis.nf.utils.I18nUtil;
-import cc.meltryllis.nf.utils.StrUtil;
+import cc.meltryllis.nf.utils.common.StrUtil;
+import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.scene.control.Alert;
 import javafx.stage.Window;
 

@@ -4,6 +4,7 @@
 <?import atlantafx.base.controls.Tile?>
 <?import atlantafx.base.layout.InputGroup?>
 <?import cc.meltryllis.nf.constants.UICons?>
+<?import cc.meltryllis.nf.ui.common.CustomTableView?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
@@ -17,22 +18,21 @@
         <VBox>
             <Separator styleClass="small"/>
             <HBox>
-
                 <Button onAction="#selectAllListItems">
                     <graphic>
                         <FontIcon iconLiteral="fth-check-square"/>
                     </graphic>
                 </Button>
-                <Button fx:id="deleteButton" onAction="#deleteSelectedItems">
+                <Button onAction="#deleteSelectedItems">
                     <graphic>
                         <FontIcon iconLiteral="fth-trash"/>
                     </graphic>
                 </Button>
                 <Separator orientation="VERTICAL" styleClass="medium"/>
                 <InputGroup HBox.hgrow="ALWAYS">
-                    <ToggleButton fx:id="regexButton" prefHeight="50" styleClass="button-icon"/>
+                    <ToggleButton fx:id="regexButton" maxHeight="50" styleClass="button-icon"/>
                     <TextField fx:id="targetField" HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="rightToLabel" prefHeight="50">
+                    <Label fx:id="rightToLabel" maxHeight="50">
                         <graphic>
                             <FontIcon iconLiteral="fth-chevrons-right"/>
                         </graphic>
@@ -48,7 +48,7 @@
                     <UICons fx:constant="SMALL_SPACING"/>
                 </spacing>
             </HBox>
-            <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="bordered"/>
+            <CustomTableView fx:id="replacementTableView" VBox.vgrow="ALWAYS" styleClass="bordered"/>
             <spacing>
                 <UICons fx:constant="SMALL_SPACING"/>
             </spacing>
