@@ -1,9 +1,10 @@
 package cc.meltryllis.nf.ui.controller.dialog;
 
-import cc.meltryllis.nf.ui.common.StateLabel;
+import cc.meltryllis.nf.constants.MyStyles;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -24,29 +25,35 @@ import java.util.regex.Pattern;
 @Slf4j
 public class PatternCompileController extends StageDialogController<String> implements Initializable {
 
+    public static PseudoClass WARNING_TIP = PseudoClass.getPseudoClass(MyStyles.WARNING_TIP);
+    public static PseudoClass SUCCESS_TIP = PseudoClass.getPseudoClass(MyStyles.SUCCESS_TIP);
+    public static PseudoClass EMPTY_TIP   = PseudoClass.getPseudoClass(MyStyles.HIDDEN_TIP);
+
     @FXML
-    public Label      patternLabel;
+    public Label     patternLabel;
     @FXML
-    public TextField  patternField;
+    public TextField patternField;
     @FXML
-    public StateLabel compileResultLabel;
+    public Label     compileResultLabel;
     @FXML
-    public Label      testTextLabel;
+    public Label     testTextLabel;
     @FXML
-    public TextField  testTextField;
+    public TextField testTextField;
     @FXML
-    public StateLabel matchResultLabel;
+    public Label     matchResultLabel;
     @FXML
-    public Button     applyButton;
+    public Button    applyButton;
 
     private final SimpleObjectProperty<Pattern>   patternProperty   = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Exception> exceptionProperty = new SimpleObjectProperty<>();
+
+    private PseudoClass matchLabelLastClass;
+    private PseudoClass compileLabelLastClass;
 
 
     private void initLabels() {
         patternLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.PatternCompile.Pattern.Label.Text"));
         testTextLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.PatternCompile.TestText.Label.Text"));
-        patternField.requestFocus();
     }
 
     private void initPatternField() {
@@ -86,27 +93,41 @@ public class PatternCompileController extends StageDialogController<String> impl
     private void updateMatchResultLabel() {
         String testText = testTextField.getText();
         Pattern pattern = patternProperty.getValue();
+        if (matchLabelLastClass != null) {
+            matchResultLabel.pseudoClassStateChanged(matchLabelLastClass, false);
+        }
         if (pattern == null || StrUtil.isEmpty(testText)) {
-            matchResultLabel.setState(StateLabel.EMPTY, (String) null);
+            matchResultLabel.pseudoClassStateChanged(EMPTY_TIP, true);
+            matchLabelLastClass = EMPTY_TIP;
         } else if (pattern.matcher(testText).matches()) {
-            matchResultLabel.setState(StateLabel.SUCCESS,
-                    I18nUtil.createStringBinding("Dialog.PatternCompile.MatchResultLabel.Success"));
+            matchResultLabel.textProperty()
+                    .bind(I18nUtil.createStringBinding("Dialog.PatternCompile.MatchResultLabel.Success"));
+            matchResultLabel.pseudoClassStateChanged(SUCCESS_TIP, true);
+            matchLabelLastClass = SUCCESS_TIP;
         } else {
-            matchResultLabel.setState(StateLabel.WARN,
-                    I18nUtil.createStringBinding("Dialog.PatternCompile.MatchResultLabel.Fail"));
+            matchResultLabel.textProperty()
+                    .bind(I18nUtil.createStringBinding("Dialog.PatternCompile.MatchResultLabel.Fail"));
+            matchResultLabel.pseudoClassStateChanged(WARNING_TIP, true);
+            matchLabelLastClass = WARNING_TIP;
         }
     }
 
     private void updateCompileResultLabel() {
         Pattern pattern = patternProperty.getValue();
         Exception e = exceptionProperty.getValue();
+        if (compileLabelLastClass != null) {
+            compileResultLabel.pseudoClassStateChanged(compileLabelLastClass, false);
+        }
         if (pattern == null && e == null) {
+            compileResultLabel.pseudoClassStateChanged(EMPTY_TIP, true);
+            compileLabelLastClass = EMPTY_TIP;
             // 空正则
-            compileResultLabel.setState(StateLabel.EMPTY, (String) null);
         } else if (pattern != null) {
+            compileResultLabel.textProperty()
+                    .bind(I18nUtil.createStringBinding("Dialog.PatternCompile.Pattern.CompileResult.Label.Success"));
             // 正则有效
-            compileResultLabel.setState(StateLabel.SUCCESS,
-                    I18nUtil.createStringBinding("Dialog.PatternCompile.Pattern.CompileResult.Label.Success"));
+            compileResultLabel.pseudoClassStateChanged(SUCCESS_TIP, true);
+            compileLabelLastClass = SUCCESS_TIP;
         } else {
             // 正则错误
             String message = e.getMessage();
@@ -114,7 +135,10 @@ public class PatternCompileController extends StageDialogController<String> impl
             if (index >= 0) {
                 message = message.substring(0, index) + ".";
             }
-            compileResultLabel.setState(StateLabel.WARN, message);
+            compileResultLabel.textProperty().unbind();
+            compileResultLabel.setText(message);
+            compileResultLabel.pseudoClassStateChanged(WARNING_TIP, true);
+            compileLabelLastClass = WARNING_TIP;
         }
     }
 
@@ -131,4 +155,5 @@ public class PatternCompileController extends StageDialogController<String> impl
         super.setResult(initialValue);
         patternField.setText(initialValue);
     }
+
 }

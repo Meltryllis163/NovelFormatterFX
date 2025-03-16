@@ -33,6 +33,7 @@ public class CustomTableView<S> extends TableView<S> {
         getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         itemsProperty().addListener(observable -> addFitColumnWidthListener());
+        setMinHeight(400);
     }
 
     /**

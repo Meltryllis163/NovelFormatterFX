@@ -19,6 +19,7 @@ module cc.meltryllis.nf {
     opens cc.meltryllis.nf.ui.controller.settings to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.dialog to javafx.fxml;
     opens cc.meltryllis.nf.ui.common to javafx.fxml;
+    opens cc.meltryllis.nf.ui.common.outline to javafx.fxml;
     opens cc.meltryllis.nf.constants to javafx.fxml;
 
     opens cc.meltryllis.nf.entity to com.fasterxml.jackson.databind;
@@ -29,6 +30,8 @@ module cc.meltryllis.nf {
     opens cc.meltryllis.nf.entity.property.output to com.fasterxml.jackson.databind, javafx.base;
 
     exports cc.meltryllis.nf.ui;
+    exports cc.meltryllis.nf.ui.common;
+    exports cc.meltryllis.nf.ui.common.outline;
     exports cc.meltryllis.nf.ui.controller;
 
 }

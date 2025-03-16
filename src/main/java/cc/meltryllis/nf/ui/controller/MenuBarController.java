@@ -1,14 +1,13 @@
 package cc.meltryllis.nf.ui.controller;
 
-import atlantafx.base.theme.Styles;
 import cc.meltryllis.nf.constants.DataCons;
+import cc.meltryllis.nf.constants.MyStyles;
 import cc.meltryllis.nf.constants.UICons;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -71,8 +70,7 @@ public class MenuBarController implements Initializable {
         HBox.setHgrow(versionKey, Priority.ALWAYS);
         Label githubValue = new Label();
         githubValue.textProperty().bind(I18nUtil.createStringBinding("Dialog.About.Github.Value"));
-        githubValue.getStyleClass().addAll(Styles.ACCENT, Styles.TEXT_UNDERLINED);
-        githubValue.setCursor(Cursor.HAND);
+        githubValue.getStyleClass().add(MyStyles.HYPER_LINK);
         githubValue.setOnMouseClicked(event -> {
             try {
                 Desktop.getDesktop().browse(URI.create(DataCons.GITHUB));
@@ -100,4 +98,5 @@ public class MenuBarController implements Initializable {
         helpMenu.textProperty().bind(I18nUtil.createStringBinding("Common.Help"));
         aboutItem.textProperty().bind(I18nUtil.createStringBinding("Common.About"));
     }
+
 }

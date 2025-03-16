@@ -50,6 +50,7 @@ public class ParseProcessor {
                     I18nUtil.createStringBinding("Dialog.FileNotFound.Desc"), DialogUtil.Type.WARNING);
             return false;
         }
+        // TODO 如果用户没有选择任何一个章节正则，弹窗提示
         // 设定输出文件对象
         outputFile = new File(file.getParent(), FileUtil.getPrefix(file) + FileCons.TXT_OUTPUT_SUFFIX);
         // 删除旧输出文件

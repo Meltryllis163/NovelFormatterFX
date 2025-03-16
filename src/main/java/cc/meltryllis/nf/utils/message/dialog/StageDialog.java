@@ -1,6 +1,7 @@
 package cc.meltryllis.nf.utils.message.dialog;
 
 import cc.meltryllis.nf.constants.UICons;
+import cc.meltryllis.nf.ui.MainApplication;
 import cc.meltryllis.nf.utils.FXUtil;
 import javafx.beans.binding.StringBinding;
 import javafx.geometry.Pos;
@@ -38,11 +39,11 @@ public class StageDialog extends Stage {
     protected StageDialog(StageDialogBuilder builder) {
         this(builder.contentPane, builder.type, builder.resizable, builder.iconified, builder.modality,
                 builder.minWidth, builder.icon, builder.title);
+        container.getStylesheets().add(MainApplication.CUSTOM_CSS);
     }
 
     protected StageDialog(@NotNull Pane contentPane, @NotNull DialogUtil.Type type, boolean resizable,
-                          boolean iconified, Modality modality, int minWidth, Image icon,
-                          StringBinding title) {
+                          boolean iconified, Modality modality, int minWidth, Image icon, StringBinding title) {
         initOwner(DialogUtil.owner);
         initContainer();
         setContent(type, contentPane);
@@ -103,12 +104,14 @@ public class StageDialog extends Stage {
     public static class StageDialogBuilder {
 
         private final Pane contentPane;
+
         private boolean         resizable = false;
         private boolean         iconified = false;
         private Modality        modality  = Modality.APPLICATION_MODAL;
         private int             minWidth  = UICons.DIALOG_MIN_WIDTH;
         private Image           icon      = FXUtil.newImage("/icons/icon.png");
         private DialogUtil.Type type      = DialogUtil.Type.NONE;
+
         private StringBinding title;
 
         protected StageDialogBuilder(@NotNull Pane contentPane) {
@@ -153,5 +156,7 @@ public class StageDialog extends Stage {
         public StageDialog build() {
             return new StageDialog(this);
         }
+
     }
+
 }

@@ -13,6 +13,7 @@ import cc.meltryllis.nf.utils.message.TooltipUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -72,8 +73,8 @@ public class ReplaceOutputController implements Initializable {
     }
 
     private void initReplaceTile() {
-        replaceTile.titleProperty().bind(I18nUtil.createStringBinding("App.Output.Replace.Tile.Title"));
-        replaceTile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Output.Replace.Tile.Desc"));
+        replaceTile.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.Tile.Title"));
+        replaceTile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.Tile.Desc"));
     }
 
     private void initButtons() {
@@ -81,9 +82,9 @@ public class ReplaceOutputController implements Initializable {
         regexButton.setGraphic(new ImageView(
                 new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/regex.png")))));
         regexButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            targetField.pseudoClassStateChanged(PseudoClass.getPseudoClass(MyStyles.Replace.PATTERN), newValue);
             if (newValue) {
                 targetField.setEditable(false);
-                targetField.setCursor(Cursor.HAND);
                 targetField.setOnMouseClicked(event -> {
                     DialogUtil.FXMLBuilder<String> builder = new DialogUtil.FXMLBuilder<>(
                             "/fxml/dialog/pattern-compile.fxml");
@@ -91,12 +92,9 @@ public class ReplaceOutputController implements Initializable {
                             .setInitialValue(targetField.getText()).show();
                     targetField.setText(pattern);
                 });
-                targetField.getStyleClass().add(MyStyles.TEXT_FIELD_LIGHT_BLUE);
             } else {
                 targetField.setEditable(true);
-                targetField.setCursor(Cursor.DEFAULT);
                 targetField.onMouseClickedProperty().setValue(null);
-                targetField.getStyleClass().remove(MyStyles.TEXT_FIELD_LIGHT_BLUE);
             }
             TooltipUtil.show(regexButton, newValue ? "Dialog.Regex.Enabled" : "Dialog.Regex.Disabled",
                     TooltipUtil.Pos.BOTTOM);
@@ -110,7 +108,7 @@ public class ReplaceOutputController implements Initializable {
         // 无Items时提示
         Label placeholderLabel = new Label();
         placeholderLabel.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.Replace.TableView.PlaceholderLabel.Text"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.TableView.PlaceholderLabel.Text"));
         replacementTableView.placeholderProperty().setValue(placeholderLabel);
 
         // 正则模式列
@@ -122,7 +120,7 @@ public class ReplaceOutputController implements Initializable {
         // 替换后文本
         TableColumn<ReplacementProperty, String> newTextColumn = new TableColumn<>();
         newTextColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.Replace.TableView.NewTextColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.TableView.NewTextColumn.Title"));
         newTextColumn.setCellValueFactory(replacementStringCellDataFeatures -> new SimpleStringProperty(
                 replacementStringCellDataFeatures.getValue().getNewText()));
 
@@ -133,7 +131,7 @@ public class ReplaceOutputController implements Initializable {
     private TableColumn<ReplacementProperty, String> createRegexModeColumn() {
         TableColumn<ReplacementProperty, String> regexModeColumn = new TableColumn<>();
         regexModeColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.Replace.TableView.RegexModeColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.TableView.RegexModeColumn.Title"));
         regexModeColumn.setCellValueFactory(replacementStringCellDataFeatures -> Bindings.when(
                         replacementStringCellDataFeatures.getValue().getRegexModeProperty())
                 .then(I18nUtil.createStringBinding("Common.Enabled"))
@@ -144,7 +142,7 @@ public class ReplaceOutputController implements Initializable {
     private TableColumn<ReplacementProperty, String> createOldTextColumn() {
         TableColumn<ReplacementProperty, String> oldTextColumn = new TableColumn<>();
         oldTextColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.Replace.TableView.OldTextColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.TableView.OldTextColumn.Title"));
         oldTextColumn.setCellValueFactory(
                 replacementStringCellDataFeatures -> replacementStringCellDataFeatures.getValue().getOldTextProperty());
         oldTextColumn.setCellFactory(new Callback<>() {

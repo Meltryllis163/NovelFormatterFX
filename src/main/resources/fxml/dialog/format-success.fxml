@@ -12,8 +12,8 @@
     <Label fx:id="successLabel"/>
     <Text fx:id="pathText"/>
     <HBox>
-        <Label fx:id="openFileLabel" styleClass="accent, text-underline"/>
-        <Label fx:id="openDirLabel" styleClass="accent, text-underline"/>
+        <Label fx:id="openFileLabel" styleClass="hyper-link"/>
+        <Label fx:id="openDirLabel" styleClass="hyper-link"/>
         <spacing>
             <UICons fx:constant="DEFAULT_SPACING"/>
         </spacing>

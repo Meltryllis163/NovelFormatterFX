@@ -30,8 +30,9 @@ public class BlankLineController implements Initializable {
     public ToggleButton     resegmentToggleButton;
 
     private void initBlackLine() {
-        blankLineTile.titleProperty().bind(I18nUtil.createStringBinding("App.Output.BlackLine.Tile.Title"));
-        blankLineTile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Output.BlackLine.Tile.Desc"));
+        blankLineTile.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.BlackLine.Tile.Title"));
+        blankLineTile.descriptionProperty().bind(I18nUtil.createStringBinding(
+                "App.Formatter.Output.BlackLine.Tile.Desc"));
         IntegerStringConverter.createFor(blankLineSpinner);
         ParagraphProperty paragraphProperty = OutputFormatProperty.getInstance().getParagraphProperty();
         paragraphProperty.getBlankLineCountProperty().bind(blankLineSpinner.valueProperty());
@@ -41,7 +42,7 @@ public class BlankLineController implements Initializable {
         ParagraphProperty paragraphProperty = OutputFormatProperty.getInstance().getParagraphProperty();
         resegmentToggleButton.setCursor(Cursor.HAND);
         resegmentToggleButton.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.BlackLine.Resegment.ToggleButton.Text"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Output.BlackLine.Resegment.ToggleButton.Text"));
         resegmentToggleButton.setSelected(paragraphProperty.isResegment());
         resegmentToggleButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> paragraphProperty.setResegment(newValue));

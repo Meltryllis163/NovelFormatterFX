@@ -16,7 +16,7 @@ import java.io.File;
  * @author Zachary W
  * @date 2025/3/4
  */
-public class FormatSuccessController {
+public class FormatSuccessController extends StageDialogController<File> {
 
     @FXML
     public Label successLabel;
@@ -36,10 +36,23 @@ public class FormatSuccessController {
         // 打开文件
         openFileLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatSuccess.OpenFile"));
         openFileLabel.setCursor(Cursor.HAND);
-        openFileLabel.setOnMouseClicked(event -> FileUtil.open(outputFile));
+        openFileLabel.setOnMouseClicked(event -> {
+            FileUtil.open(outputFile);
+            getStageDialog().close();
+        });
         // 打开目录
         openDirLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatSuccess.OpenDir"));
         openDirLabel.setCursor(Cursor.HAND);
-        openDirLabel.setOnMouseClicked(event -> FileUtil.openParentDirectory(outputFile));
+        openDirLabel.setOnMouseClicked(event -> {
+            FileUtil.openParentDirectory(outputFile);
+            getStageDialog().close();
+        });
     }
+
+    @Override
+    protected void setInitialResult(File initialResult) {
+        super.setInitialResult(initialResult);
+        setFormatFile(initialResult);
+    }
+
 }
