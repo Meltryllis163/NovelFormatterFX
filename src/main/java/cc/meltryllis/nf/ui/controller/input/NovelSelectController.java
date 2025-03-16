@@ -44,7 +44,8 @@ public class NovelSelectController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        filePathField.promptTextProperty().bind(I18nUtil.createStringBinding("App.Input.SelectNovel.Field.Prompt"));
+        filePathField.promptTextProperty().bind(I18nUtil.createStringBinding(
+                "App.Formatter.Input.SelectNovel.Field.Prompt"));
         SimpleObjectProperty<File> fileProperty = InputFormatProperty.getInstance().getFileProperty();
         filePathField.textProperty().bind(Bindings.createStringBinding(() -> {
             File file = fileProperty.getValue();

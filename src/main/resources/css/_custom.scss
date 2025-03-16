@@ -1,0 +1,103 @@
+$DODGER_BLUE : #1E90FF;
+
+/* 灰色图标 */
+.icon-subtle {
+    -fx-fill: -color-fg-subtle;
+    -fx-icon-color: -color-fg-subtle;
+}
+
+/* 详见 https://github.com/mkpaz/atlantafx/issues/107 */
+.table-view {
+    -fx-fixed-cell-size: 40;
+}
+
+.hyper-link {
+    -fx-text-fill: -color-accent-fg;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.label {
+    &.title-2 {
+        -fx-font-size: 25px;
+        -fx-font-weight: bold;
+    }
+
+    &.title-3 {
+        -fx-font-size: 21px;
+        -fx-font-weight: bold;
+        -fx-graphic-text-gap: 20px;
+
+        .ikonli-font-icon {
+            @extend .icon-subtle;
+            -fx-icon-code: "fth-hash";
+        }
+    }
+}
+
+.replace {
+    .text-field {
+        &:pattern {
+            -fx-text-fill: $DODGER_BLUE;
+            -fx-cursor: hand;
+        }
+    }
+}
+
+.outline {
+    -fx-padding: 20px 0 0 0;
+    .label {
+        -fx-text-fill: -color-fg-subtle;
+        -fx-cursor: hand;
+
+        &:selected {
+            -fx-text-fill: -color-accent-fg;
+        }
+
+        .ikonli-font-icon {
+            @extend .icon-subtle;
+        }
+
+        &:hover {
+            -fx-text-fill: -color-fg-default;
+
+            .ikonli-font-icon {
+                -fx-fill: -color-fg-default;
+                -fx-icon-color: -color-fg-default;
+            }
+        }
+    }
+
+    >.title-1 {
+        -fx-font-size: 16px;
+    }
+
+    >.title-2 {
+        -fx-font-size: 14px;
+    }
+
+}
+
+.label:warning-tip {
+    -fx-text-fill: -color-warning-fg;
+    visibility: visible;
+
+    .ikonli-font-icon {
+        -fx-icon-color: -color-warning-fg;
+        -fx-icon-code: "fth-alert-circle";
+    }
+}
+
+.label:success-tip {
+    -fx-text-fill: -color-success-fg;
+    visibility: visible;
+
+    .ikonli-font-icon {
+        -fx-icon-color: -color-success-fg;
+        -fx-icon-code: "fth-check-circle";
+    }
+}
+
+.label:hidden-tip {
+    visibility: hidden;
+}

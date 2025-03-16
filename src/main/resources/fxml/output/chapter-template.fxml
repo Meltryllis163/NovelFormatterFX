@@ -5,7 +5,6 @@
 <?import cc.meltryllis.nf.constants.UICons?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -13,14 +12,6 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
       fx:controller="cc.meltryllis.nf.ui.controller.output.ChapterTemplateController">
-    <Label fx:id="chapterConfigLabel" styleClass="title-3">
-        <graphic>
-            <FontIcon iconLiteral="fth-hash" styleClass="icon-subtle"/>
-        </graphic>
-        <graphicTextGap>
-            <UICons fx:constant="ICON_TEXT_GAP"/>
-        </graphicTextGap>
-    </Label>
     <Card>
         <header>
             <Tile fx:id="tile"/>

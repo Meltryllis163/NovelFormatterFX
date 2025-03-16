@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           xmlns="http://javafx.com/javafx">
-    <ScrollPane fitToWidth="true">
-        <fx:include source="formatter-config.fxml"/>
-    </ScrollPane>
-</StackPane>
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import cc.meltryllis.nf.ui.common.outline.OutlinePane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<OutlinePane xmlns:fx="http://javafx.com/fxml"
+             xmlns="http://javafx.com/javafx"
+             fx:controller="cc.meltryllis.nf.ui.controller.settings.SettingsPaneController"
+             fx:id="root">
+    <content>
+        <VBox>
+            <Label fx:id="formatterSettingsLabel" styleClass="title-2"/>
+            <Separator styleClass="small"/>
+            <fx:include fx:id="chapterRegexEditor" source="chapter-regex-editor.fxml"/>
+            <fx:include fx:id="chapterTemplateEditor" source="chapter-template-editor.fxml"/>
+            <spacing>
+                <UICons fx:constant="DEFAULT_SPACING"/>
+            </spacing>
+        </VBox>
+    </content>
+</OutlinePane>
 

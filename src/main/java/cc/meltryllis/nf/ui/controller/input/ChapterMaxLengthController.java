@@ -32,10 +32,11 @@ public class ChapterMaxLengthController implements Initializable {
 
         // Tile
         maxLengthTile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.MaxLength.Tile.Desc"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.MaxLength.Tile.Desc"));
         // 此处文本在语言变更时会发生错误，该错误由atlantafx产生，而且修复于以下request(https://github.com/mkpaz/atlantafx/pull/81)
         // 目前暂时不提供除简体中文以外的其他语言，因此不会产生问题，等待atlantafx更新
-        maxLengthTile.titleProperty().bind(I18nUtil.createStringBinding("App.Input.Chapter.MaxLength.Tile.Title"));
+        maxLengthTile.titleProperty().bind(I18nUtil.createStringBinding(
+                "App.Formatter.Input.Chapter.MaxLength.Tile.Title"));
 
         // ComboBox
         maxLengthComboBox.getItems().addAll(FormatFactory.createDefaultChapterMaxLengthList());

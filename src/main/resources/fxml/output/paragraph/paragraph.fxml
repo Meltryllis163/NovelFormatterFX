@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      xmlns="http://javafx.com/javafx"
-      fx:controller="cc.meltryllis.nf.ui.controller.output.ParagraphController">
-    <Label fx:id="paragraphLabel" styleClass="title-3">
-        <graphic>
-            <FontIcon iconLiteral="fth-hash" styleClass="icon-subtle"/>
-        </graphic>
-        <graphicTextGap>
-            <UICons fx:constant="ICON_TEXT_GAP"/>
-        </graphicTextGap>
-    </Label>
-    <HBox>
+      xmlns="http://javafx.com/javafx">
+    <VBox>
         <fx:include source="indentation.fxml" HBox.hgrow="ALWAYS"/>
         <fx:include source="blank-line.fxml" HBox.hgrow="ALWAYS"/>
         <spacing>
             <UICons fx:constant="SMALL_SPACING"/>
         </spacing>
-    </HBox>
+    </VBox>
     <spacing>
         <UICons fx:constant="DEFAULT_SPACING"/>
     </spacing>

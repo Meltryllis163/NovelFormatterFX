@@ -36,8 +36,9 @@ public class IndentationController implements Initializable {
     public ToggleButton                        indentationForChapterButton;
 
     private void initTile() {
-        tile.titleProperty().bind(I18nUtil.createStringBinding("App.Output.Paragraph.Indentation.Tile.Title"));
-        tile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Output.Paragraph.Indentation.Tile.Desc"));
+        tile.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Paragraph.Indentation.Tile.Title"));
+        tile.descriptionProperty().bind(I18nUtil.createStringBinding(
+                "App.Formatter.Output.Paragraph.Indentation.Tile.Desc"));
     }
 
     private void initSpinner() {
@@ -78,7 +79,8 @@ public class IndentationController implements Initializable {
                 .getIndentationProperty();
         indentationForChapterButton.setCursor(Cursor.HAND);
         indentationForChapterButton.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.Paragraph.Indentation.EffectiveForChapter.Button.Text"));
+                .bind(I18nUtil.createStringBinding(
+                        "App.Formatter.Output.Paragraph.Indentation.EffectiveForChapter.Button.Text"));
         indentationForChapterButton.setSelected(indentationProperty.isEffectiveForChapter());
         indentationForChapterButton.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> indentationProperty.setEffectiveForChapter(newValue));

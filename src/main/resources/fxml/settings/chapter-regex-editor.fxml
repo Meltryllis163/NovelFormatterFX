@@ -9,8 +9,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <Card xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
-      fx:controller="cc.meltryllis.nf.ui.controller.settings.ChapterRegexEditor"
-      prefHeight="400.0" prefWidth="600.0">
+      fx:controller="cc.meltryllis.nf.ui.controller.settings.ChapterRegexEditor">
     <header>
         <Tile fx:id="tile"/>
     </header>

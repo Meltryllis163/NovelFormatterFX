@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
 import javafx.util.StringConverter;
@@ -28,27 +27,21 @@ import java.util.ResourceBundle;
 public class ChapterTemplateController implements Initializable {
 
     @FXML
-    public Label                             chapterConfigLabel;
-    @FXML
     public Tile                              tile;
     @FXML
     public ToggleButton                      autoNumberButton;
     @FXML
     public ComboBox<ChapterTemplateProperty> templateComboBox;
 
-    private void initLabel() {
-        chapterConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.Output.ChapterFormat.Title"));
-    }
-
     private void initTile() {
-        tile.titleProperty().bind(I18nUtil.createStringBinding("App.Output.ChapterFormat.Tile.Title"));
-        tile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Output.ChapterFormat.Tile.Desc"));
+        tile.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.ChapterFormat.Tile.Title"));
+        tile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.ChapterFormat.Tile.Desc"));
     }
 
     private void initAutoNumberButton() {
         autoNumberButton.setCursor(Cursor.HAND);
         autoNumberButton.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Output.ChapterFormat.AutoNumber.Button.Text"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Output.ChapterFormat.AutoNumber.Button.Text"));
         autoNumberButton.setSelected(OutputFormatProperty.getInstance().isAutoNumberForChapter());
         OutputFormatProperty.getInstance().getAutoNumberForChapterProperty().bind(autoNumberButton.selectedProperty());
     }
@@ -88,7 +81,6 @@ public class ChapterTemplateController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initLabel();
         initTile();
         initAutoNumberButton();
         initComboBox();

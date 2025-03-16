@@ -34,9 +34,10 @@ public class ChapterRegexController implements Initializable {
     public CustomTableView<RegexProperty> chapterRegexTableView;
 
     private void initChapterRegexTile() {
-        chapterRegexTile.titleProperty().bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.Tile.Title"));
+        chapterRegexTile.titleProperty().bind(I18nUtil.createStringBinding(
+                "App.Formatter.Input.Chapter.Regex.Tile.Title"));
         chapterRegexTile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.Tile.Desc"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Regex.Tile.Desc"));
     }
 
     private void initTableView() {
@@ -57,7 +58,7 @@ public class ChapterRegexController implements Initializable {
         enabledColumn.setMinWidth(120);
         // 列头
         enabledColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.TableView.EnabledColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Regex.TableView.EnabledColumn.Title"));
         CheckBox enableAll = new CheckBox();
         enableAll.setOnAction(event -> {
             for (RegexProperty item : chapterRegexTableView.getItems()) {
@@ -75,7 +76,7 @@ public class ChapterRegexController implements Initializable {
     private @NotNull TableColumn<RegexProperty, String> createDescColumn() {
         TableColumn<RegexProperty, String> descColumn = new TableColumn<>();
         descColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.TableView.DescColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Regex.TableView.DescColumn.Title"));
         descColumn.setCellValueFactory(regexStringCellDataFeatures -> regexStringCellDataFeatures.getValue()
                 .getDescriptionProperty());
         return descColumn;
@@ -85,7 +86,7 @@ public class ChapterRegexController implements Initializable {
         TableColumn<RegexProperty, Pattern> patternColumn = new TableColumn<>();
         patternColumn.setEditable(true);
         patternColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.TableView.PatternColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Regex.TableView.PatternColumn.Title"));
         patternColumn.setCellValueFactory(
                 regexStringCellDataFeatures -> regexStringCellDataFeatures.getValue().getPatternProperty());
         return patternColumn;

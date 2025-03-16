@@ -6,7 +6,7 @@
 
     <groupId>cc.meltryllis</groupId>
     <artifactId>NovelFormatterFX</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>NovelFormatter</name>
     <description>JavaFX Novel Formatter.</description>
 
@@ -93,7 +93,51 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/pom</directory> <!-- 资源文件所在目录 -->
+                <filtering>true</filtering> <!-- 开启过滤 -->
+                <targetPath>pom</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>us.hebi.sass</groupId>
+                <artifactId>sass-cli-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <configuration>
+                    <sassVersion>1.62.0</sassVersion>
+                    <args>
+                        <arg>
+                            ${project.basedir}/src/main/resources/css/index.scss:${project.build.directory}/classes/css/index.css
+                        </arg>
+                        <arg>--no-source-map</arg>
+                        <!-- 禁止css文件开头添加@charset标识，JavaFX的CSS解析器不支持该语法 -->
+                        <arg>--no-charset</arg>
+                    </args>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sass-exec</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

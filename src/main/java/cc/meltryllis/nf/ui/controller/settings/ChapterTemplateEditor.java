@@ -64,18 +64,18 @@ public class ChapterTemplateEditor implements Initializable {
 
     private void initTile() {
         tile.titleProperty()
-                .bind(I18nUtil.createStringBinding("App.Settings.FormatterConfig.Output.ChapterFormat.Tile.Title"));
+                .bind(I18nUtil.createStringBinding("App.Settings.FormatterConfig.Output.ChapterTemplate.Tile.Title"));
         tile.descriptionProperty()
-                .bind(I18nUtil.createStringBinding("App.Settings.FormatterConfig.Output.ChapterFormat.Tile.Desc"));
+                .bind(I18nUtil.createStringBinding("App.Settings.FormatterConfig.Output.ChapterTemplate.Tile.Desc"));
     }
 
     private void initFields() {
         templateField.promptTextProperty().bind(I18nUtil.createStringBinding(
-                "App.Settings.FormatterConfig.Output.ChapterFormat.TemplateField.Prompt"));
+                "App.Settings.FormatterConfig.Output.ChapterTemplate.TemplateField.Prompt"));
         templateField.textProperty()
                 .addListener((observableValue, string, t1) -> exampleField.setText(Chapter.exampleText(t1)));
         exampleField.promptTextProperty().bind(I18nUtil.createStringBinding(
-                "App.Settings.FormatterConfig.Output.ChapterFormat.ExampleField.Prompt"));
+                "App.Settings.FormatterConfig.Output.ChapterTemplate.ExampleField.Prompt"));
     }
 
     private void initTableView() {
@@ -85,13 +85,13 @@ public class ChapterTemplateEditor implements Initializable {
 
         TableColumn<ChapterTemplateProperty, String> exampleColumn = new TableColumn<>();
         exampleColumn.textProperty().bind(I18nUtil.createStringBinding(
-                "App.Settings.FormatterConfig.Output.ChapterFormat.TableView.ExampleColumn.Title"));
+                "App.Settings.FormatterConfig.Output.ChapterTemplate.TableView.ExampleColumn.Title"));
         exampleColumn.setCellValueFactory(
                 param -> new SimpleStringProperty(Chapter.exampleText(param.getValue().getTemplateText())));
 
         TableColumn<ChapterTemplateProperty, String> templateColumn = new TableColumn<>();
         templateColumn.textProperty().bind(I18nUtil.createStringBinding(
-                "App.Settings.FormatterConfig.Output.ChapterFormat.TableView.FormatColumn.Title"));
+                "App.Settings.FormatterConfig.Output.ChapterTemplate.TableView.FormatColumn.Title"));
         templateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTemplateText()));
 
         tableView.getColumns().addAll(Arrays.asList(templateColumn, exampleColumn));

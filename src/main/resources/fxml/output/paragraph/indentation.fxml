@@ -10,7 +10,7 @@
 <Card xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
       fx:controller="cc.meltryllis.nf.ui.controller.output.IndentationController"
-      minWidth="300">
+      minWidth="450">
     <header>
         <Tile fx:id="tile"/>
     </header>

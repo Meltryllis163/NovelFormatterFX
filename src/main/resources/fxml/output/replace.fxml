@@ -10,7 +10,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <Card xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
-      fx:controller="cc.meltryllis.nf.ui.controller.output.ReplaceOutputController">
+      fx:controller="cc.meltryllis.nf.ui.controller.output.ReplaceOutputController" styleClass="replace">
     <header>
         <Tile fx:id="replaceTile"/>
     </header>

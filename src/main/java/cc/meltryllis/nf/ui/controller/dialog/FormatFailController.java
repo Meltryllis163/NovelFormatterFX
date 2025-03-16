@@ -10,15 +10,22 @@ import javafx.scene.control.Label;
  * @author Zachary W
  * @date 2025/3/8
  */
-public class FormatFailController {
+public class FormatFailController extends StageDialogController<String> {
 
     @FXML
     public Label failLabel;
     @FXML
     public Label reasonLabel;
 
-    public void setFailException(String message) {
+    public void setFailMessage(String message) {
         failLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatFail.Fail"));
         reasonLabel.setText(message);
     }
+
+    @Override
+    protected void setInitialResult(String initialResult) {
+        super.setInitialResult(initialResult);
+        setFailMessage(initialResult);
+    }
+
 }

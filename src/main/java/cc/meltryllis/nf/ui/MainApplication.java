@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -29,7 +30,11 @@ import java.util.Objects;
  * @author Zachary W
  * @date 2025/2/10
  */
+@Slf4j
 public class MainApplication extends Application {
+
+    public static final String CUSTOM_CSS = Objects.requireNonNull(MainApplication.class.getResource("/css/index.css"))
+            .toExternalForm();
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -37,7 +42,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/main-application.fxml"));
         Parent root = fxmlLoader.load();
         // 嵌入全局css表
-        root.getStylesheets().add(Objects.requireNonNull(MainApplication.class.getResource("/fxml/css/common.css"))
+        root.getStylesheets().add(Objects.requireNonNull(MainApplication.class.getResource("/css/index.css"))
                 .toExternalForm());
         Scene scene = new Scene(root, UICons.PREF_WIDTH, UICons.PREF_HEIGHT);
         initLanguageMnemonic(scene);

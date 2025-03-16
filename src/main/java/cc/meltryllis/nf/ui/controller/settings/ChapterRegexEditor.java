@@ -99,13 +99,13 @@ public class ChapterRegexEditor implements Initializable {
 
         TableColumn<RegexProperty, String> descColumn = new TableColumn<>();
         descColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.TableView.DescColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Regex.TableView.DescColumn.Title"));
         descColumn.setCellValueFactory(
                 regexStringCellDataFeatures -> regexStringCellDataFeatures.getValue().getDescriptionProperty());
 
         TableColumn<RegexProperty, Pattern> patternColumn = new TableColumn<>();
         patternColumn.textProperty()
-                .bind(I18nUtil.createStringBinding("App.Input.Chapter.Regex.TableView.PatternColumn.Title"));
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Regex.TableView.PatternColumn.Title"));
         patternColumn.setCellValueFactory(
                 regexPatternCellDataFeatures -> regexPatternCellDataFeatures.getValue().getPatternProperty());
 
