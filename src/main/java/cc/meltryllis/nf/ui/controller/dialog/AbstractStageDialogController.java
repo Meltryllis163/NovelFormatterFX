@@ -4,6 +4,8 @@ import cc.meltryllis.nf.utils.message.dialog.StageDialog;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 用作 {@link cc.meltryllis.nf.utils.message.dialog.StageDialog} 内容的FXML文件的控制器。
@@ -15,30 +17,53 @@ import lombok.Setter;
  */
 @Getter(AccessLevel.PROTECTED)
 @Setter(AccessLevel.PROTECTED)
-public abstract class StageDialogController<T> {
+public abstract class AbstractStageDialogController<T> {
 
     private StageDialog stageDialog;
 
     /** 传入数据 */
     private T result;
 
-    public T registerStageDialog(StageDialog stageDialog) {
+    public T registerStageDialog(@NotNull StageDialog stageDialog) {
         return registerStageDialog(null, stageDialog);
     }
 
-    public T registerStageDialog(T initialResult, StageDialog stageDialog) {
+    public T registerStageDialog(@Nullable T initialResult, @NotNull StageDialog stageDialog) {
         setStageDialog(stageDialog);
         setInitialResult(initialResult);
+        initialize();
         stageDialog.showAndWait();
         return getResult();
     }
 
     /**
+     * 如果需要执行任何初始化行为，请重写该方法。
+     * <p>
+     * 该方法运行时，{@link #getStageDialog()} 必定非空。
+     *
+     * @see #registerStageDialog(Object, StageDialog)
+     */
+    protected void initialize() {
+
+    }
+
+    /**
      * 如果想处理初始数值，请重写该方法。
+     * 例如：
+     * <pre>
+     *     &#064;Override
+     *     protected void setInitialResult(String initialResult) {
+     *         super.setInitialResult(initialResult);
+     *         // 处理初始数值代码
+     *     }
+     * </pre>
      *
      * @param initialResult 初始化数值
+     *
+     * @see #registerStageDialog(Object, StageDialog)
      */
     protected void setInitialResult(T initialResult) {
         setResult(initialResult);
     }
+
 }

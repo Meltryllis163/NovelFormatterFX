@@ -85,9 +85,10 @@ public class StageDialog extends Stage {
     @Nullable
     private FontIcon createTypeIcon(@NotNull DialogUtil.Type type) {
         FontIcon icon = switch (type) {
+            case ACCENT -> new FontIcon("fth-help-circle:40:#89CFF0");
             case WARNING, DANGER -> new FontIcon("fth-alert-circle:40:orange");
             case SUCCESS -> new FontIcon("fth-check-circle:40:green");
-            case NONE, ACCENT -> null;
+            case NONE -> null;
         };
         // 清除默认风格，让尺寸和颜色生效
         if (icon != null) {
@@ -114,7 +115,7 @@ public class StageDialog extends Stage {
 
         private StringBinding title;
 
-        protected StageDialogBuilder(@NotNull Pane contentPane) {
+        public StageDialogBuilder(@NotNull Pane contentPane) {
             this.contentPane = contentPane;
         }
 

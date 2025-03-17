@@ -94,7 +94,7 @@ public class FormatterPaneController implements Initializable {
             ParseProcessor parseProcessor = new ParseProcessor(formatFile);
             if (parseProcessor.format()) {
                 DialogUtil.FXMLBuilder<File> builder = new DialogUtil.FXMLBuilder<>("/fxml/dialog/format-success.fxml");
-                builder.setTitle(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title")).setInitialValue(formatFile)
+                builder.setType(DialogUtil.Type.SUCCESS).setTitle(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title")).setInitialValue(formatFile)
                         .show();
             }
         } catch (IOException e) {

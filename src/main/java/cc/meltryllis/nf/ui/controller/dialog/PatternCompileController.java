@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * @date 2025/3/9
  */
 @Slf4j
-public class PatternCompileController extends StageDialogController<String> implements Initializable {
+public class PatternCompileController extends AbstractStageDialogController<String> implements Initializable {
 
     public static PseudoClass WARNING_TIP = PseudoClass.getPseudoClass(MyStyles.WARNING_TIP);
     public static PseudoClass SUCCESS_TIP = PseudoClass.getPseudoClass(MyStyles.SUCCESS_TIP);

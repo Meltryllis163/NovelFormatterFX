@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.UICons?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.dialog.ChoiceDialogController"
+      fx:id="root">
+    <HBox alignment="BASELINE_RIGHT">
+        <Button fx:id="ok" styleClass="success"/>
+        <Button fx:id="cancel"/>
+        <spacing>
+            <UICons fx:constant="DEFAULT_SPACING"/>
+        </spacing>
+    </HBox>
+    <spacing>
+        <UICons fx:constant="DEFAULT_SPACING"/>
+    </spacing>
+</VBox>

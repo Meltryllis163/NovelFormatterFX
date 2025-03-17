@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
  * @author Zachary W
  * @date 2025/3/8
  */
-public class FormatFailController extends StageDialogController<String> {
+public class FormatFailController extends AbstractStageDialogController<String> {
 
     @FXML
     public Label failLabel;

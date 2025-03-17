@@ -16,7 +16,7 @@ import java.io.File;
  * @author Zachary W
  * @date 2025/3/4
  */
-public class FormatSuccessController extends StageDialogController<File> {
+public class FormatSuccessController extends AbstractStageDialogController<File> {
 
     @FXML
     public Label successLabel;

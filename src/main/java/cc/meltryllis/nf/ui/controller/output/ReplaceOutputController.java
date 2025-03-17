@@ -96,7 +96,7 @@ public class ReplaceOutputController implements Initializable {
                 targetField.setEditable(true);
                 targetField.onMouseClickedProperty().setValue(null);
             }
-            TooltipUtil.show(regexButton, newValue ? "Dialog.Regex.Enabled" : "Dialog.Regex.Disabled",
+            TooltipUtil.show(regexButton, newValue ? "Dialog.ToggleRegexMode.Enabled" : "Dialog.ToggleRegexMode.Disabled",
                     TooltipUtil.Pos.BOTTOM);
         });
     }

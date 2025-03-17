@@ -1,11 +1,13 @@
 package cc.meltryllis.nf.utils.message.dialog;
 
-import cc.meltryllis.nf.ui.controller.dialog.StageDialogController;
+import cc.meltryllis.nf.ui.controller.dialog.AbstractStageDialogController;
+import cc.meltryllis.nf.ui.controller.dialog.ChoiceDialogController;
 import cc.meltryllis.nf.utils.FXUtil;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -48,15 +50,29 @@ public class DialogUtil {
     @Nullable
     private static <T> T showFXML(@Nullable StringBinding title, @NotNull Type type, @NotNull String fxml,
                                   @Nullable T initialValue) {
-        FXMLLoader loader = FXUtil.newFXMLLoader(fxml);
         try {
+            FXMLLoader loader = FXUtil.newFXMLLoader(fxml);
             Pane contentPane = loader.load();
-            StageDialogController<T> stageDialogController = loader.getController();
+            AbstractStageDialogController<T> stageDialogController = loader.getController();
             StageDialog stageDialog = StageDialog.builder(contentPane).setType(type).setTitle(title).build();
             return stageDialogController.registerStageDialog(initialValue, stageDialog);
         } catch (IOException e) {
             log.warn(StrUtil.format("Load fxml({0}) failed. Return null.", fxml), e);
             return null;
+        }
+    }
+
+    public static boolean showChoice(@Nullable StringBinding title, @NotNull Type type, boolean initialChoice,
+                                     @NotNull StringBinding... messages) {
+        try {
+            FXMLLoader loader = FXUtil.newFXMLLoader("/fxml/dialog/choice-dialog.fxml");
+            VBox content = loader.load();
+            ChoiceDialogController choiceDialogController = loader.getController();
+            choiceDialogController.setMessages(messages);
+            StageDialog stageDialog = StageDialog.builder(content).setType(type).setTitle(title).build();
+            return choiceDialogController.registerStageDialog(initialChoice, stageDialog);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

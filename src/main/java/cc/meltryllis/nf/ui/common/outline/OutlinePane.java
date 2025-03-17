@@ -29,11 +29,9 @@ public class OutlinePane extends StackPane {
     public static final int        OUTLINE_WIDTH = 200;
     private final       ScrollPane contentScrollPane;
     private final       StackPane  contentStackPane;
-    // private final        ScrollPane outlineScrollPane;
     private final       Outline    outline;
     private             VBox       content;
 
-    // TODO 现在的滚动面板有个致命缺陷，那就是只能在contentScrollPane内才能滚动
     public OutlinePane() {
 
         contentStackPane = new StackPane();

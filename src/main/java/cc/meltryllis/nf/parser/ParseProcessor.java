@@ -2,6 +2,9 @@ package cc.meltryllis.nf.parser;
 
 import cc.meltryllis.nf.constants.FileCons;
 import cc.meltryllis.nf.entity.Chapter;
+import cc.meltryllis.nf.entity.property.input.ChapterRegexProperty;
+import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
+import cc.meltryllis.nf.entity.property.input.RegexProperty;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.ReplacementProperty;
 import cc.meltryllis.nf.utils.common.FileUtil;
@@ -50,7 +53,9 @@ public class ParseProcessor {
                     I18nUtil.createStringBinding("Dialog.FileNotFound.Desc"), DialogUtil.Type.WARNING);
             return false;
         }
-        // TODO 如果用户没有选择任何一个章节正则，弹窗提示
+        if (!checkChapterRegexEnabled()) {
+            return false;
+        }
         // 设定输出文件对象
         outputFile = new File(file.getParent(), FileUtil.getPrefix(file) + FileCons.TXT_OUTPUT_SUFFIX);
         // 删除旧输出文件
@@ -86,6 +91,25 @@ public class ParseProcessor {
             log.warn("Format txt failed.", e);
             throw e;
         }
+    }
+
+    /**
+     * 确保当前有章节正则表达式在启用。
+     */
+    private boolean checkChapterRegexEnabled() {
+        boolean hasChapterRegexEnabled = false;
+        ChapterRegexProperty chapterRegexProperty = InputFormatProperty.getInstance().getChapterRegexProperty();
+        for (RegexProperty regexProperty : chapterRegexProperty.getRegexList()) {
+            if (regexProperty.isEnabled()) {
+                hasChapterRegexEnabled = true;
+                break;
+            }
+        }
+        if (!hasChapterRegexEnabled) {
+            return DialogUtil.showChoice(I18nUtil.createStringBinding("Dialog.CheckChapterRegexEnabled.Title"),
+                    DialogUtil.Type.ACCENT, false, I18nUtil.createStringBinding("Dialog.CheckChapterRegexEnabled.Desc"));
+        }
+        return true;
     }
 
     private void formatNewLines(BufferedWriter writer) throws IOException {
