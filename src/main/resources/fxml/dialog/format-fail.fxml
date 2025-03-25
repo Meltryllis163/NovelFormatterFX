@@ -2,14 +2,18 @@
 
 <?import cc.meltryllis.nf.constants.UICons?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
       fx:controller="cc.meltryllis.nf.ui.controller.dialog.FormatFailController"
       alignment="CENTER_LEFT">
-    <Label fx:id="failLabel"/>
-    <Label fx:id="reasonLabel"/>
+    <Label fx:id="failTitle" styleClass="title-3"/>
+    <Separator styleClass="small"/>
+    <Label fx:id="failMessage"/>
+    <TextArea fx:id="exceptionArea"/>
     <spacing>
-        <UICons fx:constant="BIG_SPACING"/>
+        <UICons fx:constant="DEFAULT_SPACING"/>
     </spacing>
 </VBox>

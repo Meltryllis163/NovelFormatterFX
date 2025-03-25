@@ -1,7 +1,7 @@
 package cc.meltryllis.nf.ui.controller;
 
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
-import cc.meltryllis.nf.parser.ParseProcessor;
+import cc.meltryllis.nf.parse.FormatProcessor;
 import cc.meltryllis.nf.ui.common.outline.OutlinePane;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
@@ -91,17 +91,19 @@ public class FormatterPaneController implements Initializable {
         long start = System.currentTimeMillis();
         File formatFile = InputFormatProperty.getInstance().getFile();
         try {
-            ParseProcessor parseProcessor = new ParseProcessor(formatFile);
-            if (parseProcessor.format()) {
+            FormatProcessor formatProcessor = new FormatProcessor(formatFile);
+            if (formatProcessor.format()) {
                 DialogUtil.FXMLBuilder<File> builder = new DialogUtil.FXMLBuilder<>("/fxml/dialog/format-success.fxml");
-                builder.setType(DialogUtil.Type.SUCCESS).setTitle(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title")).setInitialValue(formatFile)
+                builder.setType(DialogUtil.Type.SUCCESS)
+                        .setTitle(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title"))
+                        .setInitialValue(formatFile)
                         .show();
             }
         } catch (IOException e) {
-            DialogUtil.FXMLBuilder<String> failMessageBuilder = new DialogUtil.FXMLBuilder<>(
+            DialogUtil.FXMLBuilder<Exception> failExceptionBuilder = new DialogUtil.FXMLBuilder<>(
                     "/fxml/dialog/format-fail.fxml");
-            failMessageBuilder.setTitle(I18nUtil.createStringBinding("Dialog.FormatFail.Title"))
-                    .setInitialValue(e.getMessage()).show();
+            failExceptionBuilder.setTitle(I18nUtil.createStringBinding("Dialog.FormatFail.Title"))
+                    .setInitialValue(e).show();
         }
         log.info(StrUtil.format("Format file success. Time: {0}ms.", System.currentTimeMillis() - start));
     }

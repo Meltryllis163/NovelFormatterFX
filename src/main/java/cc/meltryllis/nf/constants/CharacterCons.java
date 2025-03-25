@@ -10,11 +10,6 @@ package cc.meltryllis.nf.constants;
 @SuppressWarnings({"UnnecessaryUnicodeEscape"})
 public interface CharacterCons {
 
-    /** 可以表示一句话结束的标点符号集合 */
-    char[] END_MARKS = new char[] {
-            /* 中文标点 */ CHINESE.PERIOD, CHINESE.QUESTION, CHINESE.EXCLAMATION, CHINESE.RIGHT_DOUBLE_QUOTE, CHINESE.RIGHT_CORNER_BRACKET, CHINESE.RIGHT_WHITE_CORNER_BRACKET,
-            /* 英文标点 */ ENGLISH.PERIOD, ENGLISH.QUESTION, ENGLISH.EXCLAMATION, ENGLISH.QUOTE };
-
     interface CHINESE {
 
         /** 全角空格，在txt中，全角空格长度等于四个 {@link CharacterCons.ENGLISH#SPACE} */

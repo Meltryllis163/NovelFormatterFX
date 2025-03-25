@@ -1,33 +1,32 @@
-package cc.meltryllis.nf.parser;
+package cc.meltryllis.nf.parse;
 
 import cc.meltryllis.nf.constants.FileCons;
-import cc.meltryllis.nf.entity.Chapter;
 import cc.meltryllis.nf.entity.property.input.ChapterRegexProperty;
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
 import cc.meltryllis.nf.entity.property.input.RegexProperty;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.ReplacementProperty;
 import cc.meltryllis.nf.utils.common.FileUtil;
-import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Objects;
 
 /**
- * 小说整体流程解析器。
+ * 小说格式化处理器。
  *
  * @author Zachary W
  * @date 2025/2/5
  */
 @Slf4j
 @Getter
-public class ParseProcessor {
+public class FormatProcessor {
 
 
     private final File          file;
@@ -36,7 +35,7 @@ public class ParseProcessor {
     private       StringBuilder resegmentContent;
 
 
-    public ParseProcessor(File file) {
+    public FormatProcessor(File file) {
         this.file = file;
     }
 
@@ -66,25 +65,22 @@ public class ParseProcessor {
         autoChapterNumber = 1;
         // 初始化重新分段字符
         resegmentContent = new StringBuilder();
+        // TODO 定义文档编码格式
         try (BufferedReader reader = Files.newBufferedReader(
                 file.toPath()); BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath())) {
-            // 记录导出配置
-            OutputFormatProperty outputFormatProperty = OutputFormatProperty.getInstance();
-            String indention = outputFormatProperty.getParagraphProperty().getIndentationProperty()
-                    .generateIndentationSpace();
+            BlankLineFormatter blankLineFormatter = new BlankLineFormatter(writer);
+            ChapterFormatter chapterFormatter = new ChapterFormatter(writer);
+            ContentFormatter contentFormatter = new ContentFormatter(writer);
             // 格式化
             String line;
             while ((line = reader.readLine()) != null) {
                 line = handleReplacement(line);
-                AbstractParser parser = parseLine(line);
-                if (parser instanceof ChapterParser chapterParser) {
-                    formatChapter(writer, chapterParser, indention);
-                    formatNewLines(writer);
-                } else if (parser instanceof ContentParser contentParser) {
-                    if (formatContent(writer, contentParser, indention)) {
-                        formatNewLines(writer);
-                    }
+                if (chapterFormatter.tryFormat(line)) {
+                    contentFormatter.nextChapter();
+                } else if (!blankLineFormatter.tryFormat(line)) {
+                    contentFormatter.tryFormat(line);
                 }
+                blankLineFormatter.writeNewLines();
             }
             return true;
         } catch (IOException e) {
@@ -107,17 +103,10 @@ public class ParseProcessor {
         }
         if (!hasChapterRegexEnabled) {
             return DialogUtil.showChoice(I18nUtil.createStringBinding("Dialog.CheckChapterRegexEnabled.Title"),
-                    DialogUtil.Type.ACCENT, false, I18nUtil.createStringBinding("Dialog.CheckChapterRegexEnabled.Desc"));
+                    DialogUtil.Type.ACCENT, false,
+                    I18nUtil.createStringBinding("Dialog.CheckChapterRegexEnabled.Desc"));
         }
         return true;
-    }
-
-    private void formatNewLines(BufferedWriter writer) throws IOException {
-        writer.newLine();
-        int blankLineCount = OutputFormatProperty.getInstance().getParagraphProperty().getBlankLineCount();
-        for (int i = 0; i < blankLineCount; i++) {
-            writer.newLine();
-        }
     }
 
     /**
@@ -144,6 +133,8 @@ public class ParseProcessor {
     }
 
     // TODO 应该允许用户自定义文本替换规则的顺序
+    // TODO 允许用户直接选取一些常用的符号来替换，例如「」“”之类的
+    // TODO 将textfield换成combobox，而且设置为editable，这样可以将combobox的popup菜单作为历史记录使用，这一条和上一条TODO有重复，需要适当取舍
     private String handleReplacement(String line) {
         OutputFormatProperty outputFormatProperty = OutputFormatProperty.getInstance();
         for (ReplacementProperty replacementProperty : outputFormatProperty.getReplacementPropertyList()) {
@@ -154,68 +145,6 @@ public class ParseProcessor {
             }
         }
         return line;
-    }
-
-    private void formatChapter(Writer writer, ChapterParser parser, String indention) throws IOException {
-        Objects.requireNonNull(parser);
-        Chapter chapter = parser.getChapter();
-        if (OutputFormatProperty.getInstance().isAutoNumberForChapter()) {
-            chapter.setNumber(autoChapterNumber++);
-        }
-        if (OutputFormatProperty.getInstance().getParagraphProperty().getIndentationProperty()
-                .isEffectiveForChapter()) {
-            writer.write(indention);
-        }
-        writer.write(chapter.format(
-                OutputFormatProperty.getInstance().getSelectedChapterTemplateObjectProperty().getValue()));
-    }
-
-    /**
-     * 格式化正文内容。
-     *
-     * @param writer    输出流。
-     * @param parser    正文解析器。
-     * @param indention 正文前缩进空格字符串。
-     *
-     * @return 如果需要 {@link #formatNewLines(BufferedWriter)} 则返回 {@code true}，否则返回 {@code false}。
-     *
-     * @throws IOException 写入出现问题时抛出异常。
-     */
-    private boolean formatContent(Writer writer, ContentParser parser, String indention) throws IOException {
-        Objects.requireNonNull(parser);
-        String curContent = parser.getTrimmingText();
-        // TODO 限制文本行拼接次数，避免奇怪的文档格式将整个文档都拼成一行。
-        if (OutputFormatProperty.getInstance().getParagraphProperty().isResegment()) {
-            if (!parser.isComplete()) {
-                resegmentContent.append(curContent);
-                return false;
-            } else {
-                curContent = resegmentContent.append(curContent).toString();
-                // 清空
-                resegmentContent.setLength(0);
-            }
-        }
-        writer.write(indention);
-        writer.write(curContent);
-        return true;
-    }
-
-    @Nullable
-    private AbstractParser parseLine(String line) {
-        String trimmingLine = StrUtil.trim(line);
-        BlankLineParser blankLineParser = new BlankLineParser(trimmingLine);
-        if (blankLineParser.isSatisfied()) {
-            return blankLineParser;
-        }
-        ChapterParser chapterParser = new ChapterParser(trimmingLine);
-        if (chapterParser.isSatisfied()) {
-            return chapterParser;
-        }
-        ContentParser contentParser = new ContentParser(trimmingLine);
-        if (contentParser.isSatisfied()) {
-            return contentParser;
-        }
-        return null;
     }
 
 }

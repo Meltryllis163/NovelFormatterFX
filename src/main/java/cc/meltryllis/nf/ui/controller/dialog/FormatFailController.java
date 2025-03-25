@@ -2,7 +2,14 @@ package cc.meltryllis.nf.ui.controller.dialog;
 
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * 格式化失败对话框控制器。
@@ -10,22 +17,34 @@ import javafx.scene.control.Label;
  * @author Zachary W
  * @date 2025/3/8
  */
-public class FormatFailController extends AbstractStageDialogController<String> {
+public class FormatFailController extends AbstractStageDialogController<Exception> implements Initializable {
 
     @FXML
-    public Label failLabel;
+    public Label    failTitle;
     @FXML
-    public Label reasonLabel;
+    public Label    failMessage;
+    @FXML
+    public TextArea exceptionArea;
 
-    public void setFailMessage(String message) {
-        failLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatFail.Fail"));
-        reasonLabel.setText(message);
+    public void setFailException(Exception e) {
+        failTitle.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatFail.Title"));
+        failMessage.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatFail.Message"));
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        exceptionArea.setText(stringWriter.toString());
     }
 
     @Override
-    protected void setInitialResult(String initialResult) {
+    protected void setInitialResult(Exception initialResult) {
         super.setInitialResult(initialResult);
-        setFailMessage(initialResult);
+        setFailException(initialResult);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        exceptionArea.setEditable(false);
+        exceptionArea.setWrapText(false);
     }
 
 }

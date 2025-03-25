@@ -1,5 +1,6 @@
-package cc.meltryllis.nf.parser;
+package cc.meltryllis.nf.parse;
 
+import cc.meltryllis.nf.utils.common.StrUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,12 +11,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BlankLineParser extends AbstractParser {
 
-    public BlankLineParser(String text) {
-        super(text);
-    }
-
     @Override
     protected boolean parse(@NotNull String trimmingText) {
-        return false;
+        return StrUtil.isEmpty(trimmingText);
     }
+
 }
