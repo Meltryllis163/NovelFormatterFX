@@ -32,7 +32,6 @@ public class RegexProperty implements ICopyableTexts {
     @JsonIgnore
     private final SimpleObjectProperty<Pattern> patternProperty;
     @NotNull
-    @JsonIgnore
     private final SimpleBooleanProperty         enabledProperty;
 
     @JsonCreator
@@ -106,4 +105,5 @@ public class RegexProperty implements ICopyableTexts {
                 getPattern().toString()
         };
     }
+
 }
