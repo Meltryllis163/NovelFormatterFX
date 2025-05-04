@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.Card?>
+<?import atlantafx.base.controls.Tile?>
+<?import javafx.scene.control.ComboBox?>
+<Card xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.input.CharsetController">
+    <header>
+        <Tile fx:id="charsetTile"/>
+    </header>
+    <body>
+        <ComboBox fx:id="charsetComboBox" minWidth="200"/>
+    </body>
+</Card>

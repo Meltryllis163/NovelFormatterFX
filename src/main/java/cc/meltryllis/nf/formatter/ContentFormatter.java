@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 正文格式化器。
@@ -28,7 +29,8 @@ public class ContentFormatter extends AbstractFormatter<ContentParser> {
     }
 
     @Override
-    protected void format() {
+    protected boolean format() {
+        super.format();
         try {
             if (resegment) {
                 resegmentBuilder.append(parser.getTrimmingText());
@@ -37,14 +39,18 @@ public class ContentFormatter extends AbstractFormatter<ContentParser> {
                     writer.write(resegmentBuilder.toString());
                     writer.newLine();
                     clearResegmentBuilder();
+                    return true;
                 }
+                return false;
             } else {
                 writer.write(indentation);
-                writer.write(parser.getTrimmingText());
+                writer.write(Objects.requireNonNull(parser.getTrimmingText()));
                 writer.newLine();
+                return true;
             }
         } catch (IOException e) {
             log.warn("Write format content failed.", e);
+            return false;
         }
     }
 

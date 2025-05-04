@@ -1,6 +1,5 @@
 module cc.meltryllis.nf {
     requires javafx.fxml;
-    requires javafx.controls;
 
     requires atlantafx.base;
     requires static lombok;
@@ -12,6 +11,10 @@ module cc.meltryllis.nf {
     requires ch.qos.logback.core;
     requires org.slf4j;
     requires java.desktop;
+    requires com.github.albfernandez.juniversalchardet;
+    requires jdk.charsets;
+    requires java.naming;
+    requires nfx.core;
 
     opens cc.meltryllis.nf.ui.controller to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.input to javafx.fxml;

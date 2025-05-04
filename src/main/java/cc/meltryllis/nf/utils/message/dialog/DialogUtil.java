@@ -1,7 +1,7 @@
 package cc.meltryllis.nf.utils.message.dialog;
 
 import cc.meltryllis.nf.ui.controller.dialog.AbstractStageDialogController;
-import cc.meltryllis.nf.ui.controller.dialog.ChoiceDialogController;
+import cc.meltryllis.nf.ui.controller.dialog.MessagesController;
 import cc.meltryllis.nf.utils.FXUtil;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import javafx.beans.binding.StringBinding;
@@ -42,19 +42,18 @@ public class DialogUtil {
 
     public static void showMessage(@Nullable StringBinding title, @NotNull StringBinding message,
                                    @NotNull DialogUtil.Type type) {
-        MessagesVBox messagesVBox = new MessagesVBox(List.of(message));
-        StageDialog stageDialog = StageDialog.builder(messagesVBox).setTitle(title).setType(type).build();
-        stageDialog.showAndWait();
+        showChoice(title, type, false, message);
     }
 
     @Nullable
     private static <T> T showFXML(@Nullable StringBinding title, @NotNull Type type, @NotNull String fxml,
-                                  @Nullable T initialValue) {
+                                  @Nullable T initialValue, boolean okButton, boolean cancelButton) {
         try {
             FXMLLoader loader = FXUtil.newFXMLLoader(fxml);
             Pane contentPane = loader.load();
             AbstractStageDialogController<T> stageDialogController = loader.getController();
-            StageDialog stageDialog = StageDialog.builder(contentPane).setType(type).setTitle(title).build();
+            StageDialog stageDialog = StageDialog.builder(contentPane).setType(type).setTitle(title)
+                    .setOKButton(okButton).setCancelButton(cancelButton).build();
             return stageDialogController.registerStageDialog(initialValue, stageDialog);
         } catch (IOException e) {
             log.warn(StrUtil.format("Load fxml({0}) failed. Return null.", fxml), e);
@@ -65,12 +64,12 @@ public class DialogUtil {
     public static boolean showChoice(@Nullable StringBinding title, @NotNull Type type, boolean initialChoice,
                                      @NotNull StringBinding... messages) {
         try {
-            FXMLLoader loader = FXUtil.newFXMLLoader("/fxml/dialog/choice-dialog.fxml");
-            VBox content = loader.load();
-            ChoiceDialogController choiceDialogController = loader.getController();
-            choiceDialogController.setMessages(messages);
-            StageDialog stageDialog = StageDialog.builder(content).setType(type).setTitle(title).build();
-            return choiceDialogController.registerStageDialog(initialChoice, stageDialog);
+            FXMLLoader loader = FXUtil.newFXMLLoader("/fxml/dialog/messages.fxml");
+            VBox messagesVBox = loader.load();
+            MessagesController messagesController = loader.getController();
+            messagesController.setMessages(List.of(messages));
+            StageDialog stageDialog = StageDialog.builder(messagesVBox).setType(type).setTitle(title).build();
+            return messagesController.registerStageDialog(initialChoice, stageDialog);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -91,7 +90,9 @@ public class DialogUtil {
         private T             initialValue;
 
         @NotNull
-        private Type type = Type.NONE;
+        private Type    type         = Type.NONE;
+        private boolean okButton     = true;
+        private boolean cancelButton = true;
 
         public FXMLBuilder(@NotNull String fxml) {
             this.fxml = fxml;
@@ -112,8 +113,18 @@ public class DialogUtil {
             return this;
         }
 
+        public FXMLBuilder<T> setOKButton(boolean add) {
+            this.okButton = add;
+            return this;
+        }
+
+        public FXMLBuilder<T> setCancelButton(boolean add) {
+            this.cancelButton = add;
+            return this;
+        }
+
         public T show() {
-            return showFXML(title, type, fxml, initialValue);
+            return showFXML(title, type, fxml, initialValue, okButton, cancelButton);
         }
 
     }

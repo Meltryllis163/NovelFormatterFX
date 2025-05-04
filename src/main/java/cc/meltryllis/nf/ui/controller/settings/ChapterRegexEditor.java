@@ -3,7 +3,7 @@ package cc.meltryllis.nf.ui.controller.settings;
 import atlantafx.base.controls.Tile;
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
 import cc.meltryllis.nf.entity.property.input.RegexProperty;
-import cc.meltryllis.nf.ui.common.CustomTableView;
+import cc.meltryllis.nf.ui.common.MTableView;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
@@ -34,9 +34,9 @@ public class ChapterRegexEditor implements Initializable {
     @FXML
     public TextField                      descriptionField;
     @FXML
-    public TextField                      patternField;
+    public TextField                 patternField;
     @FXML
-    public CustomTableView<RegexProperty> tableView;
+    public MTableView<RegexProperty> tableView;
 
     @FXML
     private void selectAll() {

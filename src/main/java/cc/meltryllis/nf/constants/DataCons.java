@@ -17,10 +17,11 @@ public class DataCons {
     public static final String DATA_FOLDER          = "data";
     public static final String INPUT_FORMAT_CONFIG  = DATA_FOLDER + "/input_format.json";
     public static final String OUTPUT_FORMAT_CONFIG = DATA_FOLDER + "/output_format.json";
+    public static final String HISTORY              = DATA_FOLDER + "/history.json";
     public static final String BUILD_VERSION        = "/pom/build.version";
 
     public static final String VERSION;
-    public static String GITHUB = "https://github.com/Meltryllis163/NovelFormatterFX";
+    public static final String GITHUB = "https://github.com/Meltryllis163/NovelFormatterFX";
 
     // 此处参考 https://developer.aliyun.com/article/1625108
     static {

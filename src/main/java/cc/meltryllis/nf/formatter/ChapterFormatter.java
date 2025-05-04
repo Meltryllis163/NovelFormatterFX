@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.entity.Chapter;
 import cc.meltryllis.nf.entity.property.output.IndentationProperty;
@@ -38,11 +38,18 @@ public class ChapterFormatter extends AbstractFormatter<ChapterParser> {
     }
 
     @Override
-    protected void format() {
+    protected boolean format() {
+        super.format();
         chapterCount++;
         Matcher matcher = parser.getMatcher();
         String formatChapterText = parser.getChapterText();
-        Chapter chapter = new Chapter(chapterCount, matcher.group(ChapterParser.TITLE_KEY));
+        String title;
+        try {
+            title = matcher.group(ChapterParser.TITLE_KEY);
+        } catch (IllegalArgumentException e) {
+            title = StrUtil.EMPTY;
+        }
+        Chapter chapter = new Chapter(chapterCount, title);
         if (autoNumberForChapter) {
             formatChapterText = chapter.format(template);
         } else if (matcher.group(ChapterParser.NUMBER_KEY) != null) {
@@ -59,8 +66,10 @@ public class ChapterFormatter extends AbstractFormatter<ChapterParser> {
             writer.write(indentation);
             writer.write(formatChapterText);
             writer.newLine();
+            return true;
         } catch (IOException e) {
             log.info("Write format chapter failed.", e);
+            return false;
         }
     }
 

@@ -2,12 +2,14 @@ package cc.meltryllis.nf.ui;
 
 import atlantafx.base.theme.PrimerLight;
 import cc.meltryllis.nf.constants.UICons;
+import cc.meltryllis.nf.entity.property.HistoryProperty;
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.AlertUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +20,9 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import lombok.extern.slf4j.Slf4j;
+import xss.it.nfx.NfxWindow;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -38,6 +42,7 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        NfxWindow window = new NfxWindow();
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("/fxml/main-application.fxml"));
         Parent root = fxmlLoader.load();
@@ -46,7 +51,7 @@ public class MainApplication extends Application {
                 .toExternalForm());
         Scene scene = new Scene(root, UICons.PREF_WIDTH, UICons.PREF_HEIGHT);
         initLanguageMnemonic(scene);
-        stage.titleProperty().bind(I18nUtil.createStringBinding("App.Title"));
+        // stage.titleProperty().bind(I18nUtil.createStringBinding("App.Title"));
         Image icon = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/icon.png")));
         stage.getIcons().add(icon);
         stage.setMinWidth(UICons.STAGE_MIN_WIDTH);
@@ -56,9 +61,15 @@ public class MainApplication extends Application {
         AlertUtil.registerOwner(scene.getWindow());
         DialogUtil.registerOwner(scene.getWindow());
         // 退出事件
-        stage.setOnCloseRequest(windowEvent -> {
-            InputFormatProperty.store();
-            OutputFormatProperty.store();
+        // stage.setOnCloseRequest(windowEvent -> {
+        // 上方事件在通过stage.close()关闭程序时不会触发。参考https://stackoverflow.com/questions/48689985/javafx-stage-close-not-calling-my-oncloserequest-handler。
+        stage.setOnHidden(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                InputFormatProperty.store();
+                OutputFormatProperty.store();
+                HistoryProperty.store();
+            }
         });
         stage.show();
     }

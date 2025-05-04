@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.constants.FileCons;
 import cc.meltryllis.nf.entity.property.input.ChapterRegexProperty;
@@ -9,7 +9,6 @@ import cc.meltryllis.nf.entity.property.output.ReplacementProperty;
 import cc.meltryllis.nf.utils.common.FileUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -25,19 +24,7 @@ import java.nio.file.Files;
  * @date 2025/2/5
  */
 @Slf4j
-@Getter
-public class FormatProcessor {
-
-
-    private final File          file;
-    private       File          outputFile;
-    private       int           autoChapterNumber;
-    private       StringBuilder resegmentContent;
-
-
-    public FormatProcessor(File file) {
-        this.file = file;
-    }
+public record FormatProcessor(File file) {
 
     /**
      * 格式化小说。
@@ -46,28 +33,23 @@ public class FormatProcessor {
      */
     public boolean format() throws IOException {
         // 判断是否为TXT文件
-        if (file == null || !file.exists() || !file.isFile() || !FileCons.TXT_SUFFIX.equalsIgnoreCase(
-                FileUtil.getSuffix(file))) {
-            DialogUtil.showMessage(I18nUtil.createStringBinding("Dialog.FileNotFound.Title"),
-                    I18nUtil.createStringBinding("Dialog.FileNotFound.Desc"), DialogUtil.Type.WARNING);
+        if (!FileCons.TXT_SUFFIX.equalsIgnoreCase(FileUtil.getSuffix(file))) {
+            DialogUtil.showMessage(I18nUtil.createStringBinding("Dialog.FileNotSelected.Title"),
+                    I18nUtil.createStringBinding("Dialog.FileNotSelected.Desc"), DialogUtil.Type.WARNING);
             return false;
         }
         if (!checkChapterRegexEnabled()) {
             return false;
         }
         // 设定输出文件对象
-        outputFile = new File(file.getParent(), FileUtil.getPrefix(file) + FileCons.TXT_OUTPUT_SUFFIX);
+        File outputFile = new File(file.getParent(), FileUtil.getPrefix(file) + FileCons.TXT_OUTPUT_SUFFIX);
         // 删除旧输出文件
         if (!deleteOldOutputFile(outputFile)) {
             return false;
         }
-        // 初始化自动章节编号
-        autoChapterNumber = 1;
-        // 初始化重新分段字符
-        resegmentContent = new StringBuilder();
-        // TODO 定义文档编码格式
-        try (BufferedReader reader = Files.newBufferedReader(
-                file.toPath()); BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath())) {
+        try (BufferedReader reader = Files.newBufferedReader(file.toPath(),
+                InputFormatProperty.getInstance().getCharset()); BufferedWriter writer = Files.newBufferedWriter(
+                outputFile.toPath())) {
             BlankLineFormatter blankLineFormatter = new BlankLineFormatter(writer);
             ChapterFormatter chapterFormatter = new ChapterFormatter(writer);
             ContentFormatter contentFormatter = new ContentFormatter(writer);
@@ -75,12 +57,15 @@ public class FormatProcessor {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = handleReplacement(line);
-                if (chapterFormatter.tryFormat(line)) {
+                if (chapterFormatter.parse(line)) {
                     contentFormatter.nextChapter();
-                } else if (!blankLineFormatter.tryFormat(line)) {
-                    contentFormatter.tryFormat(line);
+                    chapterFormatter.format();
+                    blankLineFormatter.writeNewLines();
+                } else if (!blankLineFormatter.parse(line)) {
+                    if (contentFormatter.parse(line) && contentFormatter.format()) {
+                        blankLineFormatter.writeNewLines();
+                    }
                 }
-                blankLineFormatter.writeNewLines();
             }
             return true;
         } catch (IOException e) {
@@ -132,9 +117,11 @@ public class FormatProcessor {
         return deleteSuccess;
     }
 
-    // TODO 应该允许用户自定义文本替换规则的顺序
-    // TODO 允许用户直接选取一些常用的符号来替换，例如「」“”之类的
-    // TODO 将textfield换成combobox，而且设置为editable，这样可以将combobox的popup菜单作为历史记录使用，这一条和上一条TODO有重复，需要适当取舍
+    // TODO 允许编辑某条Replacement
+    // TODO 增强正则表达式输入框显示
+    // TODO unique list 添加重复元素时提示
+    // TODO 忽略第一章之前的内容，不看作正文，一般认为是简介或者其他信息
+    // TODO 重新使用hutool
     private String handleReplacement(String line) {
         OutputFormatProperty outputFormatProperty = OutputFormatProperty.getInstance();
         for (ReplacementProperty replacementProperty : outputFormatProperty.getReplacementPropertyList()) {

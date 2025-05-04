@@ -3,8 +3,13 @@ package cc.meltryllis.nf.ui.controller;
 import cc.meltryllis.nf.constants.DataCons;
 import cc.meltryllis.nf.constants.MyStyles;
 import cc.meltryllis.nf.constants.UICons;
+import cc.meltryllis.nf.entity.property.HistoryProperty;
+import cc.meltryllis.nf.entity.property.UniqueObservableList;
+import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
+import cc.meltryllis.nf.utils.FXUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -21,9 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -35,23 +43,30 @@ import java.util.ResourceBundle;
 @Slf4j
 public class MenuBarController implements Initializable {
 
+    /**
+     * 一个将文件路径字符串与 {@code MenuItem} 关联在一起的哈希表。
+     * 主要用来查询某个文件是否在历史记录中。
+     */
+    private final HashMap<String, MenuItem> filePathMap = new HashMap<>();
     @FXML
-    MenuBar menuBar;
+    public MenuBar  menuBar;
     @FXML
-    public Menu helpMenu;
+    public Menu     fileMenu;
     @FXML
-    MenuItem exitItem;
+    public Menu     historyMenu;
+    @FXML
+    public MenuItem clearAllItem;
+    @FXML
+    public MenuItem exitItem;
     @FXML
     public MenuItem aboutItem;
     @FXML
-    Menu fileMenu;
+    public Menu     helpMenu;
 
     public void exit() {
-        if (menuBar != null) {
-            Window window = menuBar.getScene().getWindow();
-            if (window instanceof Stage stage) {
-                stage.close();
-            }
+        Window window = FXUtil.getWindow(menuBar);
+        if (window instanceof Stage stage) {
+            stage.close();
         }
     }
 
@@ -91,12 +106,73 @@ public class MenuBarController implements Initializable {
         DialogUtil.show(I18nUtil.createStringBinding("App.Title"), box);
     }
 
+    private void initHistoryMenu() {
+        historyMenu.textProperty().bind(I18nUtil.createStringBinding("App.Menu.File.History"));
+        clearAllItem.textProperty().bind(I18nUtil.createStringBinding("App.Menu.File.History.ClearAll"));
+
+        UniqueObservableList<File> inputFileHistoryList = HistoryProperty.getInstance().getInputFileHistoryList();
+        inputFileHistoryList.addListener((ListChangeListener<File>) c -> {
+            while (c.next()) {
+                if (c.wasRemoved()) {
+                    System.out.println(c.wasAdded());
+                    int from = c.getFrom();
+                    int to = c.getTo();
+                    for (int i = from; i < to; i++) {
+                        System.out.println(i);
+                    }
+                    removeHistory(c.getFrom());
+                }
+                if (c.wasAdded()) {
+                    List<? extends File> addedSubList = c.getAddedSubList();
+                    for (int i = 0; i < addedSubList.size(); i++) {
+                        addHistory(c.getFrom() + i, addedSubList.get(i));
+                    }
+                }
+            }
+        });
+        for (File file : inputFileHistoryList) {
+            addHistory(historyMenu.getItems().size() - 2, file);
+        }
+    }
+
+    private void addHistory(int index, File file) {
+        if (file == null) {
+            return;
+        }
+        String path = file.getPath();
+        MenuItem item;
+        if (filePathMap.containsKey(path)) {
+            item = filePathMap.get(path);
+        } else {
+            item = new MenuItem(path);
+            item.setOnAction(event -> {
+                if (!InputFormatProperty.getInstance().setFile(file)) {
+                    DialogUtil.showMessage(I18nUtil.createStringBinding("Dialog.FileNotFound.Title"),
+                            I18nUtil.createStringBinding("Dialog.FileNotFound.Desc"), DialogUtil.Type.WARNING);
+                    historyMenu.getItems().remove(item);
+                }
+            });
+            filePathMap.put(path, item);
+        }
+        historyMenu.getItems().add(index, item);
+    }
+
+    private void removeHistory(int index) {
+        historyMenu.getItems().remove(index);
+    }
+
+    @FXML
+    private void clearHistory() {
+        HistoryProperty.getInstance().getInputFileHistoryList().clear();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        fileMenu.textProperty().bind(I18nUtil.createStringBinding("Common.File"));
-        exitItem.textProperty().bind(I18nUtil.createStringBinding("Common.Exit"));
-        helpMenu.textProperty().bind(I18nUtil.createStringBinding("Common.Help"));
-        aboutItem.textProperty().bind(I18nUtil.createStringBinding("Common.About"));
+        fileMenu.textProperty().bind(I18nUtil.createStringBinding("App.Menu.File"));
+        initHistoryMenu();
+        exitItem.textProperty().bind(I18nUtil.createStringBinding("App.Menu.File.Exit"));
+        helpMenu.textProperty().bind(I18nUtil.createStringBinding("App.Menu.Help"));
+        aboutItem.textProperty().bind(I18nUtil.createStringBinding("App.Menu.Help.About"));
     }
 
 }

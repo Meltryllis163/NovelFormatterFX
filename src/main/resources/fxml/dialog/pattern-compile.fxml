@@ -12,21 +12,18 @@
       minWidth="800">
     <Label fx:id="patternLabel"/>
     <TextField fx:id="patternField"/>
-    <Label fx:id="compileResultLabel">
+    <Label fx:id="compileResultLabel" visible="false">
         <graphic>
             <FontIcon iconLiteral="fth-check-circle"/>
         </graphic>
     </Label>
     <Label fx:id="testTextLabel"/>
     <TextField fx:id="testTextField" HBox.hgrow="ALWAYS"/>
-    <Label fx:id="matchResultLabel">
+    <Label fx:id="matchResultLabel" visible="false">
         <graphic>
             <FontIcon iconLiteral="fth-check-circle"/>
         </graphic>
     </Label>
-    <HBox alignment="BASELINE_RIGHT">
-        <Button fx:id="applyButton" styleClass="success"/>
-    </HBox>
     <spacing>
         <UICons fx:constant="BIG_SPACING"/>
     </spacing>

@@ -15,7 +15,7 @@ public interface UICons {
     int PREF_HEIGHT      = 800;
     int STAGE_MIN_WIDTH  = 300;
     int STAGE_MIN_HEIGHT = 300;
-    int DIALOG_MIN_WIDTH = 200;
+    int DIALOG_MIN_WIDTH = 450;
 
     int SMALL_SPACING   = 5;
     int DEFAULT_SPACING = 10;

@@ -11,7 +11,7 @@
       alignment="CENTER_LEFT">
     <Label fx:id="successLabel"/>
     <Text fx:id="pathText"/>
-    <HBox>
+    <HBox alignment="BASELINE_RIGHT">
         <Label fx:id="openFileLabel" styleClass="hyper-link"/>
         <Label fx:id="openDirLabel" styleClass="hyper-link"/>
         <spacing>

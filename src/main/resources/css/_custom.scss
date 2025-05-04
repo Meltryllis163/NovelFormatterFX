@@ -8,7 +8,7 @@ $DODGER_BLUE : #1E90FF;
 
 /* 详见 https://github.com/mkpaz/atlantafx/issues/107 */
 .table-view {
-    -fx-fixed-cell-size: 40;
+//     -fx-fixed-cell-size: 40;
 }
 
 .hyper-link {
@@ -70,10 +70,12 @@ $DODGER_BLUE : #1E90FF;
 
     >.title-1 {
         -fx-font-size: 16px;
+        -fx-font-weight: bold;
     }
 
     >.title-2 {
         -fx-font-size: 14px;
+        -fx-font-weight: normal;
     }
 
 }

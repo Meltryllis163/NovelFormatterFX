@@ -49,6 +49,8 @@ public class OutlinePane extends StackPane {
         StackPane.setMargin(outline, new Insets(0, 20, 0, 0));
 
         getChildren().setAll(contentScrollPane, outline);
+
+        setMinWidth(900);
     }
 
     public void setContent(VBox content) {

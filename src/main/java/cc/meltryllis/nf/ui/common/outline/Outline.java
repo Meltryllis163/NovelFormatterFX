@@ -1,6 +1,5 @@
 package cc.meltryllis.nf.ui.common.outline;
 
-import atlantafx.base.theme.Styles;
 import cc.meltryllis.nf.constants.MyStyles;
 import cc.meltryllis.nf.constants.UICons;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
@@ -35,7 +34,6 @@ public class Outline extends VBox {
         getStyleClass().add(MyStyles.Outline.OUTLINE);
         this.scrollHandler = scrollHandler;
         Separator separator = new Separator();
-        separator.getStyleClass().add(Styles.SMALL);
         Label topLabel = createOutlineEntry(I18nUtil.createStringBinding("App.Formatter.Outline.Top"), null, 2);
         topLabel.setGraphic(new FontIcon(Feather.CHEVRON_UP));
 

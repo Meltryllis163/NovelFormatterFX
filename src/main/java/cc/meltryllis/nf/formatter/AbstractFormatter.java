@@ -1,5 +1,6 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
+import cc.meltryllis.nf.utils.common.StrUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -25,21 +26,26 @@ public abstract class AbstractFormatter<T extends AbstractParser> {
         this.writer = writer;
     }
 
-    /**
-     * 尝试格式化文本并用 {@link #writer} 写入。
-     *
-     * @param trimmingText 尝试格式化的文本，已经处理过前后空白字符。
-     *
-     * @return 返回 {@code parser.parse(String)}。
-     */
-    public boolean tryFormat(String trimmingText) {
+    public boolean parse(@NotNull String text) {
+        String trimmingText = StrUtil.trim(text);
         if (parser.parse(trimmingText)) {
-            format();
+            parser.setTrimmingText(trimmingText);
             return true;
         }
+        parser.setTrimmingText(null);
         return false;
     }
 
-    protected abstract void format();
+    /**
+     * 格式化文本。
+     *
+     * @return 成功输出文本到指定位置则返回 {@code true}，否则返回 {@code false}。
+     */
+    protected boolean format() {
+        if (parser.getTrimmingText() == null) {
+            throw new UnsupportedOperationException("Please parse text first.");
+        }
+        return false;
+    }
 
 }

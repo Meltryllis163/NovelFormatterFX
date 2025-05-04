@@ -3,7 +3,7 @@ package cc.meltryllis.nf.ui.controller.input;
 import atlantafx.base.controls.Tile;
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
 import cc.meltryllis.nf.entity.property.input.RegexProperty;
-import cc.meltryllis.nf.ui.common.CustomTableView;
+import cc.meltryllis.nf.ui.common.MTableView;
 import cc.meltryllis.nf.ui.controller.TabsController;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.fxml.FXML;
@@ -29,9 +29,9 @@ import java.util.regex.Pattern;
 public class ChapterRegexController implements Initializable {
 
     @FXML
-    public Tile                           chapterRegexTile;
+    public Tile                      chapterRegexTile;
     @FXML
-    public CustomTableView<RegexProperty> chapterRegexTableView;
+    public MTableView<RegexProperty> chapterRegexTableView;
 
     private void initChapterRegexTile() {
         chapterRegexTile.titleProperty().bind(I18nUtil.createStringBinding(

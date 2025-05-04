@@ -6,6 +6,10 @@
          fx:controller="cc.meltryllis.nf.ui.controller.MenuBarController"
          fx:id="menuBar">
     <Menu fx:id="fileMenu">
+        <Menu fx:id="historyMenu">
+            <SeparatorMenuItem/>
+            <MenuItem fx:id="clearAllItem" onAction="#clearHistory"/>
+        </Menu>
         <MenuItem fx:id="exitItem" onAction="#exit"/>
     </Menu>
     <Menu fx:id="helpMenu">

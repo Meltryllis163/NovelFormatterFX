@@ -6,7 +6,7 @@ import cc.meltryllis.nf.constants.UICons;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.ReplacementProperty;
 import cc.meltryllis.nf.ui.MainApplication;
-import cc.meltryllis.nf.ui.common.CustomTableView;
+import cc.meltryllis.nf.ui.common.MTableView;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.TooltipUtil;
@@ -47,9 +47,9 @@ public class ReplaceOutputController implements Initializable {
     @FXML
     public Label                                rightToLabel;
     @FXML
-    public TextField                            replacementField;
+    public TextField                       replacementField;
     @FXML
-    public CustomTableView<ReplacementProperty> replacementTableView;
+    public MTableView<ReplacementProperty> replacementTableView;
 
     public void addListItem() {
         if (StrUtil.isEmpty(targetField.getText())) {
@@ -96,14 +96,14 @@ public class ReplaceOutputController implements Initializable {
                 targetField.setEditable(true);
                 targetField.onMouseClickedProperty().setValue(null);
             }
-            TooltipUtil.show(regexButton, newValue ? "Dialog.ToggleRegexMode.Enabled" : "Dialog.ToggleRegexMode.Disabled",
+            TooltipUtil.show(regexButton,
+                    newValue ? "Dialog.ToggleRegexMode.Enabled" : "Dialog.ToggleRegexMode.Disabled",
                     TooltipUtil.Pos.BOTTOM);
         });
     }
 
     private void initTableView() {
-        replacementTableView.setItems(OutputFormatProperty.getInstance()
-                .getReplacementPropertyUniqueObservableList());
+        replacementTableView.setItems(OutputFormatProperty.getInstance().getReplacementPropertyUniqueObservableList());
 
         // 无Items时提示
         Label placeholderLabel = new Label();

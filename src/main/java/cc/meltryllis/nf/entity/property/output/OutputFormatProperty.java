@@ -15,7 +15,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -38,7 +39,11 @@ public class OutputFormatProperty {
     @JsonIgnore
     private SimpleBooleanProperty                         autoNumberForChapterProperty;
     @JsonIgnore
-    private UniqueObservableList<ReplacementProperty>     replacementPropertyUniqueObservableList;
+    private SimpleObjectProperty<Charset>                 charsetProperty;
+
+    @Setter
+    @JsonProperty("replacements")
+    private UniqueObservableList<ReplacementProperty> replacementPropertyUniqueObservableList;
 
     @Setter
     @JsonProperty("paragraph")
@@ -47,14 +52,16 @@ public class OutputFormatProperty {
 
     @JsonCreator
     public OutputFormatProperty(
-            @JsonProperty("chapterTemplateList") List<ChapterTemplateProperty> chapterTemplateProperties) {
-        this(chapterTemplateProperties, null);
+            @JsonProperty("chapterTemplateList") List<ChapterTemplateProperty> chapterTemplateList,
+            @JsonProperty("replacements") List<ReplacementProperty> replacementList) {
+        this(chapterTemplateList, replacementList, null);
     }
 
-    public OutputFormatProperty(List<ChapterTemplateProperty> chapterTemplateProperties,
+    public OutputFormatProperty(List<ChapterTemplateProperty> chapterTemplateList,
+                                List<ReplacementProperty> replacementList,
                                 ParagraphProperty paragraphProperty) {
         if (instance == null) {
-            initProperties(chapterTemplateProperties, paragraphProperty);
+            initProperties(chapterTemplateList, replacementList, paragraphProperty);
         } else {
             throw new RuntimeException();
         }
@@ -73,24 +80,17 @@ public class OutputFormatProperty {
         JSONUtil.storeFile(new File(DataCons.OUTPUT_FORMAT_CONFIG), getInstance());
     }
 
-    public void initProperties(List<ChapterTemplateProperty> chapterTemplateProperties,
+    public void initProperties(List<ChapterTemplateProperty> chapterTemplateList,
+                               List<ReplacementProperty> replacementList,
                                ParagraphProperty paragraphProperty) {
 
-        chapterTemplateUniqueList = new UniqueObservableList<>(chapterTemplateProperties);
+        chapterTemplateUniqueList = new UniqueObservableList<>(chapterTemplateList);
         selectedChapterTemplateObjectProperty = new SimpleObjectProperty<>();
         autoNumberForChapterProperty = new SimpleBooleanProperty(false);
 
+        replacementPropertyUniqueObservableList = new UniqueObservableList<>(replacementList);
 
-        replacementPropertyUniqueObservableList = new UniqueObservableList<>(new ArrayList<>());
-        replacementPropertyUniqueObservableList.setComparator((r1, r2) -> {
-            if (r1 == null || r1.getOldText() == null) {
-                return -1;
-            }
-            if (r2 == null || r2.getOldText() == null) {
-                return 1;
-            }
-            return r1.getOldText().compareTo(r2.getOldText());
-        });
+        charsetProperty = new SimpleObjectProperty<>(StandardCharsets.UTF_8);
 
         this.paragraphProperty = paragraphProperty;
     }
@@ -114,4 +114,14 @@ public class OutputFormatProperty {
     public List<ReplacementProperty> getReplacementPropertyList() {
         return getReplacementPropertyUniqueObservableList().toList();
     }
+
+    @JsonIgnore
+    public Charset getCharset() {
+        return getCharsetProperty().getValue();
+    }
+
+    public void setCharset(Charset charset) {
+        getCharsetProperty().setValue(charset);
+    }
+
 }

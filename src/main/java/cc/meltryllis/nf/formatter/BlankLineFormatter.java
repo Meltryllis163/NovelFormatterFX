@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ public class BlankLineFormatter extends AbstractFormatter<BlankLineParser> {
     }
 
     @Override
-    protected void format() {
-
+    protected boolean format() {
+        return false;
     }
 
     protected void writeNewLines() {

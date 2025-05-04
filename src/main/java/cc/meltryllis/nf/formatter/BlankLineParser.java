@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.utils.common.StrUtil;
 import org.jetbrains.annotations.NotNull;

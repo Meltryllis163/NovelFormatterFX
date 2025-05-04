@@ -7,6 +7,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.stage.Window;
+import org.jetbrains.annotations.Nullable;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Objects;
@@ -61,6 +63,14 @@ public class FXUtil {
         return new FXMLLoader(MainApplication.class.getResource(path));
     }
 
+    @Nullable
+    public static Window getWindow(Node node) {
+        if (node == null || node.getScene() == null) {
+            return null;
+        }
+        return node.getScene().getWindow();
+    }
+
     public static void scrollVerticalToVisible(Node node) {
         Node container = node;
         // for (
@@ -102,4 +112,5 @@ public class FXUtil {
             scrollPane.setVvalue(scrollPane.getVmin() + newV * (scrollPane.getVmax() - scrollPane.getVmin()));
         }
     }
+
 }

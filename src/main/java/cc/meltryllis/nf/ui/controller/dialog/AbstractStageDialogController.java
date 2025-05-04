@@ -31,19 +31,19 @@ public abstract class AbstractStageDialogController<T> {
     public T registerStageDialog(@Nullable T initialResult, @NotNull StageDialog stageDialog) {
         setStageDialog(stageDialog);
         setInitialResult(initialResult);
-        initialize();
+        stageDialogRegistered();
         stageDialog.showAndWait();
         return getResult();
     }
 
     /**
-     * 如果需要执行任何初始化行为，请重写该方法。
+     * 如果需要修改 {@code stageDialog}，请重写该方法。
      * <p>
      * 该方法运行时，{@link #getStageDialog()} 必定非空。
      *
      * @see #registerStageDialog(Object, StageDialog)
      */
-    protected void initialize() {
+    protected void stageDialogRegistered() {
 
     }
 

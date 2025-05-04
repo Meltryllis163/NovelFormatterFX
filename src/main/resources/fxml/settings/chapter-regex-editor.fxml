@@ -3,7 +3,7 @@
 <?import atlantafx.base.controls.Card?>
 <?import atlantafx.base.controls.Tile?>
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import cc.meltryllis.nf.ui.common.CustomTableView?>
+<?import cc.meltryllis.nf.ui.common.MTableView?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
@@ -41,7 +41,7 @@
                     <UICons fx:constant="SMALL_SPACING"/>
                 </spacing>
             </HBox>
-            <CustomTableView fx:id="tableView" VBox.vgrow="ALWAYS"/>
+            <MTableView fx:id="tableView" VBox.vgrow="ALWAYS"/>
             <spacing>
                 <UICons fx:constant="SMALL_SPACING"/>
             </spacing>

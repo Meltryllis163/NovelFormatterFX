@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.constants.CharacterCons;
 import cc.meltryllis.nf.utils.common.ArrayUtil;

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 具有不重复元素的 {@code ObservableList}。
@@ -27,6 +28,10 @@ import java.util.List;
 @Getter(AccessLevel.PRIVATE)
 public class UniqueObservableList<E> extends ModifiableObservableListBase<E> {
 
+    @Setter
+    @JsonIgnore
+    private DuplicatePolicy duplicatePolicy = DuplicatePolicy.NONE;
+
     private final List<E>               elements;
     @Getter
     @JsonIgnore
@@ -34,6 +39,15 @@ public class UniqueObservableList<E> extends ModifiableObservableListBase<E> {
     @Setter
     @JsonIgnore
     private       Comparator<E>         comparator;
+
+    @Override
+    public void addFirst(E e) {
+        try {
+            super.addFirst(e);
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
 
     @JsonCreator
     public UniqueObservableList(@JsonProperty("elements") @NotNull List<E> elements) {
@@ -70,6 +84,21 @@ public class UniqueObservableList<E> extends ModifiableObservableListBase<E> {
     }
 
     @Override
+    protected void doAdd(int index, E element) {
+        int curIndex = getElements().indexOf(element);
+        // 不存在
+        if (curIndex < 0) {
+            getElements().add(index, element);
+            if (getComparator() != null) {
+                getElements().sort(getComparator());
+            }
+        } else {
+            handleDuplicate(curIndex, element);
+            throw new IllegalArgumentException(StrUtil.format("Add failed. This Element {0} already exists.", element));
+        }
+    }
+
+    @Override
     public E get(int index) {
         return getElements().get(index);
     }
@@ -80,28 +109,59 @@ public class UniqueObservableList<E> extends ModifiableObservableListBase<E> {
     }
 
     @Override
-    protected void doAdd(int index, E element) {
-        if (!contains(element)) {
-            getElements().add(index, element);
-            if (getComparator() != null) {
-                getElements().sort(getComparator());
-            }
-            return;
-        }
-        throw new IllegalArgumentException(StrUtil.format("Add failed. Element {0} already exists.", element));
-    }
-
-    @Override
     protected E doSet(int index, E element) {
-        if (!contains(element)) {
+        int curIndex = getElements().indexOf(element);
+        if (curIndex < 0) {
             return getElements().set(index, element);
         }
+        handleDuplicate(curIndex, element);
         throw new IllegalArgumentException(StrUtil.format("Set failed. Element {0} already exists.", element));
+    }
+
+    /**
+     * 当添加或设置重复项时，根据 {@code duplicatePolicy} 处理。
+     *
+     * @param curIndex 重复项当前在列表中的索引。
+     * @param element  重复项元素。
+     */
+    protected void handleDuplicate(int curIndex, E element) {
+        if (getDuplicatePolicy() == DuplicatePolicy.SET_TO_FIRST && curIndex > 0) {
+            remove(curIndex);
+            addFirst(element);
+        }
     }
 
     @Override
     protected E doRemove(int index) {
         return getElements().remove(index);
+    }
+
+    @Override
+    protected void removeRange(int fromIndex, int toIndex) {
+        if (fromIndex < 0 || fromIndex > size()) {
+            throw new IndexOutOfBoundsException("Index: " + fromIndex);
+        }
+
+        // return early if the range is empty
+        if (fromIndex == toIndex) {
+            return;
+        }
+
+        ListIterator<E> it = listIterator(fromIndex);
+        for (int i = 0, n = toIndex - fromIndex; i < n; i++) {
+            beginChange();
+            try {
+                E element = it.next();
+                it.remove();
+                nextRemove(i, element);
+            } finally {
+                endChange();
+            }
+        }
+    }
+
+    public enum DuplicatePolicy {
+        NONE, SET_TO_FIRST
     }
 
 }

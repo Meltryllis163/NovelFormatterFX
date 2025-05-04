@@ -1,4 +1,4 @@
-package cc.meltryllis.nf.parse;
+package cc.meltryllis.nf.formatter;
 
 import cc.meltryllis.nf.entity.property.input.ChapterLengthProperty;
 import cc.meltryllis.nf.entity.property.input.ChapterRegexProperty;
@@ -46,7 +46,6 @@ public class ChapterParser extends AbstractParser {
 
     protected void reset() {
         setMatcher(null);
-        setTrimmingText(null);
     }
 
     @Override
