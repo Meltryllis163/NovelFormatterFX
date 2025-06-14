@@ -54,6 +54,11 @@ public class Message extends Control {
     }
 
     public void setOKButton(Button button) {
+        // TODO 模仿DialogPane的ButtonType，通过添加不同的ButtonType来增加按钮。
+        //  class enum ButtonType {
+        //   String i18nKey;
+        //   Button createButton();...
+        //   }
         oKButtonProperty().setValue(button);
     }
 
