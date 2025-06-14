@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import atlantafx.base.controls.Card?>
-<?import atlantafx.base.controls.Tile?>
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import cc.meltryllis.nf.ui.common.CustomTableView?>
-<?import javafx.scene.control.Button?>
+<?import cc.meltryllis.nf.ui.controls.FormField?>
+<?import cc.meltryllis.nf.ui.controls.MTableView?>
 <?import javafx.scene.layout.VBox?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<Card xmlns:fx="http://javafx.com/fxml"
-      xmlns="http://javafx.com/javafx"
-      fx:controller="cc.meltryllis.nf.ui.controller.input.ChapterRegexController">
-    <header>
-        <Tile fx:id="chapterRegexTile"/>
-    </header>
+<FormField xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx"
+           fx:controller="cc.meltryllis.nf.ui.controller.input.ChapterRegexController"
+           fx:id="root">
     <body>
         <VBox>
-            <Button onAction="#editTableView">
-                <graphic>
-                    <FontIcon iconLiteral="fth-edit"/>
-                </graphic>
-            </Button>
-            <CustomTableView fx:id="chapterRegexTableView"/>
+            <!-- <InputGroup> -->
+            <!--     <Button fx:id="selectAllButton" onAction="#selectAll"> -->
+            <!--         <graphic> -->
+            <!--             <FontIcon iconLiteral="fth-check-square"/> -->
+            <!--         </graphic> -->
+            <!--     </Button> -->
+            <!--     <Button fx:id="addButton"> -->
+            <!--         <graphic> -->
+            <!--             <FontIcon iconLiteral="fth-plus-square"/> -->
+            <!--         </graphic> -->
+            <!--     </Button> -->
+            <!--     <Button fx:id="editButton"> -->
+            <!--         <graphic> -->
+            <!--             <FontIcon iconLiteral="fth-edit"/> -->
+            <!--         </graphic> -->
+            <!--     </Button> -->
+            <!--     <Button fx:id="deleteButton" onAction="#deleteSelectedRegexItems"> -->
+            <!--         <graphic> -->
+            <!--             <FontIcon iconLiteral="fth-trash"/> -->
+            <!--         </graphic> -->
+            <!--     </Button> -->
+            <!-- </InputGroup> -->
+            <MTableView fx:id="chapterRegexTableView"/>
             <spacing>
-                <UICons fx:constant="SMALL_SPACING"/>
+                <UICons fx:constant="SPACING_5"/>
             </spacing>
         </VBox>
     </body>
-</Card>
+</FormField>

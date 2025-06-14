@@ -1,21 +1,18 @@
 package cc.meltryllis.nf.ui.controller;
 
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
-import cc.meltryllis.nf.parse.FormatProcessor;
-import cc.meltryllis.nf.ui.common.outline.OutlinePane;
-import cc.meltryllis.nf.utils.common.StrUtil;
+import cc.meltryllis.nf.ui.controls.outline.OutlinePane;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
-import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,9 +26,13 @@ import java.util.ResourceBundle;
 public class FormatterPaneController implements Initializable {
 
     @FXML
-    public OutlinePane root;
+    public VBox        root;
+    @FXML
+    public OutlinePane outlinePane;
     @FXML
     public Label       inputFormatLabel;
+    @FXML
+    public Label       inputCharsetLabel;
     @FXML
     public Label       chapterTemplateLabel;
     @FXML
@@ -47,6 +48,7 @@ public class FormatterPaneController implements Initializable {
 
     private void initTexts() {
         inputFormatLabel.textProperty().bind(I18nUtil.createStringBinding("App.Formatter.Input.Label.Text"));
+        inputCharsetLabel.textProperty().bind(I18nUtil.createStringBinding("App.Formatter.Input.Charset.Label.Text"));
         chapterInputFormatTitleLabel.textProperty()
                 .bind(I18nUtil.createStringBinding("App.Formatter.Input.Chapter.Label.Text"));
         exportConfigLabel.textProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Label.Text"));
@@ -58,18 +60,16 @@ public class FormatterPaneController implements Initializable {
     }
 
     private void initOutline() {
-        root.addOutlineEntry(inputFormatLabel, 1);
-        root.addOutlineEntry(chapterInputFormatTitleLabel, 2);
-        root.addOutlineEntry(exportConfigLabel, 1);
-        root.addOutlineEntry(paragraphLabel, 2);
-        root.addOutlineEntry(chapterTemplateLabel, 2);
-        root.addOutlineEntry(othersLabel, 2);
+        outlinePane.addOutlineEntry(inputFormatLabel, 1);
+        outlinePane.addOutlineEntry(inputCharsetLabel, 2);
+        outlinePane.addOutlineEntry(chapterInputFormatTitleLabel, 2);
+        outlinePane.addOutlineEntry(exportConfigLabel, 1);
+        outlinePane.addOutlineEntry(paragraphLabel, 2);
+        outlinePane.addOutlineEntry(chapterTemplateLabel, 2);
+        outlinePane.addOutlineEntry(othersLabel, 2);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        initTexts();
-        initOutline();
+    private void initDragFileEvent() {
         root.setOnDragOver(event -> {
             Dragboard dragboard = event.getDragboard();
             if (dragboard.hasFiles()) {
@@ -87,25 +87,33 @@ public class FormatterPaneController implements Initializable {
         });
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initTexts();
+        initOutline();
+        initDragFileEvent();
+    }
+
     public void export() {
         long start = System.currentTimeMillis();
-        File formatFile = InputFormatProperty.getInstance().getFile();
-        try {
-            FormatProcessor formatProcessor = new FormatProcessor(formatFile);
-            if (formatProcessor.format()) {
-                DialogUtil.FXMLBuilder<File> builder = new DialogUtil.FXMLBuilder<>("/fxml/dialog/format-success.fxml");
-                builder.setType(DialogUtil.Type.SUCCESS)
-                        .setTitle(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title"))
-                        .setInitialValue(formatFile)
-                        .show();
-            }
-        } catch (IOException e) {
-            DialogUtil.FXMLBuilder<Exception> failExceptionBuilder = new DialogUtil.FXMLBuilder<>(
-                    "/fxml/dialog/format-fail.fxml");
-            failExceptionBuilder.setTitle(I18nUtil.createStringBinding("Dialog.FormatFail.Title"))
-                    .setInitialValue(e).show();
-        }
-        log.info(StrUtil.format("Format file success. Time: {0}ms.", System.currentTimeMillis() - start));
+        // File formatFile = InputFormatProperty.getInstance().getFile();
+        // try {
+        //     FormatProcessor formatProcessor = new FormatProcessor(formatFile);
+        //     if (formatProcessor.format()) {
+        //         log.info(StrUtil.format("Format file success. Time: {0}ms.", System.currentTimeMillis() - start));
+        //         DialogUtil.DialogBuilder<File> builder = new DialogUtil.DialogBuilder<>("/fxml/dialog/format-success.fxml");
+        //         builder.type(DialogUtil.DialogType.SUCCESS)
+        //                 .setTitle(I18nUtil.createStringBinding("Dialog.FormatSuccess.Title"))
+        //                 .setInitialValue(formatFile)
+        //                 .setOKButton(false).setCancelButton(false)
+        //                 .show();
+        //     }
+        // } catch (IOException e) {
+        //     DialogUtil.DialogBuilder<Exception> failExceptionBuilder = new DialogUtil.DialogBuilder<>(
+        //             "/fxml/dialog/format-fail.fxml");
+        //     failExceptionBuilder.setTitle(I18nUtil.createStringBinding("Dialog.FormatFail.Title"))
+        //             .setInitialValue(e).show();
+        // }
     }
 
 }

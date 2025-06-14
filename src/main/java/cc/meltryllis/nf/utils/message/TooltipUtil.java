@@ -7,8 +7,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 
-import java.util.HashMap;
-
 /**
  * {@link Tooltip} 通知工具。
  *
@@ -17,15 +15,13 @@ import java.util.HashMap;
  */
 public class TooltipUtil {
 
-    public static final HashMap<Control, Tooltip> LAST_TOOLTIP_MAP = new HashMap<>();
-    public static final int                       OFFSET           = 5;
+    public static final int OFFSET = 5;
 
-    public static Tooltip show(Control control, String i18nKey, Pos pos) {
-        return show(control, i18nKey, pos, 1000);
+    public static void show(Control control, String i18nKey, Pos pos) {
+        show(control, i18nKey, pos, 1000);
     }
 
-    public static Tooltip show(Control control, String i18nKey, Pos pos, double hideDelay) {
-        hideLastTooltip(control);
+    public static void show(Control control, String i18nKey, Pos pos, double hideDelay) {
         Point2D p = control.localToScene(0, 0);
         final Tooltip customTooltip = new Tooltip();
         customTooltip.textProperty().bind(I18nUtil.createStringBinding(i18nKey));
@@ -37,27 +33,12 @@ public class TooltipUtil {
         if (pos == Pos.BOTTOM) {
             anchorY += control.getHeight() + OFFSET;
         }
+        customTooltip.setAutoHide(true);
         customTooltip.show(control.getScene().getWindow(), anchorX, anchorY);
-        addLastTooltip(control, customTooltip);
+        // 定时关闭
         PauseTransition pauseTransition = new PauseTransition(Duration.millis(hideDelay));
         pauseTransition.setOnFinished(event -> customTooltip.hide());
         pauseTransition.play();
-        return customTooltip;
-    }
-
-    private static void addLastTooltip(Control control, Tooltip tooltip) {
-        LAST_TOOLTIP_MAP.put(control, tooltip);
-    }
-
-    private static Tooltip getLastTooltip(Control control) {
-        return LAST_TOOLTIP_MAP.getOrDefault(control, null);
-    }
-
-    private static void hideLastTooltip(Control control) {
-        Tooltip lastTooltip = getLastTooltip(control);
-        if (lastTooltip != null) {
-            lastTooltip.hide();
-        }
     }
 
     public enum Pos {

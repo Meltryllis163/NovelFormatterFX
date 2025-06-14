@@ -1,38 +1,8 @@
 $DODGER_BLUE : #1E90FF;
 
-/* 灰色图标 */
-.icon-subtle {
-    -fx-fill: -color-fg-subtle;
-    -fx-icon-color: -color-fg-subtle;
-}
-
 /* 详见 https://github.com/mkpaz/atlantafx/issues/107 */
 .table-view {
-    -fx-fixed-cell-size: 40;
-}
-
-.hyper-link {
-    -fx-text-fill: -color-accent-fg;
-    -fx-underline: true;
-    -fx-cursor: hand;
-}
-
-.label {
-    &.title-2 {
-        -fx-font-size: 25px;
-        -fx-font-weight: bold;
-    }
-
-    &.title-3 {
-        -fx-font-size: 21px;
-        -fx-font-weight: bold;
-        -fx-graphic-text-gap: 20px;
-
-        .ikonli-font-icon {
-            @extend .icon-subtle;
-            -fx-icon-code: "fth-hash";
-        }
-    }
+//     -fx-fixed-cell-size: 40;
 }
 
 .replace {
@@ -54,10 +24,6 @@ $DODGER_BLUE : #1E90FF;
             -fx-text-fill: -color-accent-fg;
         }
 
-        .ikonli-font-icon {
-            @extend .icon-subtle;
-        }
-
         &:hover {
             -fx-text-fill: -color-fg-default;
 
@@ -70,10 +36,12 @@ $DODGER_BLUE : #1E90FF;
 
     >.title-1 {
         -fx-font-size: 16px;
+        -fx-font-weight: bold;
     }
 
     >.title-2 {
         -fx-font-size: 14px;
+        -fx-font-weight: normal;
     }
 
 }

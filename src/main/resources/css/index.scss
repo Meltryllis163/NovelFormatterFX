@@ -1,1 +1,14 @@
-@use "custom"
+@use "custom";
+@use "title-bar";
+@use "navigation-pane";
+@use "formatter-pane";
+@use "form-field";
+@use "stage-dialog";
+@use "test";
+@use "main-stage";
+@use "popup-tip";
+@use "message";
+
+.context-menu {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 2, 2);
+}

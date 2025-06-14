@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import atlantafx.base.controls.Card?>
-<?import atlantafx.base.controls.Tile?>
+<?import cc.meltryllis.nf.ui.controls.FormField?>
 <?import javafx.scene.control.ComboBox?>
-<Card xmlns:fx="http://javafx.com/fxml"
-      xmlns="http://javafx.com/javafx"
-      fx:controller="cc.meltryllis.nf.ui.controller.input.ChapterMaxLengthController">
-    <header>
-        <Tile fx:id="maxLengthTile"/>
-    </header>
+<FormField xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx"
+           fx:controller="cc.meltryllis.nf.ui.controller.input.ChapterMaxLengthController"
+           fx:id="root">
     <body>
         <ComboBox prefWidth="100" fx:id="maxLengthComboBox"/>
     </body>
-</Card>
+</FormField>

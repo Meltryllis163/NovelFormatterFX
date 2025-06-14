@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.constants.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.FormatterPane2Controller"
+      fx:id="root" styleClass="formatter-pane">
+    <fx:include source="input/novel-select.fxml"/>
+    <HBox alignment="BOTTOM_LEFT">
+        <ToggleButton fx:id="inputButton" styleClass="toggle-group-button"/>
+        <ToggleButton fx:id="outputButton" styleClass="toggle-group-button"/>
+        <spacing>
+            <UICons fx:constant="SPACING_20"/>
+        </spacing>
+        <padding>
+            <Insets>
+                <top>
+                    <UICons fx:constant="SPACING_10"/>
+                </top>
+                <bottom>
+                    <UICons fx:constant="SPACING_20"/>
+                </bottom>
+            </Insets>
+        </padding>
+    </HBox>
+    <StackPane VBox.vgrow="ALWAYS">
+        <!-- <ImageView> -->
+        <!--     <Image url="@../pic/74279906_p0.png"/> -->
+        <!-- </ImageView> -->
+        <HBox fx:id="inputBox">
+            <VBox HBox.hgrow="ALWAYS">
+                <HBox>
+                    <fx:include source="input/chapter/chapter-max-length.fxml" HBox.hgrow="ALWAYS"/>
+                    <fx:include source="input/charset.fxml" HBox.hgrow="ALWAYS"/>
+                    <spacing>
+                        <UICons fx:constant="SPACING_30"/>
+                    </spacing>
+                </HBox>
+                <fx:include source="input/chapter/chapter-regex.fxml" HBox.hgrow="ALWAYS"/>
+                <spacing>
+                    <UICons fx:constant="SPACING_10"/>
+                </spacing>
+            </VBox>
+        </HBox>
+        <HBox fx:id="outputBox">
+            <VBox HBox.hgrow="ALWAYS">
+                <fx:include source="output/paragraph/indentation.fxml"/>
+                <fx:include source="output/paragraph/blank-line.fxml"/>
+                <fx:include source="output/chapter-template.fxml"/>
+                <spacing>
+                    <UICons fx:constant="SPACING_10"/>
+                </spacing>
+            </VBox>
+            <Separator orientation="VERTICAL"/>
+            <VBox HBox.hgrow="ALWAYS">
+                <fx:include source="output/replace.fxml"/>
+            </VBox>
+        </HBox>
+    </StackPane>
+    <HBox alignment="BASELINE_RIGHT">
+        <Button fx:id="exportButton" prefWidth="100" styleClass="success" onAction="#export"/>
+    </HBox>
+    <spacing>
+        <UICons fx:constant="SPACING_5"/>
+    </spacing>
+    <padding>
+        <!-- <UICons fx:constant="DEFAULT_INSETS"/> -->
+        <Insets top="15" right="50" bottom="15" left="120"/>
+    </padding>
+</VBox>

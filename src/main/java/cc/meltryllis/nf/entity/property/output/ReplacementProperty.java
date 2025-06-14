@@ -1,6 +1,6 @@
 package cc.meltryllis.nf.entity.property.output;
 
-import cc.meltryllis.nf.ui.common.ICopyableTexts;
+import cc.meltryllis.nf.ui.controls.ICopyableTexts;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;

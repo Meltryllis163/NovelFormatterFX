@@ -1,20 +1,22 @@
 package cc.meltryllis.nf.utils.message.dialog;
 
 import cc.meltryllis.nf.ui.controller.dialog.AbstractStageDialogController;
-import cc.meltryllis.nf.ui.controller.dialog.ChoiceDialogController;
+import cc.meltryllis.nf.ui.controller.dialog.MessagesController;
+import cc.meltryllis.nf.ui.controls.Message;
+import cc.meltryllis.nf.ui.controls.StageDialog;
 import cc.meltryllis.nf.utils.FXUtil;
 import cc.meltryllis.nf.utils.common.StrUtil;
-import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 import javafx.stage.Window;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * {@link javafx.scene.Scene} 弹窗通知工具。
@@ -25,36 +27,38 @@ import java.util.List;
 @Slf4j
 public class DialogUtil {
 
-    public static Window owner;
 
-    public static void registerOwner(Window window) {
-        DialogUtil.owner = window;
+    public static boolean showChoice(@NotNull Window owner, Message.Type dialogType, ObservableValue<String> title,
+                                     boolean initialValue, ObservableValue<String>... messages) {
+        FXMLLoader loader = FXUtil.newFXMLLoader("/fxml/dialog/messages.fxml");
+        try {
+            Node content = loader.load();
+            MessagesController stageDialogController = loader.getController();
+            stageDialogController.setMessages(messages);
+            StageDialog stageDialog = StageDialog.builder(owner, content).type(dialogType).title(title).build();
+            return stageDialogController.registerStageDialog(initialValue, stageDialog);
+        } catch (IOException e) {
+            log.warn(StrUtil.format("Load fxml({0}) failed. Return null."), e);
+            return initialValue;
+        }
     }
 
-    public static void show(@Nullable StringBinding title, Pane contentPane) {
-        show(title, contentPane, Type.NONE);
+    public static void showMessage(@NotNull Window owner, Message.Type dialogType, ObservableValue<String> title,
+                                   ObservableValue<String>... messages) {
+        showChoice(owner, dialogType, title, false, messages);
     }
 
-    public static void show(@Nullable StringBinding title, @NotNull Pane contentPane, Type type) {
-        StageDialog stage = StageDialog.builder(contentPane).setType(type).setTitle(title).build();
-        stage.showAndWait();
-    }
-
-    public static void showMessage(@Nullable StringBinding title, @NotNull StringBinding message,
-                                   @NotNull DialogUtil.Type type) {
-        MessagesVBox messagesVBox = new MessagesVBox(List.of(message));
-        StageDialog stageDialog = StageDialog.builder(messagesVBox).setTitle(title).setType(type).build();
-        stageDialog.showAndWait();
-    }
 
     @Nullable
-    private static <T> T showFXML(@Nullable StringBinding title, @NotNull Type type, @NotNull String fxml,
-                                  @Nullable T initialValue) {
+    private static <T> T showFXML(@NotNull Window owner, @Nullable ObservableValue<String> title,
+                                  @NotNull Message.Type dialogType, @NotNull String fxml,
+                                  @Nullable T initialValue, boolean okButton, boolean cancelButton) {
+        FXMLLoader loader = FXUtil.newFXMLLoader(fxml);
         try {
-            FXMLLoader loader = FXUtil.newFXMLLoader(fxml);
-            Pane contentPane = loader.load();
+            Node content = loader.load();
             AbstractStageDialogController<T> stageDialogController = loader.getController();
-            StageDialog stageDialog = StageDialog.builder(contentPane).setType(type).setTitle(title).build();
+            StageDialog stageDialog = StageDialog.builder(owner, content).type(dialogType).title(title)
+                    .okButton(okButton).cancelButton(cancelButton).build();
             return stageDialogController.registerStageDialog(initialValue, stageDialog);
         } catch (IOException e) {
             log.warn(StrUtil.format("Load fxml({0}) failed. Return null.", fxml), e);
@@ -62,58 +66,60 @@ public class DialogUtil {
         }
     }
 
-    public static boolean showChoice(@Nullable StringBinding title, @NotNull Type type, boolean initialChoice,
-                                     @NotNull StringBinding... messages) {
-        try {
-            FXMLLoader loader = FXUtil.newFXMLLoader("/fxml/dialog/choice-dialog.fxml");
-            VBox content = loader.load();
-            ChoiceDialogController choiceDialogController = loader.getController();
-            choiceDialogController.setMessages(messages);
-            StageDialog stageDialog = StageDialog.builder(content).setType(type).setTitle(title).build();
-            return choiceDialogController.registerStageDialog(initialChoice, stageDialog);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static class DialogBuilder<T> {
 
-    public enum Type {
-        NONE, ACCENT, SUCCESS, WARNING, DANGER
-    }
-
-    public static class FXMLBuilder<T> {
-
+        @NotNull
+        private final Window owner;
         @NotNull
         private final String fxml;
 
+        private final StringProperty titleProperty = new SimpleStringProperty();
+
         @Nullable
-        private StringBinding title;
-        @Nullable
-        private T             initialValue;
+        private T initialValue;
 
         @NotNull
-        private Type type = Type.NONE;
+        private Message.Type dialogType = Message.Type.NONE;
+        private boolean      okButton   = false;
+        private boolean               cancelButton = false;
 
-        public FXMLBuilder(@NotNull String fxml) {
+        public DialogBuilder(@NotNull Window owner, @NotNull String fxml) {
+            this.owner = owner;
             this.fxml = fxml;
         }
 
-        public FXMLBuilder<T> setTitle(@Nullable StringBinding title) {
-            this.title = title;
+        public DialogBuilder<T> title(String title) {
+            this.titleProperty.setValue(title);
             return this;
         }
 
-        public FXMLBuilder<T> setType(@NotNull Type type) {
-            this.type = type;
+        public DialogBuilder<T> title(ObservableValue<String> titleProperty) {
+            this.titleProperty.bind(titleProperty);
             return this;
         }
 
-        public FXMLBuilder<T> setInitialValue(@Nullable T initialValue) {
+        public DialogBuilder<T> type(@NotNull Message.Type dialogType) {
+            this.dialogType = dialogType;
+            return this;
+        }
+
+        public DialogBuilder<T> initialValue(@Nullable T initialValue) {
             this.initialValue = initialValue;
             return this;
         }
 
+        public DialogBuilder<T> okButton(boolean okButton) {
+            this.okButton = okButton;
+            return this;
+        }
+
+        public DialogBuilder<T> cancelButton(boolean cancelButton) {
+            this.cancelButton = cancelButton;
+            return this;
+        }
+
         public T show() {
-            return showFXML(title, type, fxml, initialValue);
+            return showFXML(owner, titleProperty, dialogType, fxml, initialValue, okButton, cancelButton);
         }
 
     }

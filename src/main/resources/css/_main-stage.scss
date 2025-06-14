@@ -1,0 +1,20 @@
+@import "global";
+
+.main-stage {
+    .title-bar {
+        .logo-slot {
+            -fx-min-width: $navigation-pane-witdh;
+            -fx-pref-width: $navigation-pane-witdh;
+            -fx-max-width: $navigation-pane-witdh;
+
+            -fx-background-color: $navigation-background-color;
+
+            .logo {
+                -fx-font-weight: bold;
+                -fx-font-size: 16px;
+                -fx-text-fill: white;
+                -fx-graphic: url("../icons/logo-white-24.png");
+            }
+        }
+    }
+}

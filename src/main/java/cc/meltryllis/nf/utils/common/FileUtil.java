@@ -1,10 +1,15 @@
 package cc.meltryllis.nf.utils.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
+import org.mozilla.universalchardet.UniversalDetector;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 文件工具。
@@ -26,6 +31,10 @@ public class FileUtil {
      */
     public static boolean isFile(File file) {
         return file != null && file.isFile();
+    }
+
+    public static boolean isDirectory(File file) {
+        return file != null && file.isDirectory();
     }
 
     /**
@@ -129,4 +138,59 @@ public class FileUtil {
             open(file.getParentFile());
         }
     }
+
+    /**
+     * 得到具有可读性的文件大小字符。
+     * 可读性即文件大小在该存储单位下，数字范围在[1, 1024)。
+     *
+     * @return 可读文件大小。
+     */
+    public static String getReadableSize(File file) {
+        double size = getSize(file);
+        if (size == -1) {
+            return null;
+        }
+        List<String> storageUnits = Arrays.asList("B", "KB", "MB", "GB");
+        int step = 1024;
+        for (String unit : storageUnits) {
+            if (size < 1024) {
+                return new DecimalFormat("0.00").format(size) + unit;
+            }
+            size /= step;
+        }
+        return new DecimalFormat("0.00").format(size) + "TB";
+    }
+
+    public static long getSize(File file) {
+        if (!exists(file)) {
+            return -1;
+        }
+        if (file.isFile()) {
+            return file.length();
+        }
+        long size = 0;
+        if (file.isDirectory()) {
+            File[] listFiles = file.listFiles();
+            if (listFiles != null) {
+                for (File listFile : listFiles) {
+                    size += getSize(listFile);
+                }
+            }
+            return size;
+        }
+        return -1;
+    }
+
+    @Nullable
+    public static String judgeFileCharset(File file) {
+        if (!exists(file) || !isFile(file)) {
+            return null;
+        }
+        try {
+            return UniversalDetector.detectCharset(file);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
 }

@@ -28,6 +28,9 @@ public class FormatSuccessController extends AbstractStageDialogController<File>
     public Label openDirLabel;
 
     public void setFormatFile(File formatFile) {
+        if (formatFile == null) {
+            return;
+        }
         File outputFile = new File(formatFile.getParent(), FileUtil.getPrefix(formatFile) + FileCons.TXT_OUTPUT_SUFFIX);
         // 成功消息
         successLabel.textProperty().bind(I18nUtil.createStringBinding("Dialog.FormatSuccess.Success"));

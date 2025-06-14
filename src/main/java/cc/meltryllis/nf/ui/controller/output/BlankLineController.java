@@ -1,9 +1,9 @@
 package cc.meltryllis.nf.ui.controller.output;
 
-import atlantafx.base.controls.Tile;
 import atlantafx.base.util.IntegerStringConverter;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.ParagraphProperty;
+import cc.meltryllis.nf.ui.controls.FormField;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,17 +23,17 @@ import java.util.ResourceBundle;
 public class BlankLineController implements Initializable {
 
     @FXML
-    public Tile             blankLineTile;
+    private FormField        root;
     @FXML
-    public Spinner<Integer> blankLineSpinner;
+    private Spinner<Integer> blankLineSpinner;
     @FXML
-    public ToggleButton     resegmentToggleButton;
+    private ToggleButton     resegmentToggleButton;
 
     private void initBlackLine() {
-        blankLineTile.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.BlackLine.Tile.Title"));
-        blankLineTile.descriptionProperty().bind(I18nUtil.createStringBinding(
-                "App.Formatter.Output.BlackLine.Tile.Desc"));
+        root.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.BlackLine.Header.Title"));
+        root.descriptionProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.BlackLine.Header.Desc"));
         IntegerStringConverter.createFor(blankLineSpinner);
+        blankLineSpinner.setTooltip(null);
         ParagraphProperty paragraphProperty = OutputFormatProperty.getInstance().getParagraphProperty();
         paragraphProperty.getBlankLineCountProperty().bind(blankLineSpinner.valueProperty());
     }

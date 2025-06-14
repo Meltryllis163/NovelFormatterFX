@@ -1,7 +1,7 @@
 package cc.meltryllis.nf.ui.controller.settings;
 
 import atlantafx.base.controls.Card;
-import cc.meltryllis.nf.ui.common.outline.OutlinePane;
+import cc.meltryllis.nf.ui.controls.outline.OutlinePane;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

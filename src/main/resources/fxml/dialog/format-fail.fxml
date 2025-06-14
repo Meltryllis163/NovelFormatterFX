@@ -14,6 +14,6 @@
     <Label fx:id="failMessage"/>
     <TextArea fx:id="exceptionArea"/>
     <spacing>
-        <UICons fx:constant="DEFAULT_SPACING"/>
+        <UICons fx:constant="SPACING_10"/>
     </spacing>
 </VBox>

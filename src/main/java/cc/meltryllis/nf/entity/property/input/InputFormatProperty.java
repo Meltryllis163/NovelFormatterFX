@@ -3,6 +3,7 @@ package cc.meltryllis.nf.entity.property.input;
 import cc.meltryllis.nf.constants.DataCons;
 import cc.meltryllis.nf.constants.FileCons;
 import cc.meltryllis.nf.entity.FormatFactory;
+import cc.meltryllis.nf.entity.property.HistoryProperty;
 import cc.meltryllis.nf.utils.common.FileUtil;
 import cc.meltryllis.nf.utils.jackson.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,8 +12,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 「小说导入」配置项的响应式属性。
@@ -20,6 +24,7 @@ import java.io.File;
  * @author Zachary W
  * @date 2025/2/20
  */
+@Slf4j
 @Getter
 @ToString
 public class InputFormatProperty {
@@ -28,13 +33,16 @@ public class InputFormatProperty {
     private static InputFormatProperty instance;
 
     @JsonIgnore
-    private SimpleObjectProperty<File> fileProperty;
+    private SimpleObjectProperty<File>    fileProperty;
+    @JsonIgnore
+    private SimpleObjectProperty<Charset> charsetProperty;
+
     @Setter
     @JsonProperty("chapterLength")
-    private ChapterLengthProperty      chapterLengthProperty;
+    private ChapterLengthProperty chapterLengthProperty;
     @Setter
     @JsonProperty("chapterRegex")
-    private ChapterRegexProperty       chapterRegexProperty;
+    private ChapterRegexProperty  chapterRegexProperty;
 
 
     public InputFormatProperty() {
@@ -60,6 +68,12 @@ public class InputFormatProperty {
 
     private void initProperties() {
         fileProperty = new SimpleObjectProperty<>();
+        fileProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                HistoryProperty.getInstance().getInputFileHistoryList().addFirst(newValue.getAbsoluteFile());
+            }
+        });
+        this.charsetProperty = new SimpleObjectProperty<>(StandardCharsets.UTF_8);
     }
 
     @JsonIgnore
@@ -81,4 +95,14 @@ public class InputFormatProperty {
         }
         return false;
     }
+
+    @JsonIgnore
+    public Charset getCharset() {
+        return getCharsetProperty().getValue();
+    }
+
+    public void setCharset(Charset charset) {
+        getCharsetProperty().setValue(charset);
+    }
+
 }

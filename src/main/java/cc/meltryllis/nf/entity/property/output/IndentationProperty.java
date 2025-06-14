@@ -7,9 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import lombok.Getter;
 
 /**
@@ -27,6 +26,7 @@ public class IndentationProperty {
     private final SimpleIntegerProperty       spaceCountProperty;
     @JsonIgnore
     private final SimpleBooleanProperty       effectiveForChapterProperty;
+
     @JsonCreator
     public IndentationProperty(@JsonProperty(value = "space", defaultValue = "CHINESE_SPACE") Space space,
                                @JsonProperty(value = "spaceCount", defaultValue = "2") int spaceCount,
@@ -69,15 +69,16 @@ public class IndentationProperty {
 
     @Getter
     public enum Space {
-        CHINESE_SPACE(I18nUtil.get("Common.Character.FullWidthSpace"), CharacterCons.CHINESE.SPACE), SPACE(
-                I18nUtil.get("Common.Character.Space"), CharacterCons.ENGLISH.SPACE);
+        CHINESE_SPACE(I18nUtil.createStringBinding("Common.Character.FullWidthSpace"), CharacterCons.CHINESE.SPACE),
+        SPACE(I18nUtil.createStringBinding("Common.Character.Space"), CharacterCons.ENGLISH.SPACE);
 
-        private final String name;
-        private final char   spaceChar;
+        private final StringProperty nameProperty = new SimpleStringProperty();
+        private final char           spaceChar;
 
-        Space(String name, char spaceChar) {
-            this.name = name;
+        Space(ObservableValue<String> nameProperty, char spaceChar) {
+            this.nameProperty.bind(nameProperty);
             this.spaceChar = spaceChar;
         }
     }
+
 }

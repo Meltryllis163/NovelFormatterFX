@@ -1,14 +1,16 @@
 package cc.meltryllis.nf.ui.controller.input;
 
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
+import cc.meltryllis.nf.ui.controls.MTextField;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,11 +28,13 @@ import java.util.ResourceBundle;
 public class NovelSelectController implements Initializable {
 
     @FXML
-    public HBox      root;
+    public VBox       root;
     @FXML
-    public TextField filePathField;
+    public Label      selectFileLabel;
     @FXML
-    public Button    browseButton;
+    public MTextField filePathField;
+    @FXML
+    public Button     browseButton;
 
     public void chooseFile() {
         FileChooser fileChooser = new FileChooser();
@@ -44,12 +48,15 @@ public class NovelSelectController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        filePathField.promptTextProperty().bind(I18nUtil.createStringBinding(
-                "App.Formatter.Input.SelectNovel.Field.Prompt"));
+        selectFileLabel.textProperty().bind(I18nUtil.createStringBinding("App.Formatter.Input.SelectNovel.Label.Text"));
+        filePathField.promptTextProperty()
+                .bind(I18nUtil.createStringBinding("App.Formatter.Input.SelectNovel.Field.Prompt"));
         SimpleObjectProperty<File> fileProperty = InputFormatProperty.getInstance().getFileProperty();
         filePathField.textProperty().bind(Bindings.createStringBinding(() -> {
             File file = fileProperty.getValue();
             return file == null ? null : file.getAbsolutePath();
         }, fileProperty));
+        filePathField.setCursor(Cursor.DEFAULT);
     }
+
 }

@@ -4,14 +4,11 @@ import atlantafx.base.controls.Notification;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import cc.meltryllis.nf.constants.UICons;
-import cc.meltryllis.nf.ui.controller.TabsController;
+import cc.meltryllis.nf.ui.controls.Message;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
-import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -32,24 +29,25 @@ public class NotificationUtil {
 
     @Nullable
     private static StackPane getStackPane() {
-        TabPane tabPane = TabsController.getTabPane();
-        if (tabPane != null) {
-            Node content = tabPane.getSelectionModel().getSelectedItem().getContent();
-            if (content instanceof StackPane stackPane) {
-                return stackPane;
-            }
-        }
+        // TODO TabPane tabPane = TabsController.getTabPane();
+        //  if (tabPane != null) {
+        //     Node content = tabPane.getSelectionModel().getSelectedItem().getContent();
+        //     if (content instanceof StackPane stackPane) {
+        //         return stackPane;
+        //     }
+        //  }
+        //  return null;
         return null;
     }
 
     /**
      * 显示通知。
      *
-     * @param notificationType 通知类型。
+     * @param notificationDialogType 通知类型。
      * @param i18nKey          通知内容的国际化Key。
      * @param position         通知位置，目前仅支持 {@code BOTTOM_CENTER} 和 {@code TOP_CENTER}。
      */
-    public static void show(final DialogUtil.Type notificationType, @NotNull final String i18nKey, @NotNull final Pos position) {
+    public static void show(final Message.Type notificationDialogType, @NotNull final String i18nKey, @NotNull final Pos position) {
         // 前置检查
         StackPane stackPane = getStackPane();
         if (stackPane == null) {
@@ -57,7 +55,7 @@ public class NotificationUtil {
         }
         removeLastNotification(stackPane);
         // 样式设置
-        Notification notification = createNotification(notificationType, i18nKey);
+        Notification notification = createNotification(notificationDialogType, i18nKey);
         StackPane.setMargin(notification, UICons.NOTIFICATION_INSETS);
         StackPane.setAlignment(notification, position);
         // 动画
@@ -80,11 +78,11 @@ public class NotificationUtil {
         });
     }
 
-    private static Notification createNotification(DialogUtil.Type type, String i18nKey) {
+    private static Notification createNotification(Message.Type dialogType, String i18nKey) {
         Notification notification = new Notification(null, FONT_ICON);
         notification.messageProperty().bind(I18nUtil.createStringBinding(i18nKey));
         notification.getStyleClass().add(Styles.ELEVATED_1);
-        switch (type) {
+        switch (dialogType) {
             case ACCENT:
                 notification.getStyleClass().add(Styles.ACCENT);
                 break;

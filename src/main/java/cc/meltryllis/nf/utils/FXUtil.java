@@ -7,8 +7,13 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.stage.Window;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -17,6 +22,7 @@ import java.util.Objects;
  * @author Zachary W
  * @date 2025/2/18
  */
+@Slf4j
 public class FXUtil {
 
     /**
@@ -54,11 +60,42 @@ public class FXUtil {
     }
 
     public static Image newImage(String path) {
-        return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(path)));
+        return newImage(path, 0, 0);
+    }
+
+    public static Image newImage(String path, double requestedWidth, double requestedHeight) {
+        return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(path)), requestedWidth,
+                requestedHeight, false, false);
     }
 
     public static FXMLLoader newFXMLLoader(String path) {
         return new FXMLLoader(MainApplication.class.getResource(path));
+    }
+
+    public static <T> T loadFXML(@NotNull String path) {
+        FXMLLoader loader = newFXMLLoader(path);
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            log.warn("Load fxml({}) failed.", path);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getStyleSheets(String path) {
+        return Objects.requireNonNull(MainApplication.class.getResource(path)).toExternalForm();
+    }
+
+    @Nullable
+    public static Window getWindow(Node node) {
+        if (node == null || node.getScene() == null) {
+            return null;
+        }
+        return node.getScene().getWindow();
+    }
+
+    public static Bounds getBoundsInScreen(Node node) {
+        return node.localToScreen(node.getBoundsInLocal());
     }
 
     public static void scrollVerticalToVisible(Node node) {
@@ -102,4 +139,5 @@ public class FXUtil {
             scrollPane.setVvalue(scrollPane.getVmin() + newV * (scrollPane.getVmax() - scrollPane.getVmin()));
         }
     }
+
 }

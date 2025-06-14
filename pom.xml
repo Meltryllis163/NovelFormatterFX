@@ -6,7 +6,7 @@
 
     <groupId>cc.meltryllis</groupId>
     <artifactId>NovelFormatterFX</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.1</version>
     <name>NovelFormatter</name>
     <description>JavaFX Novel Formatter.</description>
 
@@ -88,7 +88,19 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.12</version>
+            <version>1.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.albfernandez</groupId>
+            <artifactId>juniversalchardet</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>xss.it.nfx</groupId>
+            <artifactId>nfx-core</artifactId>
+            <version>1.0.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/nfx-core-1.0.2.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -101,8 +113,14 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering>
             </resource>
+            <!-- <resource> -->
+            <!--     <directory>libs</directory> -->
+            <!--     <targetPath>${project.build.directory}/libs</targetPath> -->
+            <!--     <includes> -->
+            <!--         <include>*.jar</include> -->
+            <!--     </includes> -->
+            <!-- </resource> -->
         </resources>
         <plugins>
             <plugin>
@@ -153,6 +171,9 @@
                             <version>1.18.36</version>
                         </path>
                     </annotationProcessorPaths>
+                    <compilerArguments>
+                        <extdirs>${project.basedir}/libs</extdirs>
+                    </compilerArguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -181,12 +202,17 @@
                                 <fileVersion>${project.version}.0</fileVersion>
                                 <productVersion>${project.version}.0</productVersion>
                                 <!-- 用于开启控制台，然后在CMD窗口中输入NovelFormatter.exe，运行EXE程序来查看控制台 -->
-                                <!-- <headerType>console</headerType> -->
+                                <headerType>console</headerType>
                             </winConfig>
                             <additionalModules>
                                 <!-- 详见 https://github.com/fvarrui/JavaPackager/issues/429 -->
                                 <additionalModule>java.naming</additionalModule>
+                                <!-- 否则找不到GBK2312字符集 -->
+                                <additionalModule>jdk.charsets</additionalModule>
                             </additionalModules>
+                            <additionalResources>
+                                <additionalResource>${project.basedir}/libs</additionalResource>
+                            </additionalResources>
                         </configuration>
                     </execution>
                 </executions>

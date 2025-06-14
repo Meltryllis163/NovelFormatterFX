@@ -1,22 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<TabPane xmlns:fx="http://javafx.com/fxml"
-         xmlns="http://javafx.com/javafx"
-         fx:controller="cc.meltryllis.nf.ui.controller.TabsController"
-         styleClass="floating" fx:id="root">
-    <Tab fx:id="mainTab" closable="false">
-        <graphic>
-            <FontIcon iconLiteral="fth-edit"/>
-        </graphic>
-        <fx:include source="formatter-pane.fxml"/>
-    </Tab>
-    <Tab fx:id="settingsTab" closable="false">
-        <graphic>
-            <FontIcon iconLiteral="fth-settings"/>
-        </graphic>
-        <fx:include fx:id="settingsPane" source="settings/settings-pane.fxml"/>
-    </Tab>
-</TabPane>
+<?import java.lang.String?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx"
+           fx:controller="cc.meltryllis.nf.ui.controller.TabsController"
+           fx:id="root" minWidth="0" alignment="CENTER_LEFT">
+    <fx:include source="settings/settings-pane.fxml" fx:id="settingsPane"/>
+    <!-- <fx:include source="formatter-pane.fxml" fx:id="formatterPane"/> -->
+    <fx:include source="formatter-pane2.fxml" fx:id="formatterPane"/>
+    <VBox styleClass="navigation-pane" fx:id="navigationPane">
+        <VBox VBox.vgrow="ALWAYS" spacing="8" alignment="TOP_CENTER">
+            <ToggleButton styleClass="navigation-button" fx:id="formatterButton">
+                <graphic>
+                    <FontIcon iconLiteral="fth-edit"/>
+                </graphic>
+            </ToggleButton>
+            <ToggleButton styleClass="navigation-button" fx:id="settingsButton">
+                <graphic>
+                    <FontIcon iconLiteral="fth-settings"/>
+                </graphic>
+            </ToggleButton>
+            <padding>
+                <Insets top="5"/>
+            </padding>
+        </VBox>
+        <VBox alignment="BOTTOM_CENTER" spacing="8">
+            <MenuButton fx:id="historyMenuButton">
+                <styleClass>
+                    <String fx:value="no-arrow"/>
+                    <String fx:value="navigation-button"/>
+                </styleClass>
+                <graphic>
+                    <FontIcon iconLiteral="fth-clock"/>
+                </graphic>
+            </MenuButton>
+            <Label styleClass="version" fx:id="versionLabel"/>
+        </VBox>
+        <padding>
+            <Insets bottom="15"/>
+        </padding>
+    </VBox>
+</StackPane>

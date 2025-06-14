@@ -1,0 +1,32 @@
+.form-field {
+
+    -fx-spacing: 5;
+
+    .header {
+        -fx-spacing: 5;
+        -fx-alignment: center-left;
+        -fx-padding: 5 2 5 2;
+    }
+
+    .title {
+        -fx-font-size: 16;
+    }
+
+    .description {
+        -fx-background-color: transparent;
+        -fx-border-insets: 0;
+        -fx-padding: 0;
+
+        .ikonli-font-icon {
+            -fx-icon-color: lightgray;
+            -fx-icon-code: "fth-help-circle";
+        }
+
+        &:hover {
+            .ikonli-font-icon {
+                -fx-icon-color: -color-accent-fg;
+                -fx-icon-code: "fth-help-circle";
+            }
+        }
+    }
+}

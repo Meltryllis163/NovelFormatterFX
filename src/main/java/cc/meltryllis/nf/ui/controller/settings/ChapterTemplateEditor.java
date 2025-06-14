@@ -4,7 +4,7 @@ import atlantafx.base.controls.Tile;
 import cc.meltryllis.nf.entity.Chapter;
 import cc.meltryllis.nf.entity.property.output.ChapterTemplateProperty;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
-import cc.meltryllis.nf.ui.common.CustomTableView;
+import cc.meltryllis.nf.ui.controls.MTableView;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import javafx.beans.property.SimpleStringProperty;
@@ -33,9 +33,9 @@ public class ChapterTemplateEditor implements Initializable {
     @FXML
     public TextField                                templateField;
     @FXML
-    public TextField                                exampleField;
+    public TextField                           exampleField;
     @FXML
-    public CustomTableView<ChapterTemplateProperty> tableView;
+    public MTableView<ChapterTemplateProperty> tableView;
 
     @FXML
     private void selectAll() {

@@ -1,6 +1,6 @@
 package cc.meltryllis.nf.ui.controller.dialog;
 
-import cc.meltryllis.nf.utils.message.dialog.StageDialog;
+import cc.meltryllis.nf.ui.controls.StageDialog;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 用作 {@link cc.meltryllis.nf.utils.message.dialog.StageDialog} 内容的FXML文件的控制器。
+ * 用作 {@link StageDialog} 内容的FXML文件的控制器。
  * <p>
  * {@code T} 代表对话框关闭后可从对话框返回的数据类型。
  *
@@ -31,19 +31,19 @@ public abstract class AbstractStageDialogController<T> {
     public T registerStageDialog(@Nullable T initialResult, @NotNull StageDialog stageDialog) {
         setStageDialog(stageDialog);
         setInitialResult(initialResult);
-        initialize();
+        stageDialogRegistered();
         stageDialog.showAndWait();
         return getResult();
     }
 
     /**
-     * 如果需要执行任何初始化行为，请重写该方法。
+     * 如果需要修改 {@code stageDialog}，请重写该方法。
      * <p>
      * 该方法运行时，{@link #getStageDialog()} 必定非空。
      *
      * @see #registerStageDialog(Object, StageDialog)
      */
-    protected void initialize() {
+    protected void stageDialogRegistered() {
 
     }
 

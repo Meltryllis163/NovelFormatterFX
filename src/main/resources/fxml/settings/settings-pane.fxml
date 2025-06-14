@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import cc.meltryllis.nf.ui.common.outline.OutlinePane?>
+<?import cc.meltryllis.nf.ui.controls.outline.OutlinePane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.VBox?>
@@ -16,9 +17,16 @@
             <fx:include fx:id="chapterRegexEditor" source="chapter-regex-editor.fxml"/>
             <fx:include fx:id="chapterTemplateEditor" source="chapter-template-editor.fxml"/>
             <spacing>
-                <UICons fx:constant="DEFAULT_SPACING"/>
+                <UICons fx:constant="SPACING_10"/>
             </spacing>
         </VBox>
     </content>
+    <padding>
+        <Insets>
+            <left>
+                <UICons fx:constant="NAVIGATION_PANE_WIDTH"/>
+            </left>
+        </Insets>
+    </padding>
 </OutlinePane>
 

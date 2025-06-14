@@ -1,0 +1,54 @@
+@import "global";
+
+.stage-dialog {
+    .container {
+        .ikonli-font-icon {
+            -fx-icon-size: $ikonli-icon-size-large;
+        }
+
+        &.success:has-graphic {
+
+            .font-icon,
+            .ikonli-font-icon {
+                -fx-icon-code: "fth-check-circle";
+                -fx-icon-color: -color-success-emphasis;
+            }
+        }
+
+        &.accent:has-graphic {
+
+            .font-icon,
+            .ikonli-font-icon {
+                -fx-icon-code: "fth-help-circle";
+                -fx-icon-color: -color-accent-emphasis;
+            }
+        }
+
+        &.danger:has-graphic,
+        &.warning:has-graphic {
+
+            .font-icon,
+            .ikonli-font-icon {
+                -fx-icon-code: "fth-alert-circle";
+                -fx-icon-color: -color-warning-emphasis;
+            }
+        }
+    }
+
+    .title-bar {
+        -fx-background-color: ghostwhite;
+
+        .logo-slot {
+            visibility: hidden;
+            // -fx-padding: 0 0 0 15;
+
+            .logo {
+                -fx-graphic: null;
+            }
+        }
+
+        .title-slot {
+            -fx-alignment: center-left;
+        }
+    }
+}

@@ -12,7 +12,7 @@
     <fx:include source="chapter-regex-editor.fxml"/>
     <fx:include source="chapter-template-editor.fxml"/>
     <spacing>
-        <UICons fx:constant="SMALL_SPACING"/>
+        <UICons fx:constant="SPACING_5"/>
     </spacing>
     <padding>
         <UICons fx:constant="DEFAULT_INSETS"/>

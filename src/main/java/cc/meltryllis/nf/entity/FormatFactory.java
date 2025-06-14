@@ -10,6 +10,7 @@ import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.ParagraphProperty;
 import cc.meltryllis.nf.utils.common.CollectionUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +39,8 @@ public class FormatFactory {
     }
 
     public static OutputFormatProperty createDefaultOutputFormatProperty() {
-        return new OutputFormatProperty(createDefaultChapterFormatList(), createDefaultParagraphProperty());
+        return new OutputFormatProperty(createDefaultChapterFormatList(), new ArrayList<>(),
+                createDefaultParagraphProperty());
     }
 
     public static InputFormatProperty createDefaultInputFormatProperty() {

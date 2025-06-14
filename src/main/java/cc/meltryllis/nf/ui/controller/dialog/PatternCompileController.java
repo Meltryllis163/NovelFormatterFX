@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +40,6 @@ public class PatternCompileController extends AbstractStageDialogController<Stri
     public TextField testTextField;
     @FXML
     public Label     matchResultLabel;
-    @FXML
-    public Button    applyButton;
 
     private final SimpleObjectProperty<Pattern>   patternProperty   = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Exception> exceptionProperty = new SimpleObjectProperty<>();
@@ -81,13 +78,16 @@ public class PatternCompileController extends AbstractStageDialogController<Stri
         testTextField.textProperty().addListener((observable, oldValue, newValue) -> updateMatchResultLabel());
     }
 
-    public void initApplyButton() {
-        applyButton.textProperty().bind(I18nUtil.createStringBinding("Common.Apply"));
-        applyButton.disableProperty().bind(patternProperty.isNull());
-        applyButton.setOnAction(event -> {
-            setResult(patternProperty.getValue().toString());
-            getStageDialog().close();
-        });
+    public void initOKButton() {
+        // TODO
+        // Button okButton = getStageDialog().getOKButton();
+        // if (okButton != null) {
+        //     okButton.disableProperty().bind(patternProperty.isNull());
+        //     okButton.setOnAction(event -> {
+        //         setResult(patternProperty.getValue().toString());
+        //         getStageDialog().close();
+        //     });
+        // }
     }
 
     private void updateMatchResultLabel() {
@@ -147,7 +147,12 @@ public class PatternCompileController extends AbstractStageDialogController<Stri
         initLabels();
         initPatternField();
         initTestTextField();
-        initApplyButton();
+    }
+
+    @Override
+    protected void stageDialogRegistered() {
+        super.stageDialogRegistered();
+        initOKButton();
     }
 
     @Override

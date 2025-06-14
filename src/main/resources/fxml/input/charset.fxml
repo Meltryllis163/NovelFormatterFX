@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import cc.meltryllis.nf.ui.controls.FormField?>
+<?import javafx.scene.control.ComboBox?>
+<FormField xmlns:fx="http://javafx.com/fxml"
+           xmlns="http://javafx.com/javafx"
+           fx:controller="cc.meltryllis.nf.ui.controller.input.CharsetController"
+           fx:id="root">
+    <body>
+        <ComboBox fx:id="charsetComboBox" minWidth="200"/>
+    </body>
+</FormField>

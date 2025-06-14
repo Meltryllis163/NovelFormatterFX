@@ -3,7 +3,7 @@ package cc.meltryllis.nf.ui.controller.settings;
 import atlantafx.base.controls.Tile;
 import cc.meltryllis.nf.entity.property.input.InputFormatProperty;
 import cc.meltryllis.nf.entity.property.input.RegexProperty;
-import cc.meltryllis.nf.ui.common.CustomTableView;
+import cc.meltryllis.nf.ui.controls.MTableView;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
@@ -28,15 +28,15 @@ import java.util.regex.Pattern;
 public class ChapterRegexEditor implements Initializable {
 
     @FXML
-    public Tile                           tile;
+    public Tile                      tile;
     @FXML
-    public Button                         deleteButton;
+    public Button                    deleteButton;
     @FXML
-    public TextField                      descriptionField;
+    public TextField                 descriptionField;
     @FXML
-    public TextField                      patternField;
+    public TextField                 patternField;
     @FXML
-    public CustomTableView<RegexProperty> tableView;
+    public MTableView<RegexProperty> tableView;
 
     @FXML
     private void selectAll() {
@@ -71,8 +71,9 @@ public class ChapterRegexEditor implements Initializable {
     }
 
     private void initDeleteButton() {
-        deleteButton.disableProperty().bind(InputFormatProperty.getInstance().getChapterRegexProperty()
-                .getRegexPropertyUniqueObservableList().getSizeProperty().lessThan(2));
+        deleteButton.disableProperty()
+                .bind(InputFormatProperty.getInstance().getChapterRegexProperty().getRegexPropertyUniqueObservableList()
+                        .getSizeProperty().lessThan(2));
     }
 
     private void initFields() {
@@ -85,16 +86,17 @@ public class ChapterRegexEditor implements Initializable {
         patternField.setEditable(false);
         patternField.setCursor(Cursor.HAND);
         patternField.setOnMouseClicked(event -> {
-            DialogUtil.FXMLBuilder<String> builder = new DialogUtil.FXMLBuilder<>("/fxml/dialog/pattern-compile.fxml");
-            String pattern = builder.setTitle(I18nUtil.createStringBinding("Dialog.PatternCompile.Title"))
-                    .setInitialValue(patternField.getText()).show();
+            DialogUtil.DialogBuilder<String> builder = new DialogUtil.DialogBuilder<>(tile.getScene().getWindow(),
+                    "/fxml/dialog/pattern-compile.fxml");
+            String pattern = builder.title(I18nUtil.createStringBinding("Dialog.PatternCompile.Title"))
+                    .initialValue(patternField.getText()).okButton(true).show();
             patternField.setText(pattern);
         });
     }
 
     private void initTableView() {
-        tableView.setItems(InputFormatProperty.getInstance().getChapterRegexProperty()
-                .getRegexPropertyUniqueObservableList());
+        tableView.setItems(
+                InputFormatProperty.getInstance().getChapterRegexProperty().getRegexPropertyUniqueObservableList());
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         TableColumn<RegexProperty, String> descColumn = new TableColumn<>();

@@ -1,32 +1,28 @@
 package cc.meltryllis.nf.ui.controller.output;
 
-import atlantafx.base.controls.Tile;
+import cc.meltryllis.nf.constants.ColorCons;
 import cc.meltryllis.nf.constants.MyStyles;
-import cc.meltryllis.nf.constants.UICons;
 import cc.meltryllis.nf.entity.property.output.OutputFormatProperty;
 import cc.meltryllis.nf.entity.property.output.ReplacementProperty;
-import cc.meltryllis.nf.ui.MainApplication;
-import cc.meltryllis.nf.ui.common.CustomTableView;
+import cc.meltryllis.nf.ui.controls.FormField;
+import cc.meltryllis.nf.ui.controls.MTableView;
+import cc.meltryllis.nf.ui.controls.PopupTip;
 import cc.meltryllis.nf.utils.common.StrUtil;
 import cc.meltryllis.nf.utils.i18n.I18nUtil;
-import cc.meltryllis.nf.utils.message.TooltipUtil;
 import cc.meltryllis.nf.utils.message.dialog.DialogUtil;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -39,17 +35,17 @@ import java.util.ResourceBundle;
 public class ReplaceOutputController implements Initializable {
 
     @FXML
-    public Tile                                 replaceTile;
+    public  ToggleButton                    regexButton;
     @FXML
-    public ToggleButton                         regexButton;
+    public  TextField                       targetField;
     @FXML
-    public TextField                            targetField;
+    public  Label                           rightToLabel;
     @FXML
-    public Label                                rightToLabel;
+    public  TextField                       replacementField;
     @FXML
-    public TextField                            replacementField;
+    public  MTableView<ReplacementProperty> replacementTableView;
     @FXML
-    public CustomTableView<ReplacementProperty> replacementTableView;
+    private FormField                       root;
 
     public void addListItem() {
         if (StrUtil.isEmpty(targetField.getText())) {
@@ -72,38 +68,50 @@ public class ReplaceOutputController implements Initializable {
         }
     }
 
-    private void initReplaceTile() {
-        replaceTile.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.Tile.Title"));
-        replaceTile.descriptionProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.Tile.Desc"));
+    private void initHeader() {
+        root.titleProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.Header.Title"));
+        root.descriptionProperty().bind(I18nUtil.createStringBinding("App.Formatter.Output.Replace.Header.Desc"));
     }
 
     private void initButtons() {
-        regexButton.setCursor(Cursor.HAND);
-        regexButton.setGraphic(new ImageView(
-                new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/regex.png")))));
+        // regexButton.setCursor(Cursor.HAND);
+        // ImageView blackRegex = new ImageView(
+        //         new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/regex-black.png"))));
+        // ImageView whiteRegex = new ImageView(
+        //         new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/regex-white.png"))));
+        // regexButton.setGraphic(blackRegex);
+        // regexButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        //     @Override
+        //     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        //
+        //     }
+        // });
         regexButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             targetField.pseudoClassStateChanged(PseudoClass.getPseudoClass(MyStyles.Replace.PATTERN), newValue);
             if (newValue) {
                 targetField.setEditable(false);
                 targetField.setOnMouseClicked(event -> {
-                    DialogUtil.FXMLBuilder<String> builder = new DialogUtil.FXMLBuilder<>(
-                            "/fxml/dialog/pattern-compile.fxml");
-                    String pattern = builder.setTitle(I18nUtil.createStringBinding("Dialog.PatternCompile.Title"))
-                            .setInitialValue(targetField.getText()).show();
+                    DialogUtil.DialogBuilder<String> builder = new DialogUtil.DialogBuilder<>(
+                            root.getScene().getWindow(), "/fxml/dialog/pattern-compile.fxml");
+                    String pattern = builder.title(I18nUtil.createStringBinding("Dialog.PatternCompile.Title"))
+                            .initialValue(targetField.getText()).okButton(true).show();
                     targetField.setText(pattern);
                 });
             } else {
                 targetField.setEditable(true);
                 targetField.onMouseClickedProperty().setValue(null);
             }
-            TooltipUtil.show(regexButton, newValue ? "Dialog.ToggleRegexMode.Enabled" : "Dialog.ToggleRegexMode.Disabled",
-                    TooltipUtil.Pos.BOTTOM);
+            // TODO show tooltip
+            PopupTip regexTip = PopupTip.builder(regexButton, I18nUtil.createStringBinding(
+                            newValue ? "Dialog.ToggleRegexMode.Enabled" : "Dialog.ToggleRegexMode.Disabled"))
+                    .position(Pos.BOTTOM_CENTER).hideDelay(2000).build();
+            regexButton.setOnMouseClicked(event -> regexTip.ownerShow());
         });
     }
 
     private void initTableView() {
-        replacementTableView.setItems(OutputFormatProperty.getInstance()
-                .getReplacementPropertyUniqueObservableList());
+        replacementTableView.setItems(OutputFormatProperty.getInstance().getReplacementPropertyUniqueObservableList());
+        replacementTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         // 无Items时提示
         Label placeholderLabel = new Label();
@@ -162,7 +170,7 @@ public class ReplaceOutputController implements Initializable {
                             label = new Label(item);
                             ReplacementProperty replacementProperty = getTableView().getItems().get(getIndex());
                             if (replacementProperty.isRegexMode()) {
-                                label.setTextFill(UICons.DODER_BLUE);
+                                label.setTextFill(ColorCons.DODGER_BLUE);
                             }
                             setGraphic(label);
                         }
@@ -175,7 +183,7 @@ public class ReplaceOutputController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initReplaceTile();
+        initHeader();
         initTableView();
         initButtons();
     }

@@ -1,54 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import cc.meltryllis.nf.constants.UICons?>
-<?import cc.meltryllis.nf.ui.common.outline.OutlinePane?>
+<?import cc.meltryllis.nf.ui.controls.outline.OutlinePane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<OutlinePane xmlns:fx="http://javafx.com/fxml"
-             xmlns="http://javafx.com/javafx"
-             fx:controller="cc.meltryllis.nf.ui.controller.FormatterPaneController"
-             fx:id="root">
-    <content>
-        <VBox styleClass="formatter">
-            <!-- Input -->
-            <Label fx:id="inputFormatLabel" styleClass="title-2"/>
-            <Separator styleClass="small"/>
-            <fx:include source="input/novel-select.fxml"/>
-            <Label fx:id="chapterInputFormatTitleLabel" styleClass="title-3">
-                <graphic>
-                    <FontIcon/>
-                </graphic>
-            </Label>
-            <fx:include source="input/chapter/chapter-input.fxml"/>
-            <!-- Output -->
-            <Label fx:id="exportConfigLabel" styleClass="title-2"/>
-            <Separator styleClass="small"/>
-            <Label fx:id="paragraphLabel" styleClass="title-3">
-                <graphic>
-                    <FontIcon/>
-                </graphic>
-            </Label>
-            <fx:include source="output/paragraph/paragraph.fxml"/>
-            <Label fx:id="chapterTemplateLabel" styleClass="title-3">
-                <graphic>
-                    <FontIcon/>
-                </graphic>
-            </Label>
-            <fx:include source="output/chapter-template.fxml"/>
-            <Label fx:id="othersLabel" styleClass="title-3">
-                <graphic>
-                    <FontIcon/>
-                </graphic>
-            </Label>
-            <fx:include source="output/replace.fxml"/>
-            <HBox alignment="TOP_RIGHT">
-                <Button fx:id="exportButton" prefWidth="100" styleClass="success" onAction="#export"/>
-            </HBox>
-            <spacing>
-                <UICons fx:constant="DEFAULT_SPACING"/>
-            </spacing>
-        </VBox>
-    </content>
-</OutlinePane>
+<?import org.kordamp.ikonli.javafx.*?>
+<?import java.lang.String?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="cc.meltryllis.nf.ui.controller.FormatterPaneController"
+      fx:id="root">
+    <fx:include source="input/novel-select.fxml"/>
+    <!-- <Separator styleClass="small"/> -->
+    <OutlinePane fx:id="outlinePane">
+        <content>
+            <VBox styleClass="formatter">
+                <!-- Input -->
+                <Label fx:id="inputFormatLabel">
+                    <styleClass>
+                        <String fx:value="title-2"/>
+                        <String fx:value="custom-title-2"/>
+                    </styleClass>
+                </Label>
+                <!-- <Separator styleClass="small"/> -->
+                <Label fx:id="inputCharsetLabel" styleClass="title-3">
+                    <graphic>
+                        <FontIcon/>
+                    </graphic>
+                </Label>
+                <fx:include source="input/charset.fxml"/>
+                <Label fx:id="chapterInputFormatTitleLabel" styleClass="title-3">
+                    <graphic>
+                        <FontIcon/>
+                    </graphic>
+                </Label>
+                <VBox>
+                    <fx:include source="input/chapter/chapter-max-length.fxml"/>
+                    <fx:include source="input/chapter/chapter-regex.fxml"/>
+                    <spacing>
+                        <UICons fx:constant="SPACING_10"/>
+                    </spacing>
+                </VBox>
+                <Label visible="false" minHeight="40"/>
+                <!-- Output -->
+                <Label fx:id="exportConfigLabel">
+                    <styleClass>
+                        <String fx:value="title-2"/>
+                        <String fx:value="custom-title-2"/>
+                    </styleClass>
+                </Label>
+                <!-- <Separator styleClass="small"/> -->
+                <Label fx:id="paragraphLabel" styleClass="title-3">
+                    <graphic>
+                        <FontIcon/>
+                    </graphic>
+                </Label>
+                <fx:include source="output/paragraph/blank-line.fxml"/>
+                <fx:include source="output/paragraph/indentation.fxml"/>
+                <Label fx:id="chapterTemplateLabel" styleClass="title-3">
+                    <graphic>
+                        <FontIcon/>
+                    </graphic>
+                </Label>
+                <fx:include source="output/chapter-template.fxml"/>
+                <Label fx:id="othersLabel" styleClass="title-3">
+                    <graphic>
+                        <FontIcon/>
+                    </graphic>
+                </Label>
+                <fx:include source="output/replace.fxml"/>
+                <HBox alignment="TOP_RIGHT">
+                    <Button fx:id="exportButton" prefWidth="100" styleClass="success" onAction="#export"/>
+                </HBox>
+                <spacing>
+                    <UICons fx:constant="SPACING_10"/>
+                </spacing>
+            </VBox>
+        </content>
+    </OutlinePane>
+</VBox>

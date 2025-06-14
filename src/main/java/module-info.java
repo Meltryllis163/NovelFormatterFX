@@ -1,6 +1,5 @@
 module cc.meltryllis.nf {
     requires javafx.fxml;
-    requires javafx.controls;
 
     requires atlantafx.base;
     requires static lombok;
@@ -12,26 +11,34 @@ module cc.meltryllis.nf {
     requires ch.qos.logback.core;
     requires org.slf4j;
     requires java.desktop;
+    requires com.github.albfernandez.juniversalchardet;
+    requires jdk.charsets;
+    requires java.naming;
+    requires nfx.core;
 
     opens cc.meltryllis.nf.ui.controller to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.input to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.output to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.settings to javafx.fxml;
     opens cc.meltryllis.nf.ui.controller.dialog to javafx.fxml;
-    opens cc.meltryllis.nf.ui.common to javafx.fxml;
-    opens cc.meltryllis.nf.ui.common.outline to javafx.fxml;
+    opens cc.meltryllis.nf.ui.controls.outline to javafx.fxml;
     opens cc.meltryllis.nf.constants to javafx.fxml;
 
     opens cc.meltryllis.nf.entity to com.fasterxml.jackson.databind;
-    opens cc.meltryllis.nf.ui to com.fasterxml.jackson.databind;
 
     opens cc.meltryllis.nf.entity.property to com.fasterxml.jackson.databind, javafx.base;
     opens cc.meltryllis.nf.entity.property.input to com.fasterxml.jackson.databind, javafx.base;
     opens cc.meltryllis.nf.entity.property.output to com.fasterxml.jackson.databind, javafx.base;
 
     exports cc.meltryllis.nf.ui;
-    exports cc.meltryllis.nf.ui.common;
-    exports cc.meltryllis.nf.ui.common.outline;
+    exports cc.meltryllis.nf.ui.controls.outline;
     exports cc.meltryllis.nf.ui.controller;
+    exports cc.meltryllis.nf.ui.controls;
+    opens cc.meltryllis.nf.ui.controls to javafx.fxml;
+    opens cc.meltryllis.nf.ui to com.fasterxml.jackson.databind, javafx.fxml;
+    exports cc.meltryllis.nf.ui.stage;
+    opens cc.meltryllis.nf.ui.stage to com.fasterxml.jackson.databind, javafx.fxml;
+    exports cc.meltryllis.nf.ui.controls.skin;
+    opens cc.meltryllis.nf.ui.controls.skin to javafx.fxml;
 
 }
